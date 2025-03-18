@@ -12,7 +12,29 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
-    name: 'Theme'
+    name: 'Encotech'
+  },
+  {
+    name: 'Laboratórium',
+    url: '/laboratory',
+    iconComponent: { name: 'cil-filter' }, // Laboratory icon
+    children: [
+      {
+        name: 'Mintavételi beállítás módja',
+        url: '/laboratory/mintaveteli-beallitas-modja',
+        icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Szennyezőanyag csoportok',
+        url: '/laboratory/szennyezoanyag-csoportok',
+        icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Szennyezőanyagok',
+        url: '/laboratory/szennyezoanyagok',
+        icon: 'nav-icon-bullet'
+      }
+    ]
   },
   {
     name: 'Colors',

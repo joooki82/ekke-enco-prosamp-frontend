@@ -19,6 +19,43 @@ export const routes: Routes = [
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes)
       },
       {
+        path: 'laboratory',
+        data: { title: 'Laboratory' },
+        children: [
+          {
+            path: 'mintaveteli-beallitas-modja',
+            loadComponent: () =>
+              import('./views/laboratory/mintaveteli-beallitas-modja/mintaveteli-beallitas-modja.component').then(
+                (m) => m.MintaveteliBeallitasModjaComponent
+              ),
+            data: { title: 'Mintavételi beállítás módja' }
+          },
+          {
+            path: 'laboratory/mintaveteli-beallitas-modja/:id',
+            loadComponent: () =>
+              import('./views/laboratory/mintaveteli-beallitas-modja/mintaveteli-beallitas-modja.component')
+                .then((m) => m.MintaveteliBeallitasModjaComponent),
+            data: { title: 'Mintavételi beállítás módja' }
+          },
+          {
+            path: 'szennyezoanyag-csoportok',
+            loadComponent: () =>
+              import('./views/laboratory/szennyezoanyag-csoportok/szennyezoanyag-csoportok.component').then(
+                (m) => m.SzennyezoanyagCsoportokComponent
+              ),
+            data: { title: 'Szennyezőanyag csoportok' }
+          },
+          {
+            path: 'szennyezoanyagok',
+            loadComponent: () =>
+              import('./views/laboratory/szennyezoanyagok/szennyezoanyagok.component').then(
+                (m) => m.SzennyezoanyagokComponent
+              ),
+            data: { title: 'Szennyezőanyagok' }
+          }
+        ]
+      },
+      {
         path: 'theme',
         loadChildren: () => import('./views/theme/routes').then((m) => m.routes)
       },
