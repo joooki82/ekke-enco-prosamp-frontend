@@ -1,1 +1,65 @@
-<p>adjustment-method works!</p>
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>{{ selectedMethodId ? 'Mintavételi Beállítás Módosítása' : 'Új Mintavételi Beállítás Hozzáadása' }}</strong>
+      </c-card-header>
+      <c-card-body>
+        <form #adjustmentMethodForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+          <!-- Code Input -->
+          <c-col md="6">
+            <label cLabel for="adjustmentMethodCode">Kód</label>
+            <input cFormControl id="adjustmentMethodCode" [(ngModel)]="newAdjustmentMethod.code" name="code" required type="text" />
+            <c-form-feedback [valid]="false">A kód megadása kötelező.</c-form-feedback>
+          </c-col>
+
+          <!-- Description Input -->
+          <c-col md="6">
+            <label cLabel for="adjustmentMethodDescription">Leírás</label>
+            <input cFormControl id="adjustmentMethodDescription" [(ngModel)]="newAdjustmentMethod.description" name="description" type="text" />
+          </c-col>
+
+          <!-- Submit and Reset Buttons -->
+          <c-col xs="12">
+            <button cButton color="primary" type="submit">{{ selectedMethodId ? 'Módosítás' : 'Hozzáadás' }}</button>
+            <button *ngIf="selectedMethodId" cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
+          </c-col>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Elérhető Mintavételi Beállítások</strong>
+      </c-card-header>
+      <c-card-body>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Kód</th>
+            <th>Leírás</th>
+            <th>Létrehozva</th>
+            <th>Frissítve</th>
+            <th>Műveletek</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let method of adjustmentMethods"> <!-- ✅ Uses *ngFor -->
+            <td>{{ method.id }}</td>
+            <td>{{ method.code }}</td>
+            <td>{{ method.description }}</td>
+            <td>{{ method.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ method.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>
+              <button cButton color="warning" (click)="editMethod(method)">Szerkesztés</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
