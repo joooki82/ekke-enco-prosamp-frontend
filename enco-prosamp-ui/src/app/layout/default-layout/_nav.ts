@@ -16,22 +16,22 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Laboratórium',
-    url: '/laboratory',
-    iconComponent: { name: 'cil-filter' }, // Laboratory icon
+    url: '/laboratorium',
+    iconComponent: { name: 'cil-filter' },
     children: [
       {
-        name: 'Mintavételi beállítás módja',
-        url: '/laboratory/mintaveteli-beallitas-modja',
+        name: 'Mintavételi beállítás',
+        url: '/laboratorium/adjustment-method',
         icon: 'nav-icon-bullet'
       },
       {
-        name: 'Szennyezőanyag csoportok',
-        url: '/laboratory/szennyezoanyag-csoportok',
+        name: 'Szennyezőanyag csoport',
+        url: '/laboratorium/contaminant-group',
         icon: 'nav-icon-bullet'
       },
       {
-        name: 'Szennyezőanyagok',
-        url: '/laboratory/szennyezoanyagok',
+        name: 'Szennyezőanyag',
+        url: '/laboratorium/contaminant',
         icon: 'nav-icon-bullet'
       }
     ]
