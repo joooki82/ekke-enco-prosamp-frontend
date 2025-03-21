@@ -7,6 +7,7 @@ import { delay, filter, map, tap } from 'rxjs/operators';
 import { ColorModeService } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
+import {ToastContainerComponent} from "./shared/components/toasters/app-toast-sample/toast-container.component";
 
 @Component({
     selector: 'app-root',

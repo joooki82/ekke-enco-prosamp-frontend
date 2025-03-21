@@ -17,6 +17,7 @@ import {
 
 import { DefaultFooterComponent, DefaultHeaderComponent } from './';
 import { navItems } from './_nav';
+import {ToastContainerComponent} from "../../shared/components/toasters/app-toast-sample/toast-container.component";
 
 function isOverflown(element: HTMLElement) {
   return (
@@ -44,7 +45,8 @@ function isOverflown(element: HTMLElement) {
     NgScrollbar,
     RouterOutlet,
     RouterLink,
-    ShadowOnScrollDirective
+    ShadowOnScrollDirective,
+    ToastContainerComponent
   ]
 })
 export class DefaultLayoutComponent {

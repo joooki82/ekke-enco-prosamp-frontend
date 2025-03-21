@@ -11,6 +11,8 @@ import {
   RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
+import {NotificationService} from "../../../services/notification/notification.service";
+import {take} from "rxjs";
 
 @Component({
   selector: 'app-adjustment-method',
@@ -25,7 +27,10 @@ export class AdjustmentMethodComponent implements OnInit {
   selectedMethodId: number | null = null; // ✅ Tracks if we are editing an existing method
   formValidated = false;
 
-  constructor(private adjustmentMethodService: AdjustmentMethodService) {}
+  constructor(private adjustmentMethodService: AdjustmentMethodService,
+              private notificationService: NotificationService) {
+    console.log('NotificationService instance in AdjustmentMethodComponent:', notificationService);
+  }
 
   ngOnInit(): void {
     this.loadAdjustmentMethods();
@@ -51,6 +56,7 @@ export class AdjustmentMethodComponent implements OnInit {
       this.adjustmentMethodService.create(this.newAdjustmentMethod).subscribe({
         next: (response: any) => {
           console.log('Created:', response);
+          this.notificationService.showToast('success', 'Testing long duration', 20000);
           this.resetForm();
           this.loadAdjustmentMethods();
         },
