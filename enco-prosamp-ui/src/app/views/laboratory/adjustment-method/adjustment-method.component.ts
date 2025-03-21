@@ -58,13 +58,13 @@ export class AdjustmentMethodComponent implements OnInit {
       this.adjustmentMethodService.create(this.newAdjustmentMethod).subscribe({
         next: (response: any) => {
           console.log('Created:', response);
-          this.notificationService.showToast({title: 'Adjustment method created', color: 'success'});
+          this.notificationService.showSuccess('Adjustment method created');
           this.resetForm();
           this.loadAdjustmentMethods();
         },
         error: (err: any) => {
           console.error('Failed to create adjustment method', err)
-          this.notificationService.showToast({title: 'Failed to create adjustment method', color: 'danger'});
+          this.notificationService.showError('Failed to create adjustment method');
         }
       });
     } else {

@@ -13,6 +13,8 @@ export class AppToastComponent extends ToastComponent {
 
   constructor() {
     super();
+    console.log('AppToastComponent:' ); // Logging props here
+
   }
 
   @Input() closeButton = true;

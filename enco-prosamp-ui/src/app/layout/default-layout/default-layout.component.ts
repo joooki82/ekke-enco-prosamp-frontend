@@ -18,6 +18,7 @@ import {
 import { DefaultFooterComponent, DefaultHeaderComponent } from './';
 import { navItems } from './_nav';
 import {NotificationService} from "../../services/notification/notification.service";
+import {ToastersComponent} from "../../shared/components/toasters/toasters.component";
 
 function isOverflown(element: HTMLElement) {
   return (
@@ -46,21 +47,13 @@ function isOverflown(element: HTMLElement) {
     RouterOutlet,
     RouterLink,
     ShadowOnScrollDirective,
-    ToasterComponent
+    ToastersComponent
   ]
 })
-export class DefaultLayoutComponent implements AfterViewInit {
+export class DefaultLayoutComponent  {
   public navItems = [...navItems];
 
-  constructor(private notificationService: NotificationService) {}
-  @ViewChild(ToasterComponent)
-  toasterComponent!: ToasterComponent;
+  constructor() {}
 
-  ngAfterViewInit() {
-    if (this.toasterComponent) {
-      this.notificationService.setToasterComponent(this.toasterComponent);
-    } else {
-      console.warn('ToasterComponent not found via ViewChild');
-    }
-  }
+
 }

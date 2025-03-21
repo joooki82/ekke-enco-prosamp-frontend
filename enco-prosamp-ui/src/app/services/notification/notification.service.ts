@@ -1,46 +1,38 @@
-import {Injectable, viewChild} from '@angular/core';
-import {AppToastSampleComponent} from "../../shared/components/toasters/app-toast-sample/app-toast-sample.component";
-import {ToasterComponent, ToasterPlacement} from "@coreui/angular";
+import {Injectable} from "@angular/core";
+import {Subject} from "rxjs";
+
+
+export type ToastType = 'success' | 'danger' | 'warning' | 'info';
+
+export interface ToastMessage {
+    title?: string;
+    type?: ToastType;
+}
+
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class NotificationService {
 
-  private toasterComponent: ToasterComponent | null = null;
+    private toastSubject = new Subject<ToastMessage>();
+    public toastMessages$ = this.toastSubject.asObservable();
 
-  setToasterComponent(toaster: ToasterComponent) {
-    this.toasterComponent = toaster;
-  }
-
-  showToast(options: {
-    title?: string;
-    color?: string;
-    delay?: number;
-    autohide?: boolean;
-    fade?: boolean;
-    placement?: ToasterPlacement;
-  }) {
-    if (!this.toasterComponent) {
-      console.warn('Toaster component not set.');
-      return;
+    showSuccess(title: string ) {
+        this.toastSubject.next({ title, type: 'success' });
     }
 
-    const props: any = {
-      title: options.title ?? 'Info',
-      color: options.color ?? 'success',
-      autohide: options.autohide ?? true,
-      delay: options.delay ?? 5000,
-      fade: options.fade ?? true,
-      placement: options.placement ?? ToasterPlacement.TopCenter,
-      visible: true
-    };
+    showError( title: string ) {
+        this.toastSubject.next({ title, type: 'danger' });
+    }
 
-    // Proper invocation using explicit typing or casting to any:
-    this.toasterComponent.addToast(
-        AppToastSampleComponent,
-        props,  // ✅ Pass everything explicitly here
-        {}      // Leave the third parameter empty
-    );
-  }
+    showInfo(title: string ) {
+        this.toastSubject.next({ title, type: 'info' });
+    }
+
+    showWarning(title: string ) {
+        this.toastSubject.next({ title, type: 'warning' });
+    }
+
+
 }
