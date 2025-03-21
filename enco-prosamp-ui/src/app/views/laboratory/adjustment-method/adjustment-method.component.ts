@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from '@angular/common'; // ✅ Import necessary Angular directives
-import { AdjustmentMethodService, AdjustmentMethodResponseDTO, AdjustmentMethodRequestDTO } from '../../../services/adjustment-method.service';
+import {
+  AdjustmentMethodService,
+  AdjustmentMethodResponseDTO,
+  AdjustmentMethodRequestDTO
+} from '../../../services/adjustment-method.service';
 import {
   ButtonDirective,
   CardBodyComponent,
@@ -12,7 +16,6 @@ import {
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
 import {NotificationService} from "../../../services/notification/notification.service";
-import {take} from "rxjs";
 
 @Component({
   selector: 'app-adjustment-method',
@@ -23,13 +26,12 @@ import {take} from "rxjs";
 })
 export class AdjustmentMethodComponent implements OnInit {
   adjustmentMethods: AdjustmentMethodResponseDTO[] = [];
-  newAdjustmentMethod: AdjustmentMethodRequestDTO = { code: '', description: '' };
+  newAdjustmentMethod: AdjustmentMethodRequestDTO = {code: '', description: ''};
   selectedMethodId: number | null = null; // ✅ Tracks if we are editing an existing method
   formValidated = false;
 
   constructor(private adjustmentMethodService: AdjustmentMethodService,
               private notificationService: NotificationService) {
-    console.log('NotificationService instance in AdjustmentMethodComponent:', notificationService);
   }
 
   ngOnInit(): void {
@@ -56,7 +58,7 @@ export class AdjustmentMethodComponent implements OnInit {
       this.adjustmentMethodService.create(this.newAdjustmentMethod).subscribe({
         next: (response: any) => {
           console.log('Created:', response);
-          this.notificationService.showToast('success', 'Testing long duration', 20000);
+          this.notificationService.showToast({title: 'Adjustment method created', color: 'success'});
           this.resetForm();
           this.loadAdjustmentMethods();
         },
@@ -78,12 +80,12 @@ export class AdjustmentMethodComponent implements OnInit {
   /** Load an existing method into the form for editing */
   editMethod(method: AdjustmentMethodResponseDTO): void {
     this.selectedMethodId = method.id;
-    this.newAdjustmentMethod = { code: method.code, description: method.description };
+    this.newAdjustmentMethod = {code: method.code, description: method.description};
   }
 
   /** Reset form and switch back to create mode */
   resetForm(): void {
-    this.newAdjustmentMethod = { code: '', description: '' };
+    this.newAdjustmentMethod = {code: '', description: ''};
     this.selectedMethodId = null;
     this.formValidated = false;
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgScrollbar } from 'ngx-scrollbar';
 
@@ -12,12 +12,12 @@ import {
   SidebarHeaderComponent,
   SidebarNavComponent,
   SidebarToggleDirective,
-  SidebarTogglerDirective
+  SidebarTogglerDirective, ToasterComponent
 } from '@coreui/angular';
 
 import { DefaultFooterComponent, DefaultHeaderComponent } from './';
 import { navItems } from './_nav';
-import {ToastContainerComponent} from "../../shared/components/toasters/app-toast-sample/toast-container.component";
+import {NotificationService} from "../../services/notification/notification.service";
 
 function isOverflown(element: HTMLElement) {
   return (
@@ -46,9 +46,21 @@ function isOverflown(element: HTMLElement) {
     RouterOutlet,
     RouterLink,
     ShadowOnScrollDirective,
-    ToastContainerComponent
+    ToasterComponent
   ]
 })
-export class DefaultLayoutComponent {
+export class DefaultLayoutComponent implements AfterViewInit {
   public navItems = [...navItems];
+
+  constructor(private notificationService: NotificationService) {}
+  @ViewChild(ToasterComponent)
+  toasterComponent!: ToasterComponent;
+
+  ngAfterViewInit() {
+    if (this.toasterComponent) {
+      this.notificationService.setToasterComponent(this.toasterComponent);
+    } else {
+      console.warn('ToasterComponent not found via ViewChild');
+    }
+  }
 }
