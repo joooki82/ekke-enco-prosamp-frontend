@@ -18,19 +18,29 @@ export class NotificationService {
     color?: string;
     delay?: number;
     autohide?: boolean;
+    fade?: boolean;
+    placement?: ToasterPlacement;
   }) {
     if (!this.toasterComponent) {
       console.warn('Toaster component not set.');
       return;
     }
 
-    this.toasterComponent.addToast(AppToastSampleComponent, {
+    const props: any = {
       title: options.title ?? 'Info',
-      color: options.color ?? 'info',
+      color: options.color ?? 'success',
       autohide: options.autohide ?? true,
       delay: options.delay ?? 5000,
-      placement: ToasterPlacement.TopCenter
-    });
-  }
+      fade: options.fade ?? true,
+      placement: options.placement ?? ToasterPlacement.TopCenter,
+      visible: true
+    };
 
+    // Proper invocation using explicit typing or casting to any:
+    this.toasterComponent.addToast(
+        AppToastSampleComponent,
+        props,  // ✅ Pass everything explicitly here
+        {}      // Leave the third parameter empty
+    );
+  }
 }

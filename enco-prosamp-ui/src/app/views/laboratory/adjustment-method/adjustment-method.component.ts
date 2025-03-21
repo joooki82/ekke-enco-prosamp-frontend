@@ -62,7 +62,10 @@ export class AdjustmentMethodComponent implements OnInit {
           this.resetForm();
           this.loadAdjustmentMethods();
         },
-        error: (err: any) => console.error('Failed to create adjustment method', err)
+        error: (err: any) => {
+          console.error('Failed to create adjustment method', err)
+          this.notificationService.showToast({title: 'Failed to create adjustment method', color: 'danger'});
+        }
       });
     } else {
       // ✅ Update existing method
