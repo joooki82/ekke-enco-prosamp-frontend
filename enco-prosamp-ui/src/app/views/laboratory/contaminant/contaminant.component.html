@@ -18,32 +18,35 @@
 <c-card>
   <c-card-header><strong>Szennyezők Listája</strong></c-card-header>
   <c-card-body>
-    <table class="table table-hover">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Név</th>
-        <th>Leírás</th>
-        <th>Csoport</th>
-        <th>Létrehozva</th>
-        <th>Frissítve</th>
-        <th>Műveletek</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let c of filteredContaminants">
-        <td>{{ c.id }}</td>
-        <td>{{ c.name }}</td>
-        <td>{{ c.description }}</td>
-        <td>{{ c.contaminantGroup.name }}</td>
-        <td>{{ c.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
-        <td>{{ c.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
-        <td>
-          <button cButton color="warning" (click)="openModal(c)">Szerkesztés</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive"> <!-- ✅ Add this wrapper -->
+
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Név</th>
+          <th>Leírás</th>
+          <th>Csoport</th>
+          <th>Létrehozva</th>
+          <th>Frissítve</th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let c of filteredContaminants">
+          <td>{{ c.id }}</td>
+          <td>{{ c.name }}</td>
+          <td>{{ c.description }}</td>
+          <td>{{ c.contaminantGroup.name }}</td>
+          <td>{{ c.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ c.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(c)">Szerkesztés</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </c-card-body>
 </c-card>
 
@@ -60,14 +63,14 @@
       <c-col md="6">
         <label cLabel for="name">Név</label>
         <input id="name" name="name" [(ngModel)]="newContaminant.name" type="text"
-               class="form-control" required />
+               class="form-control" required/>
         <c-form-feedback [valid]="false">A név megadása kötelező.</c-form-feedback>
       </c-col>
 
       <c-col md="6">
         <label cLabel for="description">Leírás</label>
         <input id="description" name="description" [(ngModel)]="newContaminant.description" type="text"
-               class="form-control" />
+               class="form-control"/>
       </c-col>
 
       <c-col md="12">

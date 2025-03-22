@@ -1,1 +1,108 @@
-<p>client works!</p>
+<c-row class="mb-3">
+  <c-col md="6">
+    <h5><strong>Megbízókezelés</strong></h5>
+  </c-col>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="openModal()">Új Megbízó</button>
+  </c-col>
+</c-row>
+
+<c-card>
+  <c-card-header><strong>Megbízók Listája</strong></c-card-header>
+  <c-card-body>
+    <div class="table-responsive"> <!-- ✅ Add this wrapper -->
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th>Név</th>
+          <th>Kapcsolattartó</th>
+          <th>Email</th>
+          <th>Telefon</th>
+          <th>Ország</th>
+          <th>Város</th>
+          <th>Adószám</th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let client of clients">
+          <td>{{ client.name }}</td>
+          <td>{{ client.contactPerson }}</td>
+          <td>{{ client.email }}</td>
+          <td>{{ client.phone }}</td>
+          <td>{{ client.country }}</td>
+          <td>{{ client.city }}</td>
+          <td>{{ client.taxNumber }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(client)">Szerkesztés</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Modal -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+  <c-modal-header>
+    <h5 class="modal-title">
+      {{ selectedClientId ? 'Megbízó Módosítása' : 'Új Megbízó Hozzáadása' }}
+    </h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form #clientForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+      <c-col md="6">
+        <label cLabel>Név</label>
+        <input class="form-control" name="name" required [(ngModel)]="newClient.name"/>
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Kapcsolattartó</label>
+        <input class="form-control" name="contactPerson" required [(ngModel)]="newClient.contactPerson"/>
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Email</label>
+        <input class="form-control" name="email" type="email" required [(ngModel)]="newClient.email"/>
+        <c-form-feedback [valid]="false">Érvényes email szükséges</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Telefon</label>
+        <input class="form-control" name="phone" [(ngModel)]="newClient.phone"/>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Ország</label>
+        <input class="form-control" name="country" [(ngModel)]="newClient.country"/>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Város</label>
+        <input class="form-control" name="city" [(ngModel)]="newClient.city"/>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Irányítószám</label>
+        <input class="form-control" name="postalCode" [(ngModel)]="newClient.postalCode"/>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Adószám</label>
+        <input class="form-control" name="taxNumber" [(ngModel)]="newClient.taxNumber"/>
+      </c-col>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="primary" (click)="onSubmit()">
+      {{ selectedClientId ? 'Mentés' : 'Hozzáadás' }}
+    </button>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+  </c-modal-footer>
+</c-modal>
+
