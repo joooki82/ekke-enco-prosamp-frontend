@@ -16,7 +16,7 @@
       <table class="table table-hover table-bordered">
         <thead>
         <tr>
-          <th (click)="toggleSort('name')">Név <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('name')">Cég név <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
           <th (click)="toggleSort('contactPerson')">Kapcsolattartó <span *ngIf="sortColumn === 'contactPerson'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
           <th (click)="toggleSort('email')">Email <span *ngIf="sortColumn === 'email'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
           <th (click)="toggleSort('phone')">Telefon <span *ngIf="sortColumn === 'phone'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>

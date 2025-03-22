@@ -47,7 +47,7 @@ export const navItems: INavData[] = [
         icon: 'nav-icon-bullet'
       },
       {
-        name: 'Üzemek',
+        name: 'Szennyező cég',
         url: '/partners/company',
         icon: 'nav-icon-bullet'
       },
