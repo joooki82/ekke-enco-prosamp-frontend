@@ -39,7 +39,7 @@ export const navItems: INavData[] = [
   {
     name: 'Partnerek',
     url: '/partners',
-    iconComponent: { name: 'cil-company' },
+    iconComponent: { name: 'cil-factory' },
     children: [
       {
         name: 'Megbízók',
