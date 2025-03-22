@@ -12,7 +12,7 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
-    name: 'Encotech'
+    name: 'Encotech - alapadatok'
   },
   {
     name: 'Laboratórium',
@@ -93,6 +93,15 @@ export const navItems: INavData[] = [
     url: '/theme/typography',
     linkProps: { fragment: 'headings' },
     iconComponent: { name: 'cil-pencil' }
+  },
+  {
+    title: true,
+    name: 'Encotech - munkák'
+  },
+  {
+    name: 'Projektek',
+    url: '/projects',
+    iconComponent: { name: 'cil-puzzle' }
   },
   {
     name: 'Components',

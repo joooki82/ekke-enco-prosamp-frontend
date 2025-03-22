@@ -1,0 +1,149 @@
+<!-- Search & Add -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input class="form-control" placeholder="Keresés projekt név vagy szám alapján..." [(ngModel)]="filterText" />
+  </c-col>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="openModal()">Új Projekt</button>
+  </c-col>
+</c-row>
+
+<!-- Project List Table -->
+<c-card>
+  <c-card-header><strong>Labor Projektek</strong></c-card-header>
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th (click)="toggleSort('projectNumber')" class="sortable">
+            Projekt Szám
+            <i class="fa" [ngClass]="{
+                'fa-sort-up': sortColumn === 'projectNumber' && sortDirection === 'asc',
+                'fa-sort-down': sortColumn === 'projectNumber' && sortDirection === 'desc',
+                'fa-sort': sortColumn !== 'projectNumber'
+              }"></i>
+          </th>
+          <th (click)="toggleSort('projectName')" class="sortable">
+            Név
+            <i class="fa" [ngClass]="{
+                'fa-sort-up': sortColumn === 'projectName' && sortDirection === 'asc',
+                'fa-sort-down': sortColumn === 'projectName' && sortDirection === 'desc',
+                'fa-sort': sortColumn !== 'projectName'
+              }"></i>
+          </th>
+          <th (click)="toggleSort('clientName')" class="sortable">
+            Ügyfél
+            <i class="fa" [ngClass]="{
+                'fa-sort-up': sortColumn === 'clientName' && sortDirection === 'asc',
+                'fa-sort-down': sortColumn === 'clientName' && sortDirection === 'desc',
+                'fa-sort': sortColumn !== 'clientName'
+              }"></i>
+          </th>
+          <th (click)="toggleSort('status')" class="sortable">
+            Státusz
+            <i class="fa" [ngClass]="{
+                'fa-sort-up': sortColumn === 'status' && sortDirection === 'asc',
+                'fa-sort-down': sortColumn === 'status' && sortDirection === 'desc',
+                'fa-sort': sortColumn !== 'status'
+              }"></i>
+          </th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let p of filteredProjects" (click)="openDetails(p)" style="cursor: pointer;">
+          <td>{{ p.projectNumber }}</td>
+          <td>{{ p.projectName }}</td>
+          <td>{{ p.clientName }}</td>
+          <td>{{ p.status }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(p); $event.stopPropagation()">Szerkesztés</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredProjects.length === 0">
+          <td colspan="5" class="text-center text-muted">Nincs találat.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Project Create/Edit Modal -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+  <c-modal-header>
+    <h5 class="modal-title">{{ selectedProjectId ? 'Projekt Módosítása' : 'Új Projekt' }}</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+      <c-col md="6">
+        <label cLabel>Projekt Szám</label>
+        <input class="form-control" name="projectNumber" required [(ngModel)]="newProject.projectNumber" />
+        <c-form-feedback [valid]="false">Kötelező</c-form-feedback>
+      </c-col>
+      <c-col md="6">
+        <label cLabel>Projekt Név</label>
+        <input class="form-control" name="projectName" required [(ngModel)]="newProject.projectName" />
+        <c-form-feedback [valid]="false">Kötelező</c-form-feedback>
+      </c-col>
+
+      <c-col md="12">
+        <label cLabel>Ügyfél</label>
+        <div class="input-group">
+          <input class="form-control" [value]="clientFilter" disabled />
+          <button cButton type="button" color="secondary" (click)="openClientSelector()">Kiválasztás</button>
+        </div>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Kezdés</label>
+        <input type="date" class="form-control" [(ngModel)]="newProject.startDate" name="startDate" />
+      </c-col>
+      <c-col md="6">
+        <label cLabel>Befejezés</label>
+        <input type="date" class="form-control" [(ngModel)]="newProject.endDate" name="endDate" />
+      </c-col>
+      <c-col md="12">
+        <label cLabel>Leírás</label>
+        <textarea class="form-control" [(ngModel)]="newProject.description" name="description"></textarea>
+      </c-col>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="primary" (click)="onSubmit()">Mentés</button>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+  </c-modal-footer>
+</c-modal>
+
+<!-- Project Details Drawer -->
+<c-offcanvas placement="end" [visible]="isDrawerOpen" (visibleChange)="isDrawerOpen = $event" [scroll]="true" [backdrop]="true">
+  <c-offcanvas-header>
+    <h5 class="offcanvas-title">Projekt Részletei</h5>
+    <button type="button" class="btn-close text-reset" aria-label="Close" (click)="closeDetails()"></button>
+  </c-offcanvas-header>
+
+  <c-offcanvas-body *ngIf="selectedProjectForDetails">
+    <dl class="row">
+      <dt class="col-sm-4">Projekt Név</dt><dd class="col-sm-8">{{ selectedProjectForDetails.projectName }}</dd>
+      <dt class="col-sm-4">Projekt Szám</dt><dd class="col-sm-8">{{ selectedProjectForDetails.projectNumber }}</dd>
+      <dt class="col-sm-4">Ügyfél</dt><dd class="col-sm-8">{{ selectedProjectForDetails.clientName }}</dd>
+      <dt class="col-sm-4">Leírás</dt><dd class="col-sm-8">{{ selectedProjectForDetails.description }}</dd>
+      <dt class="col-sm-4">Státusz</dt><dd class="col-sm-8">{{ selectedProjectForDetails.status }}</dd>
+      <dt class="col-sm-4">Kezdés</dt><dd class="col-sm-8">{{ selectedProjectForDetails.startDate }}</dd>
+      <dt class="col-sm-4">Befejezés</dt><dd class="col-sm-8">{{ selectedProjectForDetails.endDate }}</dd>
+      <dt class="col-sm-4">Létrehozva</dt><dd class="col-sm-8">{{ selectedProjectForDetails.createdAt | date: 'yyyy-MM-dd HH:mm' }}</dd>
+      <dt class="col-sm-4">Frissítve</dt><dd class="col-sm-8">{{ selectedProjectForDetails.updatedAt | date: 'yyyy-MM-dd HH:mm' }}</dd>
+    </dl>
+  </c-offcanvas-body>
+</c-offcanvas>
+
+<!-- Client Lookup Modal -->
+<app-client-lookup-modal
+  [visible]="isClientSelectorModalOpen"
+  (close)="isClientSelectorModalOpen = false"
+  (clientSelected)="onClientSelected($event)"
+></app-client-lookup-modal>
+
