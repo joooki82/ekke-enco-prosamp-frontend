@@ -1,1 +1,115 @@
-<p>measurement-unit works!</p>
+<!-- Search & Add -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input
+      class="form-control"
+      placeholder="Keresés kód vagy leírás alapján..."
+      [(ngModel)]="filterText"
+    />
+  </c-col>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="openModal()">Új Mértékegység</button>
+  </c-col>
+</c-row>
+
+<!-- Table -->
+<c-card>
+  <c-card-header><strong>Mértékegységek</strong></c-card-header>
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th>Kód</th>
+          <th>Leírás</th>
+          <th>Kategória</th>
+          <th>Bázis Egység</th>
+          <th>Átváltási Tényező</th>
+          <th>Standard</th>
+          <th>Létrehozva</th>
+          <th>Frissítve</th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let unit of filteredUnits">
+          <td>{{ unit.unitCode }}</td>
+          <td>{{ unit.description }}</td>
+          <td>{{ unit.unitCategory }}</td>
+          <td>{{ unit.baseUnit?.unitCode || '—' }}</td>
+          <td>{{ unit.conversionFactor || '—' }}</td>
+          <td>{{ unit.standardBody || '—' }}</td>
+          <td>{{ unit.createdAt | date:'yyyy-MM-dd' }}</td>
+          <td>{{ unit.updatedAt | date:'yyyy-MM-dd' }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(unit)">Szerkesztés</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredUnits.length === 0">
+          <td colspan="9" class="text-center text-muted">Nincs találat.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Modal -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+  <c-modal-header>
+    <h5 class="modal-title">
+      {{ selectedUnitId ? 'Mértékegység Módosítása' : 'Új Mértékegység' }}
+    </h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form #unitForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+      <c-col md="6">
+        <label cLabel>Kód</label>
+        <input class="form-control" name="unitCode" required [(ngModel)]="newUnit.unitCode" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Leírás</label>
+        <input class="form-control" name="description" required [(ngModel)]="newUnit.description" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Kategória</label>
+        <input class="form-control" name="unitCategory" required [(ngModel)]="newUnit.unitCategory" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Bázis Egység</label>
+        <select class="form-select" name="baseUnitId" [(ngModel)]="newUnit.baseUnitId">
+          <option [ngValue]="null">— Nincs —</option>
+          <option
+            *ngFor="let base of allUnits"
+            [ngValue]="base.id"
+            [disabled]="base.id === selectedUnitId"
+          >
+            {{ base.unitCode }} - {{ base.description }}
+          </option>
+        </select>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Átváltási Tényező</label>
+        <input type="number" step="any" class="form-control" name="conversionFactor" [(ngModel)]="newUnit.conversionFactor" />
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Standard Testület</label>
+        <input class="form-control" name="standardBody" [(ngModel)]="newUnit.standardBody" />
+      </c-col>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="primary" (click)="onSubmit()">{{ selectedUnitId ? 'Mentés' : 'Hozzáadás' }}</button>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+  </c-modal-footer>
+</c-modal>
