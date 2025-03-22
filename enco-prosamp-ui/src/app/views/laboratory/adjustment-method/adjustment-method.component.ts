@@ -4,7 +4,7 @@ import {
   AdjustmentMethodService,
   AdjustmentMethodResponseDTO,
   AdjustmentMethodRequestDTO
-} from '../../../services/adjustment-method.service';
+} from '../../../services/laboratory/adjustment-method.service';
 import {
   ButtonDirective,
   CardBodyComponent,

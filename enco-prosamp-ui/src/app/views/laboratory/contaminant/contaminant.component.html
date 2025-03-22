@@ -1,1 +1,66 @@
-<p>contaminant works!</p>
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>{{ selectedContaminantId ? 'Szennyező Módosítása' : 'Új Szennyező Hozzáadása' }}</strong>
+      </c-card-header>
+      <c-card-body>
+        <form #contaminantForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+          <c-col md="4">
+            <label cLabel for="contaminantName">Név</label>
+            <input cFormControl id="contaminantName" [(ngModel)]="newContaminant.name" name="name" required type="text" />
+            <c-form-feedback [valid]="false">A név megadása kötelező.</c-form-feedback>
+          </c-col>
+          <c-col md="4">
+            <label cLabel for="contaminantDescription">Leírás</label>
+            <input cFormControl id="contaminantDescription" [(ngModel)]="newContaminant.description" name="description" type="text" />
+          </c-col>
+          <c-col md="4">
+            <label cLabel for="contaminantGroupId">Szennyező Csoport</label>
+            <select cFormControl id="contaminantGroupId" name="contaminantGroupId" required [(ngModel)]="newContaminant.contaminantGroupId">
+              <option *ngFor="let group of contaminantGroups" [value]="group.id">{{ group.name }}</option>
+            </select>
+            <c-form-feedback [valid]="false">Válassz egy csoportot.</c-form-feedback>
+          </c-col>
+          <c-col xs="12">
+            <button cButton color="primary" type="submit">{{ selectedContaminantId ? 'Módosítás' : 'Hozzáadás' }}</button>
+            <button *ngIf="selectedContaminantId" cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
+          </c-col>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header><strong>Szennyezők Listája</strong></c-card-header>
+      <c-card-body>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Név</th>
+            <th>Leírás</th>
+            <th>Csoport</th>
+            <th>Létrehozva</th>
+            <th>Frissítve</th>
+            <th>Műveletek</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let c of contaminants">
+            <td>{{ c.id }}</td>
+            <td>{{ c.name }}</td>
+            <td>{{ c.description }}</td>
+            <td>{{ c.contaminantGroup?.name }}</td>
+            <td>{{ c.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ c.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td><button cButton color="warning" (click)="editContaminant(c)">Szerkesztés</button></td>
+          </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
