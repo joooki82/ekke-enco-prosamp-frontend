@@ -15,7 +15,7 @@ import {
   RowComponent
 } from '@coreui/angular';
 import { FormsModule } from '@angular/forms';
-import {NgIf, NgForOf, DatePipe} from '@angular/common';
+import {NgIf, NgForOf, DatePipe, NgClass} from '@angular/common';
 import { NotificationService } from '../../../services/notification/notification.service';
 import {
   MeasurementUnitRequestDTO,
@@ -45,7 +45,8 @@ import {Observable} from "rxjs";
     FormsModule,
     NgForOf,
     NgIf,
-    DatePipe
+    DatePipe,
+    NgClass
   ]
 })
 export class MeasurementUnitComponent implements OnInit {
@@ -56,6 +57,9 @@ export class MeasurementUnitComponent implements OnInit {
   isModalOpen = false;
   formValidated = false;
   filterText = '';
+  sortColumn: keyof MeasurementUnitResponseDTO | null = null;
+  sortDirection: 'asc' | 'desc' = 'asc';
+
 
   constructor(
     private unitService: MeasurementUnitService,
@@ -135,10 +139,38 @@ export class MeasurementUnitComponent implements OnInit {
   }
 
   get filteredUnits(): MeasurementUnitResponseDTO[] {
-    const lower = this.filterText.toLowerCase();
-    return this.units.filter(unit =>
-      unit.unitCode.toLowerCase().includes(lower) ||
-      unit.description.toLowerCase().includes(lower)
-    );
+    let filtered = this.units;
+
+    if (this.filterText) {
+      const lower = this.filterText.toLowerCase();
+      filtered = filtered.filter(unit =>
+        unit.unitCode.toLowerCase().includes(lower) ||
+        unit.description.toLowerCase().includes(lower)
+      );
+    }
+
+    if (this.sortColumn !== null) {
+      filtered = [...filtered].sort((a, b) => {
+        const column = this.sortColumn!;
+        const aValue = (a[column] ?? '').toString().toLowerCase();
+        const bValue = (b[column] ?? '').toString().toLowerCase();
+
+        if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
+        if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
   }
+
+  toggleSort(column: keyof MeasurementUnitResponseDTO): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+  }
+
 }

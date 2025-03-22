@@ -7,7 +7,7 @@ import {
   ModalFooterComponent, ModalHeaderComponent, RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {
   LaboratoryRequestDTO,
   LaboratoryResponseDTO,
@@ -33,7 +33,8 @@ import {NotificationService} from "../../../services/notification/notification.s
     CardBodyComponent,
     CardHeaderComponent,
     CardComponent,
-    RowComponent
+    RowComponent,
+    NgClass
   ],
   standalone: true,
   templateUrl: './laboratory.component.html',

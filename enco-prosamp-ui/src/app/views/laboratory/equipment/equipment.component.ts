@@ -18,7 +18,7 @@ import {
   RowComponent
 } from "@coreui/angular";
 import { FormsModule } from "@angular/forms";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import { NotificationService } from "../../../services/notification/notification.service";
 import {
   EquipmentRequestDTO,
@@ -51,7 +51,8 @@ import {
     FormLabelDirective,
     NgForOf,
     NgIf,
-    DatePipe
+    DatePipe,
+    NgClass
   ]
 })
 export class EquipmentComponent implements OnInit {

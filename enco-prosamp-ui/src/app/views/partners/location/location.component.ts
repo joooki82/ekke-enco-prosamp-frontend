@@ -9,7 +9,7 @@ import {
   RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-location',
@@ -32,7 +32,7 @@ import {NgForOf, NgIf} from "@angular/common";
     CardComponent,
     CardBodyComponent,
     RowComponent,
-    NgIf
+    NgClass
   ]
 })
 export class LocationComponent implements OnInit {

@@ -15,11 +15,66 @@
       <table class="table table-hover table-bordered">
         <thead>
         <tr>
-          <th (click)="toggleSort('name')">Név <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-          <th (click)="toggleSort('contactEmail')">Email <span *ngIf="sortColumn === 'contactEmail'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-          <th (click)="toggleSort('phone')">Telefon</th>
-          <th (click)="toggleSort('accreditation')">Akkreditáció</th>
-          <th (click)="toggleSort('address')">Cím</th>
+          <th (click)="toggleSort('name')" class="sortable">
+            Név
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'name' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'name' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'name'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
+          <th (click)="toggleSort('contactEmail')" class="sortable">
+            Email
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'contactEmail' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'contactEmail' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'contactEmail'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
+          <th (click)="toggleSort('phone')" class="sortable">
+            Telefon
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'phone' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'phone' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'phone'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
+          <th (click)="toggleSort('accreditation')" class="sortable">
+            Akkreditáció
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'accreditation' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'accreditation' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'accreditation'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
+          <th (click)="toggleSort('address')" class="sortable">
+            Cím
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'address' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'address' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'address'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
           <th>Műveletek</th>
         </tr>
         </thead>

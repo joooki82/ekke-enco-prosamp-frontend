@@ -20,11 +20,66 @@
       <table class="table table-hover table-bordered">
         <thead>
         <tr>
-          <th (click)="toggleSort('name')">Név <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-          <th (click)="toggleSort('identifier')">Azonosító <span *ngIf="sortColumn === 'identifier'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
-          <th>Gyártó</th>
-          <th>Típus</th>
-          <th>Sorozatszám</th>
+          <th (click)="toggleSort('name')" class="sortable">
+            Név
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'name' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'name' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'name'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
+          <th (click)="toggleSort('identifier')" class="sortable">
+            Azonosító
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'identifier' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'identifier' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'identifier'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
+          <th (click)="toggleSort('manufacturer')" class="sortable">
+            Gyártó
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'manufacturer' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'manufacturer' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'manufacturer'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
+          <th (click)="toggleSort('type')" class="sortable">
+            Típus
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'type' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'type' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'type'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
+          <th (click)="toggleSort('serialNumber')" class="sortable">
+            Sorozatszám
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'serialNumber' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'serialNumber' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'serialNumber'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+
           <th>Műveletek</th>
         </tr>
         </thead>

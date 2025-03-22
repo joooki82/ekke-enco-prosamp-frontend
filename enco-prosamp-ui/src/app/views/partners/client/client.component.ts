@@ -16,7 +16,7 @@ import {
 import {FormsModule} from "@angular/forms";
 import {ClientRequestDTO, ClientResponseDTO, ClientService} from "../../../services/partners/client.service";
 import {NotificationService} from "../../../services/notification/notification.service";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-client',
@@ -36,7 +36,8 @@ import {NgForOf, NgIf} from "@angular/common";
     FormLabelDirective,
     ModalFooterComponent,
     NgForOf,
-    NgIf
+    NgIf,
+    NgClass
   ],
   standalone: true,
   templateUrl: './client.component.html',

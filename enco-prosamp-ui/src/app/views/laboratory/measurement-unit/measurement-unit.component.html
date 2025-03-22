@@ -20,14 +20,78 @@
       <table class="table table-hover table-bordered">
         <thead>
         <tr>
-          <th>Kód</th>
-          <th>Leírás</th>
-          <th>Kategória</th>
+          <th (click)="toggleSort('unitCode')" class="sortable">
+            Kód
+            <i class="fa"
+               aria-hidden="true"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'unitCode' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'unitCode' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'unitCode'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+          <th (click)="toggleSort('description')" class="sortable">
+            Leírás
+            <i class="fa"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'description' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'description' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'description'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+          <th (click)="toggleSort('unitCategory')" class="sortable">
+            Kategória
+            <i class="fa"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'unitCategory' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'unitCategory' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'unitCategory'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
           <th>Bázis Egység</th>
-          <th>Átváltási Tényező</th>
-          <th>Standard</th>
-          <th>Létrehozva</th>
-          <th>Frissítve</th>
+          <th (click)="toggleSort('conversionFactor')" class="sortable">
+            Átváltási Tényező
+            <i class="fa"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'conversionFactor' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'conversionFactor' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'conversionFactor'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+          <th (click)="toggleSort('standardBody')" class="sortable">
+            Standard
+            <i class="fa"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'standardBody' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'standardBody' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'standardBody'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+          <th (click)="toggleSort('createdAt')" class="sortable">
+            Létrehozva
+            <i class="fa"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'createdAt' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'createdAt' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'createdAt'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
+          <th (click)="toggleSort('updatedAt')" class="sortable">
+            Frissítve
+            <i class="fa"
+               [ngClass]="{
+           'fa-sort-up': sortColumn === 'updatedAt' && sortDirection === 'asc',
+           'fa-sort-down': sortColumn === 'updatedAt' && sortDirection === 'desc',
+           'fa-sort': sortColumn !== 'updatedAt'
+         }"></i>
+            <span class="visually-hidden">Rendezés</span>
+          </th>
           <th>Műveletek</th>
         </tr>
         </thead>
@@ -66,19 +130,19 @@
     <form #unitForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
       <c-col md="6">
         <label cLabel>Kód</label>
-        <input class="form-control" name="unitCode" required [(ngModel)]="newUnit.unitCode" />
+        <input class="form-control" name="unitCode" required [(ngModel)]="newUnit.unitCode"/>
         <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
       </c-col>
 
       <c-col md="6">
         <label cLabel>Leírás</label>
-        <input class="form-control" name="description" required [(ngModel)]="newUnit.description" />
+        <input class="form-control" name="description" required [(ngModel)]="newUnit.description"/>
         <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
       </c-col>
 
       <c-col md="6">
         <label cLabel>Kategória</label>
-        <input class="form-control" name="unitCategory" required [(ngModel)]="newUnit.unitCategory" />
+        <input class="form-control" name="unitCategory" required [(ngModel)]="newUnit.unitCategory"/>
         <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
       </c-col>
 
@@ -98,12 +162,13 @@
 
       <c-col md="6">
         <label cLabel>Átváltási Tényező</label>
-        <input type="number" step="any" class="form-control" name="conversionFactor" [(ngModel)]="newUnit.conversionFactor" />
+        <input type="number" step="any" class="form-control" name="conversionFactor"
+               [(ngModel)]="newUnit.conversionFactor"/>
       </c-col>
 
       <c-col md="6">
         <label cLabel>Standard Testület</label>
-        <input class="form-control" name="standardBody" [(ngModel)]="newUnit.standardBody" />
+        <input class="form-control" name="standardBody" [(ngModel)]="newUnit.standardBody"/>
       </c-col>
     </form>
   </c-modal-body>

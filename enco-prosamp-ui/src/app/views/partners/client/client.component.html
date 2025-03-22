@@ -21,36 +21,107 @@
         <thead>
         <tr>
           <th (click)="toggleSort('name')" class="sortable">
-            Név
-            <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      <span class="sort-header">
+        Név
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'name' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'name' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'name'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th (click)="toggleSort('contactPerson')" class="sortable">
-            Kapcsolattartó
-            <span *ngIf="sortColumn === 'contactPerson'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      <span class="sort-header">
+        Kapcsolattartó
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'contactPerson' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'contactPerson' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'contactPerson'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th (click)="toggleSort('email')" class="sortable">
-            Email
-            <span *ngIf="sortColumn === 'email'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      <span class="sort-header">
+        Email
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'email' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'email' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'email'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th (click)="toggleSort('phone')" class="sortable">
-            Telefon
-            <span *ngIf="sortColumn === 'phone'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      <span class="sort-header">
+        Telefon
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'phone' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'phone' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'phone'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th (click)="toggleSort('country')" class="sortable">
-            Ország
-            <span *ngIf="sortColumn === 'country'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      <span class="sort-header">
+        Ország
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'country' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'country' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'country'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th (click)="toggleSort('city')" class="sortable">
-            Város
-            <span *ngIf="sortColumn === 'city'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      <span class="sort-header">
+        Város
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'city' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'city' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'city'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th (click)="toggleSort('taxNumber')" class="sortable">
-            Adószám
-            <span *ngIf="sortColumn === 'taxNumber'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      <span class="sort-header">
+        Adószám
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'taxNumber' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'taxNumber' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'taxNumber'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th>Műveletek</th>
         </tr>
         </thead>
+
         <tbody>
         <tr *ngFor="let client of filteredClients">
           <td>{{ client.name }}</td>

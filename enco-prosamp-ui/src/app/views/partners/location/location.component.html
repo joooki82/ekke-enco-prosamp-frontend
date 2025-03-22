@@ -1,7 +1,8 @@
 <!-- Search & Add -->
 <c-row class="mb-3">
   <c-col md="6">
-    <input class="form-control" placeholder="Keresés telephely név vagy kapcsolattartó alapján..." [(ngModel)]="filterText" />
+    <input class="form-control" placeholder="Keresés telephely név vagy kapcsolattartó alapján..."
+           [(ngModel)]="filterText"/>
   </c-col>
   <c-col md="6" class="text-end">
     <button cButton color="primary" (click)="openModal()">Új Telephely</button>
@@ -16,22 +17,78 @@
       <table class="table table-hover table-bordered">
         <thead>
         <tr>
-          <th (click)="toggleSort('name')">
-            Telephely Név <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+          <th (click)="toggleSort('name')" class="sortable">
+      <span class="sort-header">
+        Telephely Név
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'name' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'name' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'name'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th>Szennyező cég</th>
-          <th (click)="toggleSort('contactPerson')">
-            Kapcsolattartó <span *ngIf="sortColumn === 'contactPerson'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+
+          <th (click)="toggleSort('contactPerson')" class="sortable">
+      <span class="sort-header">
+        Kapcsolattartó
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'contactPerson' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'contactPerson' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'contactPerson'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
-          <th (click)="toggleSort('email')">
-            Email <span *ngIf="sortColumn === 'email'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+
+          <th (click)="toggleSort('email')" class="sortable">
+      <span class="sort-header">
+        Email
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'email' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'email' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'email'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
-          <th (click)="toggleSort('city')">
-            Város <span *ngIf="sortColumn === 'city'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+
+          <th (click)="toggleSort('city')" class="sortable">
+      <span class="sort-header">
+        Város
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'city' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'city' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'city'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
-          <th (click)="toggleSort('country')">
-            Ország <span *ngIf="sortColumn === 'country'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+
+          <th (click)="toggleSort('country')" class="sortable">
+      <span class="sort-header">
+        Ország
+        <i class="fa"
+           aria-hidden="true"
+           [ngClass]="{
+             'fa-sort-up': sortColumn === 'country' && sortDirection === 'asc',
+             'fa-sort-down': sortColumn === 'country' && sortDirection === 'desc',
+             'fa-sort': sortColumn !== 'country'
+           }"></i>
+      </span>
+            <span class="visually-hidden">Rendezés</span>
           </th>
+
           <th>Műveletek</th>
         </tr>
         </thead>
@@ -71,43 +128,43 @@
 
       <c-col md="6">
         <label cLabel>Név</label>
-        <input class="form-control" name="name" required [(ngModel)]="newLocation.name" />
+        <input class="form-control" name="name" required [(ngModel)]="newLocation.name"/>
         <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
       </c-col>
 
       <c-col md="6">
         <label cLabel>Kapcsolattartó</label>
-        <input class="form-control" name="contactPerson" required [(ngModel)]="newLocation.contactPerson" />
+        <input class="form-control" name="contactPerson" required [(ngModel)]="newLocation.contactPerson"/>
       </c-col>
 
       <c-col md="6">
         <label cLabel>Email</label>
-        <input class="form-control" name="email" required type="email" [(ngModel)]="newLocation.email" />
+        <input class="form-control" name="email" required type="email" [(ngModel)]="newLocation.email"/>
       </c-col>
 
       <c-col md="6">
         <label cLabel>Telefon</label>
-        <input class="form-control" name="phone" [(ngModel)]="newLocation.phone" />
+        <input class="form-control" name="phone" [(ngModel)]="newLocation.phone"/>
       </c-col>
 
       <c-col md="6">
         <label cLabel>Ország</label>
-        <input class="form-control" name="country" [(ngModel)]="newLocation.country" />
+        <input class="form-control" name="country" [(ngModel)]="newLocation.country"/>
       </c-col>
 
       <c-col md="6">
         <label cLabel>Város</label>
-        <input class="form-control" name="city" [(ngModel)]="newLocation.city" />
+        <input class="form-control" name="city" [(ngModel)]="newLocation.city"/>
       </c-col>
 
       <c-col md="12">
         <label cLabel>Irányítószám</label>
-        <input class="form-control" name="postalCode" [(ngModel)]="newLocation.postalCode" />
+        <input class="form-control" name="postalCode" [(ngModel)]="newLocation.postalCode"/>
       </c-col>
 
       <c-col md="12">
         <label cLabel>Cím</label>
-        <input class="form-control" name="address" [(ngModel)]="newLocation.address" />
+        <input class="form-control" name="address" [(ngModel)]="newLocation.address"/>
       </c-col>
     </form>
   </c-modal-body>
