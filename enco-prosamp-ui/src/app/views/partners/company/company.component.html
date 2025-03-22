@@ -1,1 +1,102 @@
-<p>company works!</p>
+<!-- Search & Add -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input class="form-control" placeholder="Keresés név, kapcsolattartó vagy email alapján..." [(ngModel)]="filterText" />
+  </c-col>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="openModal()">Új Üzem</button>
+  </c-col>
+</c-row>
+
+<!-- Table -->
+<c-card>
+  <c-card-header><strong>Üzemek Listája</strong></c-card-header>
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th (click)="toggleSort('name')">Név <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('contactPerson')">Kapcsolattartó <span *ngIf="sortColumn === 'contactPerson'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('email')">Email <span *ngIf="sortColumn === 'email'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('phone')">Telefon <span *ngIf="sortColumn === 'phone'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('country')">Ország <span *ngIf="sortColumn === 'country'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('city')">Város <span *ngIf="sortColumn === 'city'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('address')">Cím <span *ngIf="sortColumn === 'address'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let company of filteredCompanies">
+          <td>{{ company.name }}</td>
+          <td>{{ company.contactPerson }}</td>
+          <td>{{ company.email }}</td>
+          <td>{{ company.phone }}</td>
+          <td>{{ company.country }}</td>
+          <td>{{ company.city }}</td>
+          <td>{{ company.address }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(company)">Szerkesztés</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredCompanies.length === 0">
+          <td colspan="7" class="text-center text-muted">Nincs találat a megadott szűrőre.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Modal -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+  <c-modal-header>
+    <h5 class="modal-title">{{ selectedCompanyId ? 'Üzem Módosítása' : 'Új Üzem Hozzáadása' }}</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <form #companyForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+      <c-col md="6">
+        <label cLabel>Név</label>
+        <input class="form-control" name="name" required [(ngModel)]="newCompany.name" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Kapcsolattartó</label>
+        <input class="form-control" name="contactPerson" required [(ngModel)]="newCompany.contactPerson" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Email</label>
+        <input class="form-control" name="email" required type="email" [(ngModel)]="newCompany.email" />
+        <c-form-feedback [valid]="false">Érvényes email szükséges</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Telefon</label>
+        <input class="form-control" name="phone" [(ngModel)]="newCompany.phone" />
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Ország</label>
+        <input class="form-control" name="country" [(ngModel)]="newCompany.country" />
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Város</label>
+        <input class="form-control" name="city" [(ngModel)]="newCompany.city" />
+      </c-col>
+
+      <c-col md="12">
+        <label cLabel>Cím</label>
+        <input class="form-control" name="address" [(ngModel)]="newCompany.address" />
+      </c-col>
+    </form>
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton color="primary" (click)="onSubmit()">{{ selectedCompanyId ? 'Mentés' : 'Hozzáadás' }}</button>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+  </c-modal-footer>
+</c-modal>
+
