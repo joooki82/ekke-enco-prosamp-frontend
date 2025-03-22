@@ -1,6 +1,5 @@
 import {Routes} from "@angular/router";
 
-
 export const routes: Routes = [
   {
     path: '',
@@ -32,6 +31,34 @@ export const routes: Routes = [
         loadComponent: () => import('./contaminant/contaminant.component').then(m => m.ContaminantComponent),
         data: {
           title: 'Szennyezőanyag'
+        }
+      },
+      {
+        path: 'equipment',
+        loadComponent: () => import('./equipment/equipment.component').then(m => m.EquipmentComponent),
+        data: {
+          title: 'Eszközök'
+        }
+      },
+      {
+        path: 'measurement-unit',
+        loadComponent: () => import('./measurement-unit/measurement-unit.component').then(m => m.MeasurementUnitComponent),
+        data: {
+          title: 'Mértékegységek'
+        }
+      },
+      {
+        path: 'sample-type',
+        loadComponent: () => import('./sample-type/sample-type.component').then(m => m.SampleTypeComponent),
+        data: {
+          title: 'Mintatípusok'
+        }
+      },
+      {
+        path: 'standard',
+        loadComponent: () => import('./standard/standard.component').then(m => m.StandardComponent),
+        data: {
+          title: 'Szabványok'
         }
       }
     ]

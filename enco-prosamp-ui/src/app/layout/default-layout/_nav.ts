@@ -33,6 +33,21 @@ export const navItems: INavData[] = [
         name: 'Szennyezőanyag',
         url: '/laboratorium/contaminant',
         icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Eszközök',
+        url: '/laboratorium/equipment',
+        icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Mértékegységek',
+        url: '/laboratorium/measurement-unit',
+        icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Szabványok',
+        url: '/laboratorium/standard',
+        icon: 'nav-icon-bullet'
       }
     ]
   },

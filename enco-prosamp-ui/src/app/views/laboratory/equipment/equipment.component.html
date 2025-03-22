@@ -1,0 +1,82 @@
+<!-- Search & Add -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input class="form-control" placeholder="Keresés név vagy azonosító alapján..." [(ngModel)]="filterText" />
+  </c-col>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="openModal()">Új Eszköz</button>
+  </c-col>
+</c-row>
+
+<!-- Equipment List Table -->
+<c-card>
+  <c-card-header><strong>Labor Eszközök</strong></c-card-header>
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th (click)="toggleSort('name')">Név <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('identifier')">Azonosító <span *ngIf="sortColumn === 'identifier'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th>Gyártó</th>
+          <th>Típus</th>
+          <th>Sorozatszám</th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let eq of filteredEquipment">
+          <td>{{ eq.name }}</td>
+          <td>{{ eq.identifier }}</td>
+          <td>{{ eq.manufacturer }}</td>
+          <td>{{ eq.type }}</td>
+          <td>{{ eq.serialNumber }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(eq)">Szerkesztés</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredEquipment.length === 0">
+          <td colspan="6" class="text-center text-muted">Nincs találat.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Modal -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+  <c-modal-header>
+    <h5 class="modal-title">{{ selectedEquipmentId ? 'Eszköz Módosítása' : 'Új Eszköz' }}</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form #equipmentForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+      <c-col md="6">
+        <label cLabel>Név</label>
+        <input class="form-control" name="name" required [(ngModel)]="newEquipment.name" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Azonosító</label>
+        <input class="form-control" name="identifier" required [(ngModel)]="newEquipment.identifier" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6"><label cLabel>Gyártó</label><input class="form-control" [(ngModel)]="newEquipment.manufacturer" name="manufacturer" /></c-col>
+      <c-col md="6"><label cLabel>Típus</label><input class="form-control" [(ngModel)]="newEquipment.type" name="type" /></c-col>
+      <c-col md="6"><label cLabel>Sorozatszám</label><input class="form-control" [(ngModel)]="newEquipment.serialNumber" name="serialNumber" /></c-col>
+      <c-col md="6"><label cLabel>Mérési Tartomány</label><input class="form-control" [(ngModel)]="newEquipment.measuringRange" name="measuringRange" /></c-col>
+      <c-col md="6"><label cLabel>Felbontás</label><input class="form-control" [(ngModel)]="newEquipment.resolution" name="resolution" /></c-col>
+      <c-col md="6"><label cLabel>Pontosság</label><input class="form-control" [(ngModel)]="newEquipment.accuracy" name="accuracy" /></c-col>
+      <c-col md="6"><label cLabel>Kalibrálás Dátuma</label><input type="date" class="form-control" [(ngModel)]="newEquipment.calibrationDate" name="calibrationDate" /></c-col>
+      <c-col md="6"><label cLabel>Következő Kalibrálás</label><input type="date" class="form-control" [(ngModel)]="newEquipment.nextCalibrationDate" name="nextCalibrationDate" /></c-col>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="primary" (click)="onSubmit()">{{ selectedEquipmentId ? 'Mentés' : 'Hozzáadás' }}</button>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+  </c-modal-footer>
+</c-modal>
