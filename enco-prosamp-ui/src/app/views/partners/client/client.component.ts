@@ -16,7 +16,7 @@ import {
 import {FormsModule} from "@angular/forms";
 import {ClientRequestDTO, ClientResponseDTO, ClientService} from "../../../services/partners/client.service";
 import {NotificationService} from "../../../services/notification/notification.service";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-client',
@@ -35,7 +35,8 @@ import {NgForOf} from "@angular/common";
     FormFeedbackComponent,
     FormLabelDirective,
     ModalFooterComponent,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   standalone: true,
   templateUrl: './client.component.html',
@@ -48,6 +49,9 @@ export class ClientComponent implements OnInit {
   isModalOpen = false;
   formValidated = false;
   filterText = '';
+  sortColumn: keyof ClientResponseDTO | null = null;
+  sortDirection: 'asc' | 'desc' = 'asc';
+
 
 
   constructor(
@@ -119,14 +123,39 @@ export class ClientComponent implements OnInit {
   }
 
   get filteredClients(): ClientResponseDTO[] {
-    if (!this.filterText) return this.clients;
+    let filtered = this.clients;
 
-    const lower = this.filterText.toLowerCase();
+    if (this.filterText) {
+      const lower = this.filterText.toLowerCase();
+      filtered = filtered.filter(client =>
+        client.name.toLowerCase().includes(lower) ||
+        client.contactPerson?.toLowerCase().includes(lower) ||
+        client.email?.toLowerCase().includes(lower)
+      );
+    }
 
-    return this.clients.filter(client =>
-      client.name.toLowerCase().includes(lower) ||
-      client.contactPerson?.toLowerCase().includes(lower) ||
-      client.email?.toLowerCase().includes(lower)
-    );
+    if (this.sortColumn !== null) {
+      filtered = [...filtered].sort((a, b) => {
+        const column = this.sortColumn!;
+        const aValue = (a[column] ?? '').toString().toLowerCase();
+        const bValue = (b[column] ?? '').toString().toLowerCase();
+
+        if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
+        if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filtered;
   }
+
+  toggleSort(column: keyof ClientResponseDTO): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+  }
+
 }

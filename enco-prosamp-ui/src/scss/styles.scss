@@ -25,3 +25,8 @@
   margin-right: 10px; // Adjust the value as needed
 }
 
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
