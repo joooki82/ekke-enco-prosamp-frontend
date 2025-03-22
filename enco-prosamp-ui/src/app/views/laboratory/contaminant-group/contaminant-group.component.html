@@ -1,1 +1,61 @@
-<p>contaminant-group works!</p>
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>{{ selectedGroupId ? 'Szennyező Csoport Módosítása' : 'Új Szennyező Csoport Hozzáadása' }}</strong>
+      </c-card-header>
+      <c-card-body>
+        <form #contaminantGroupForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+          <c-col md="6">
+            <label cLabel for="groupName">Név</label>
+            <input cFormControl id="groupName" [(ngModel)]="newContaminantGroup.name" name="name" required type="text" />
+            <c-form-feedback [valid]="false">A név megadása kötelező.</c-form-feedback>
+          </c-col>
+          <c-col md="6">
+            <label cLabel for="groupDescription">Leírás</label>
+            <input cFormControl id="groupDescription" [(ngModel)]="newContaminantGroup.description" name="description" type="text" />
+          </c-col>
+          <c-col xs="12">
+            <button cButton color="primary" type="submit" class="button-spacing">{{ selectedGroupId ? 'Módosítás' : 'Hozzáadás' }}</button>
+            <button *ngIf="selectedGroupId" cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
+          </c-col>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Szennyező Csoportok</strong>
+      </c-card-header>
+      <c-card-body>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Név</th>
+            <th>Leírás</th>
+            <th>Létrehozva</th>
+            <th>Frissítve</th>
+            <th>Műveletek</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let group of contaminantGroups">
+            <td>{{ group.id }}</td>
+            <td>{{ group.name }}</td>
+            <td>{{ group.description }}</td>
+            <td>{{ group.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ group.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+            <td>
+              <button cButton color="warning" (click)="editGroup(group)">Szerkesztés</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
