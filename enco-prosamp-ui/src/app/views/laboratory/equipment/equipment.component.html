@@ -25,14 +25,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let eq of filteredEquipment">
+        <tr *ngFor="let eq of filteredEquipment" (click)="openDetails(eq)" style="cursor: pointer;">
           <td>{{ eq.name }}</td>
           <td>{{ eq.identifier }}</td>
           <td>{{ eq.manufacturer }}</td>
           <td>{{ eq.type }}</td>
           <td>{{ eq.serialNumber }}</td>
           <td>
-            <button cButton color="warning" (click)="openModal(eq)">Szerkesztés</button>
+            <button cButton color="warning" (click)="openModal(eq); $event.stopPropagation()">Szerkesztés</button>
           </td>
         </tr>
         <tr *ngIf="filteredEquipment.length === 0">
@@ -80,3 +80,58 @@
     <button cButton color="secondary" (click)="closeModal()">Mégse</button>
   </c-modal-footer>
 </c-modal>
+
+<!-- Equipment Details Modal -->
+<c-modal
+  [visible]="!!selectedEquipmentForDetails"
+  (close)="closeDetails()"
+  backdrop="static"
+  keyboard="true"
+>
+  <c-modal-header>
+    <h5 class="modal-title">Eszköz Részletei</h5>
+  </c-modal-header>
+  <c-modal-body *ngIf="selectedEquipmentForDetails">
+    <dl class="row">
+      <dt class="col-sm-4">Név</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.name }}</dd>
+
+      <dt class="col-sm-4">Azonosító</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.identifier }}</dd>
+
+      <dt class="col-sm-4">Gyártó</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.manufacturer }}</dd>
+
+      <dt class="col-sm-4">Típus</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.type }}</dd>
+
+      <dt class="col-sm-4">Sorozatszám</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.serialNumber }}</dd>
+
+      <dt class="col-sm-4">Mérési Tartomány</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.measuringRange }}</dd>
+
+      <dt class="col-sm-4">Felbontás</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.resolution }}</dd>
+
+      <dt class="col-sm-4">Pontosság</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.accuracy }}</dd>
+
+      <dt class="col-sm-4">Kalibrálás Dátuma</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.calibrationDate }}</dd>
+
+      <dt class="col-sm-4">Következő Kalibrálás</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.nextCalibrationDate }}</dd>
+
+      <dt class="col-sm-4">Létrehozva</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.createdAt | date:'yyyy-MM-dd HH:mm' }}</dd>
+
+      <dt class="col-sm-4">Frissítve</dt>
+      <dd class="col-sm-8">{{ selectedEquipmentForDetails.updatedAt | date:'yyyy-MM-dd HH:mm' }}</dd>
+    </dl>
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="closeDetails()">Bezárás</button>
+  </c-modal-footer>
+</c-modal>
+

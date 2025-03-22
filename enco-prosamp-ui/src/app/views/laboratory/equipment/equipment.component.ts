@@ -7,7 +7,7 @@ import {
   ModalFooterComponent, ModalHeaderComponent, RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {
   EquipmentRequestDTO,
   EquipmentResponseDTO,
@@ -33,7 +33,8 @@ import {NotificationService} from "../../../services/notification/notification.s
     CardHeaderComponent,
     CardComponent,
     RowComponent,
-    FormDirective
+    FormDirective,
+    DatePipe
   ],
   templateUrl: './equipment.component.html',
   styleUrl: './equipment.component.scss'
@@ -47,6 +48,7 @@ export class EquipmentComponent implements OnInit {
   filterText = '';
   sortColumn: keyof EquipmentResponseDTO | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
+  selectedEquipmentForDetails: EquipmentResponseDTO | null = null;
 
   constructor(
     private equipmentService: EquipmentService,
@@ -147,5 +149,13 @@ export class EquipmentComponent implements OnInit {
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
+  }
+
+  openDetails(equipment: EquipmentResponseDTO): void {
+    this.selectedEquipmentForDetails = equipment;
+  }
+
+  closeDetails(): void {
+    this.selectedEquipmentForDetails = null;
   }
 }
