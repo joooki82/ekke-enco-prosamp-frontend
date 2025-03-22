@@ -48,6 +48,11 @@ export const navItems: INavData[] = [
         name: 'Szabványok',
         url: '/laboratorium/standard',
         icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Minta típusok',
+        url: '/laboratorium/sample-type',
+        icon: 'nav-icon-bullet'
       }
     ]
   },

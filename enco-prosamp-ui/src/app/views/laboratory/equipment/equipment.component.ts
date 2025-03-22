@@ -1,54 +1,70 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
-  ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent,
-  ColComponent, FormDirective,
+  ButtonDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  ColComponent,
+  FormDirective,
   FormFeedbackComponent,
-  FormLabelDirective, ModalBodyComponent, ModalComponent,
-  ModalFooterComponent, ModalHeaderComponent, RowComponent
+  FormLabelDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  OffcanvasComponent,
+  OffcanvasHeaderComponent,
+  OffcanvasBodyComponent,
+  RowComponent
 } from "@coreui/angular";
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import { NotificationService } from "../../../services/notification/notification.service";
 import {
   EquipmentRequestDTO,
   EquipmentResponseDTO,
   EquipmentService
 } from "../../../services/laboratory/equipment.service";
-import {NotificationService} from "../../../services/notification/notification.service";
 
 @Component({
   selector: 'app-equipment',
+  standalone: true,
+  templateUrl: './equipment.component.html',
+  styleUrl: './equipment.component.scss',
   imports: [
-    ButtonDirective,
-    ModalFooterComponent,
     ColComponent,
+    RowComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    ButtonDirective,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    ModalFooterComponent,
+    OffcanvasComponent,
+    OffcanvasHeaderComponent,
+    OffcanvasBodyComponent,
+    FormsModule,
+    FormDirective,
     FormFeedbackComponent,
     FormLabelDirective,
-    ModalBodyComponent,
-    FormsModule,
-    ModalHeaderComponent,
-    ModalComponent,
-    NgIf,
     NgForOf,
-    CardBodyComponent,
-    CardHeaderComponent,
-    CardComponent,
-    RowComponent,
-    FormDirective,
+    NgIf,
     DatePipe
-  ],
-  templateUrl: './equipment.component.html',
-  styleUrl: './equipment.component.scss'
+  ]
 })
 export class EquipmentComponent implements OnInit {
   equipmentList: EquipmentResponseDTO[] = [];
   newEquipment: EquipmentRequestDTO = this.createEmptyEquipment();
   selectedEquipmentId: number | null = null;
+  selectedEquipmentForDetails: EquipmentResponseDTO | null = null;
   isModalOpen = false;
+  isDrawerOpen = false;
   formValidated = false;
   filterText = '';
   sortColumn: keyof EquipmentResponseDTO | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
-  selectedEquipmentForDetails: EquipmentResponseDTO | null = null;
 
   constructor(
     private equipmentService: EquipmentService,
@@ -98,6 +114,16 @@ export class EquipmentComponent implements OnInit {
     this.formValidated = false;
   }
 
+  openDetails(equipment: EquipmentResponseDTO): void {
+    this.selectedEquipmentForDetails = equipment;
+    this.isDrawerOpen = true;
+  }
+
+  closeDetails(): void {
+    this.selectedEquipmentForDetails = null;
+    this.isDrawerOpen = false;
+  }
+
   onSubmit(): void {
     if (!this.newEquipment.name || !this.newEquipment.identifier) {
       this.formValidated = true;
@@ -122,6 +148,7 @@ export class EquipmentComponent implements OnInit {
 
   get filteredEquipment(): EquipmentResponseDTO[] {
     let filtered = this.equipmentList;
+
     if (this.filterText) {
       const lower = this.filterText.toLowerCase();
       filtered = filtered.filter(eq =>
@@ -149,13 +176,5 @@ export class EquipmentComponent implements OnInit {
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
-  }
-
-  openDetails(equipment: EquipmentResponseDTO): void {
-    this.selectedEquipmentForDetails = equipment;
-  }
-
-  closeDetails(): void {
-    this.selectedEquipmentForDetails = null;
   }
 }
