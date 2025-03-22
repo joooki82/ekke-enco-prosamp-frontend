@@ -17,8 +17,15 @@
           </c-col>
           <c-col md="4">
             <label cLabel for="contaminantGroupId">Szennyező Csoport</label>
-            <select cFormControl id="contaminantGroupId" name="contaminantGroupId" required [(ngModel)]="newContaminant.contaminantGroupId">
-              <option *ngFor="let group of contaminantGroups" [value]="group.id">{{ group.name }}</option>
+            <select id="contaminantGroupId"
+                    name="contaminantGroupId"
+                    class="form-select"
+                    required
+                    [(ngModel)]="newContaminant.contaminantGroupId">
+              <option value="" disabled selected>-- Válassz csoportot --</option>
+              <option *ngFor="let group of contaminantGroups" [value]="group.id">
+                {{ group.name }}
+              </option>
             </select>
             <c-form-feedback [valid]="false">Válassz egy csoportot.</c-form-feedback>
           </c-col>

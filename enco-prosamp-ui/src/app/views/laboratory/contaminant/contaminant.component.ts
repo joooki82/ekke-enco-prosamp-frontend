@@ -9,10 +9,35 @@ import {
   ContaminantGroupService
 } from "../../../services/laboratory/contaminant-group.service";
 import {NotificationService} from "../../../services/notification/notification.service";
+import {
+  ButtonDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  ColComponent, FormControlDirective, FormDirective,
+  FormFeedbackComponent, FormLabelDirective, RowComponent
+} from "@coreui/angular";
+import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-contaminant',
-  imports: [],
+  imports: [
+    ButtonDirective,
+    DatePipe,
+    NgForOf,
+    CardBodyComponent,
+    CardHeaderComponent,
+    CardComponent,
+    ColComponent,
+    FormFeedbackComponent,
+    NgIf,
+    FormLabelDirective,
+    FormsModule,
+    FormDirective,
+    RowComponent,
+    FormControlDirective
+  ],
   standalone: true,
   templateUrl: './contaminant.component.html',
   styleUrl: './contaminant.component.scss'
