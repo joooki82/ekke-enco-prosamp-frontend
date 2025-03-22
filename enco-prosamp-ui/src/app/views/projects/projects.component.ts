@@ -168,8 +168,9 @@ export class ProjectsComponent implements OnInit {
       const lower = this.filterText.toLowerCase();
       filtered = filtered.filter(p =>
         p.projectName.toLowerCase().includes(lower) ||
-        p.projectNumber.toLowerCase().includes(lower)
-      );
+        p.projectNumber.toLowerCase().includes(lower) ||
+        p.clientName.toLowerCase().includes(lower)     // 👈 új feltétel
+    );
     }
 
     if (this.sortColumn !== null) {
