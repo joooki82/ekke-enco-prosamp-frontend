@@ -17,7 +17,7 @@ import {NotificationService} from "./services/notification/notification.service"
 export class AppComponent implements OnInit {
 
 
-  title = 'CoreUI Angular Admin Template';
+  title = 'Encotech Prosamp ';
 
   readonly #destroyRef: DestroyRef = inject(DestroyRef);
   readonly #activatedRoute: ActivatedRoute = inject(ActivatedRoute);
