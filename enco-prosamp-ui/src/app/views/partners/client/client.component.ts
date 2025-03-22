@@ -47,6 +47,8 @@ export class ClientComponent implements OnInit {
   selectedClientId: number | null = null;
   isModalOpen = false;
   formValidated = false;
+  filterText = '';
+
 
   constructor(
     private clientService: ClientService,
@@ -114,5 +116,17 @@ export class ClientComponent implements OnInit {
       },
       error: () => this.notificationService.showError('Művelet sikertelen')
     });
+  }
+
+  get filteredClients(): ClientResponseDTO[] {
+    if (!this.filterText) return this.clients;
+
+    const lower = this.filterText.toLowerCase();
+
+    return this.clients.filter(client =>
+      client.name.toLowerCase().includes(lower) ||
+      client.contactPerson?.toLowerCase().includes(lower) ||
+      client.email?.toLowerCase().includes(lower)
+    );
   }
 }
