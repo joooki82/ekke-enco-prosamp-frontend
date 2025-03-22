@@ -50,8 +50,8 @@ export const navItems: INavData[] = [
         icon: 'nav-icon-bullet'
       },
       {
-        name: 'Minta típusok',
-        url: '/laboratorium/sample-type',
+        name: 'Mintavételi típusok',
+        url: '/laboratorium/sampling-type',
         icon: 'nav-icon-bullet'
       }
     ]

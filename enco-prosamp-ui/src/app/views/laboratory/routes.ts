@@ -48,10 +48,10 @@ export const routes: Routes = [
         }
       },
       {
-        path: 'sample-type',
-        loadComponent: () => import('./sample-type/sample-type.component').then(m => m.SampleTypeComponent),
+        path: 'sampling-type',
+        loadComponent: () => import('./sampling-type/sampling-type.component').then(m => m.SamplingTypeComponent),
         data: {
-          title: 'Mintatípusok'
+          title: 'Mintavételi típusok'
         }
       },
       {

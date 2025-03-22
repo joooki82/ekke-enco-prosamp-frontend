@@ -46,6 +46,10 @@ export class StandardComponent implements OnInit {
   filterText = '';
   sortColumn: keyof StandardResponseDTO | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
+  readonly STANDARD_TYPES = [
+    { label: 'Mintavétel', value: 'SAMPLING' },
+    { label: 'Vizsgálat', value: 'ANALYSES' }
+  ];
 
   constructor(
     private standardService: StandardService,

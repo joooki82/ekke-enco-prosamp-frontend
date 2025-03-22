@@ -1,0 +1,84 @@
+<!-- Filter + Add -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input class="form-control" placeholder="Keresés kód vagy leírás alapján..." [(ngModel)]="filterText" />
+  </c-col>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="openModal()">Új Típus</button>
+  </c-col>
+</c-row>
+
+<!-- Table -->
+<c-card>
+  <c-card-header><strong>Mintavételi Típusok</strong></c-card-header>
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th (click)="toggleSort('code')" class="sortable">
+              <span class="sort-header">Kód
+                <i class="fa"
+                   [ngClass]="{
+                     'fa-sort-up': sortColumn === 'code' && sortDirection === 'asc',
+                     'fa-sort-down': sortColumn === 'code' && sortDirection === 'desc',
+                     'fa-sort': sortColumn !== 'code'
+                   }"></i>
+              </span>
+          </th>
+          <th (click)="toggleSort('description')" class="sortable">
+              <span class="sort-header">Leírás
+                <i class="fa"
+                   [ngClass]="{
+                     'fa-sort-up': sortColumn === 'description' && sortDirection === 'asc',
+                     'fa-sort-down': sortColumn === 'description' && sortDirection === 'desc',
+                     'fa-sort': sortColumn !== 'description'
+                   }"></i>
+              </span>
+          </th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let s of filtered">
+          <td>{{ s.code }}</td>
+          <td>{{ s.description }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(s)">Szerkesztés</button>
+          </td>
+        </tr>
+        <tr *ngIf="filtered.length === 0">
+          <td colspan="3" class="text-center text-muted">Nincs találat</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Modal -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+  <c-modal-header>
+    <h5 class="modal-title">{{ selectedId ? 'Típus módosítása' : 'Új Típus' }}</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form #form="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+      <c-col md="6">
+        <label cLabel>Kód</label>
+        <input class="form-control" name="code" required [(ngModel)]="newSamplingType.code" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+      <c-col md="6">
+        <label cLabel>Leírás</label>
+        <input class="form-control" name="description" required [(ngModel)]="newSamplingType.description" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="primary" (click)="onSubmit()">{{ selectedId ? 'Mentés' : 'Hozzáadás' }}</button>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+  </c-modal-footer>
+</c-modal>

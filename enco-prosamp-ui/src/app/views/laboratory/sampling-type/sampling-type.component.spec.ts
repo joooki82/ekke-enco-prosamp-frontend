@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SampleTypeComponent } from './sample-type.component';
+import { SamplingTypeComponent } from './sampling-type.component';
 
-describe('SampleTypeComponent', () => {
-  let component: SampleTypeComponent;
-  let fixture: ComponentFixture<SampleTypeComponent>;
+describe('SamplingTypeComponent', () => {
+  let component: SamplingTypeComponent;
+  let fixture: ComponentFixture<SamplingTypeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SampleTypeComponent]
+      imports: [SamplingTypeComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SampleTypeComponent);
+    fixture = TestBed.createComponent(SamplingTypeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

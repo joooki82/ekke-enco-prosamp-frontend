@@ -119,7 +119,12 @@
 
       <c-col md="12">
         <label cLabel>Típus</label>
-        <input class="form-control" name="standardType" [(ngModel)]="newStandard.standardType" />
+        <select class="form-control" name="standardType" required [(ngModel)]="newStandard.standardType">
+          <option *ngFor="let type of STANDARD_TYPES" [ngValue]="type.value">
+            {{ type.label }}
+          </option>
+        </select>
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
       </c-col>
     </form>
   </c-modal-body>
