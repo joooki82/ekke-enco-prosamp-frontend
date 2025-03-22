@@ -1,73 +1,93 @@
-<c-row>
-  <c-col xs="12">
-    <c-card class="mb-4">
-      <c-card-header>
-        <strong>{{ selectedContaminantId ? 'Szennyező Módosítása' : 'Új Szennyező Hozzáadása' }}</strong>
-      </c-card-header>
-      <c-card-body>
-        <form #contaminantForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
-          <c-col md="4">
-            <label cLabel for="contaminantName">Név</label>
-            <input cFormControl id="contaminantName" [(ngModel)]="newContaminant.name" name="name" required type="text" />
-            <c-form-feedback [valid]="false">A név megadása kötelező.</c-form-feedback>
-          </c-col>
-          <c-col md="4">
-            <label cLabel for="contaminantDescription">Leírás</label>
-            <input cFormControl id="contaminantDescription" [(ngModel)]="newContaminant.description" name="description" type="text" />
-          </c-col>
-          <c-col md="4">
-            <label cLabel for="contaminantGroupId">Szennyező Csoport</label>
-            <select id="contaminantGroupId"
-                    name="contaminantGroupId"
-                    class="form-select"
-                    required
-                    [(ngModel)]="newContaminant.contaminantGroupId">
-              <option value="" disabled selected>-- Válassz csoportot --</option>
-              <option *ngFor="let group of contaminantGroups" [value]="group.id">
-                {{ group.name }}
-              </option>
-            </select>
-            <c-form-feedback [valid]="false">Válassz egy csoportot.</c-form-feedback>
-          </c-col>
-          <c-col xs="12">
-            <button cButton color="primary" type="submit">{{ selectedContaminantId ? 'Módosítás' : 'Hozzáadás' }}</button>
-            <button *ngIf="selectedContaminantId" cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
-          </c-col>
-        </form>
-      </c-card-body>
-    </c-card>
+<c-row class="mb-3">
+  <!-- Filter Dropdown -->
+  <c-col md="4">
+    <label cLabel for="filterGroupId">Szűrés Csoport Szerint</label>
+    <select id="filterGroupId" class="form-select" [(ngModel)]="filterGroupId">
+      <option [ngValue]="null">-- Összes --</option>
+      <option *ngFor="let group of contaminantGroups" [ngValue]="group.id">{{ group.name }}</option>
+    </select>
   </c-col>
 
-  <c-col xs="12">
-    <c-card class="mb-4">
-      <c-card-header><strong>Szennyezők Listája</strong></c-card-header>
-      <c-card-body>
-        <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Név</th>
-            <th>Leírás</th>
-            <th>Csoport</th>
-            <th>Létrehozva</th>
-            <th>Frissítve</th>
-            <th>Műveletek</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let c of contaminants">
-            <td>{{ c.id }}</td>
-            <td>{{ c.name }}</td>
-            <td>{{ c.description }}</td>
-            <td>{{ c.contaminantGroup?.name }}</td>
-            <td>{{ c.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ c.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
-            <td><button cButton color="warning" (click)="editContaminant(c)">Szerkesztés</button></td>
-          </tr>
-          </tbody>
-        </table>
-      </c-card-body>
-    </c-card>
+  <!-- Add New Button -->
+  <c-col md="4" class="align-self-end">
+    <button cButton color="primary" (click)="openModal()">Új Szennyező</button>
   </c-col>
 </c-row>
 
+<!-- Contaminant Table -->
+<c-card>
+  <c-card-header><strong>Szennyezők Listája</strong></c-card-header>
+  <c-card-body>
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Név</th>
+        <th>Leírás</th>
+        <th>Csoport</th>
+        <th>Létrehozva</th>
+        <th>Frissítve</th>
+        <th>Műveletek</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let c of filteredContaminants">
+        <td>{{ c.id }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.description }}</td>
+        <td>{{ c.contaminantGroup.name }}</td>
+        <td>{{ c.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ c.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+        <td>
+          <button cButton color="warning" (click)="openModal(c)">Szerkesztés</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </c-card-body>
+</c-card>
+
+<!-- Modal Form for Create/Edit -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+  <c-modal-header>
+    <h5 class="modal-title">
+      {{ selectedContaminantId ? 'Szennyező Módosítása' : 'Új Szennyező Hozzáadása' }}
+    </h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form #modalForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+      <c-col md="6">
+        <label cLabel for="name">Név</label>
+        <input id="name" name="name" [(ngModel)]="newContaminant.name" type="text"
+               class="form-control" required />
+        <c-form-feedback [valid]="false">A név megadása kötelező.</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel for="description">Leírás</label>
+        <input id="description" name="description" [(ngModel)]="newContaminant.description" type="text"
+               class="form-control" />
+      </c-col>
+
+      <c-col md="12">
+        <label cLabel for="groupSelect">Szennyező Csoport</label>
+        <select id="groupSelect" name="contaminantGroupId"
+                class="form-select"
+                required
+                [(ngModel)]="newContaminant.contaminantGroupId">
+          <option value="" disabled>-- Válassz csoportot --</option>
+          <option *ngFor="let group of contaminantGroups" [value]="group.id">{{ group.name }}</option>
+        </select>
+        <c-form-feedback [valid]="false">Válassz egy csoportot.</c-form-feedback>
+      </c-col>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="primary" (click)="onSubmit()">
+      {{ selectedContaminantId ? 'Mentés' : 'Hozzáadás' }}
+    </button>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+  </c-modal-footer>
+</c-modal>

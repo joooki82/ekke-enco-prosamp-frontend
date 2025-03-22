@@ -23,6 +23,10 @@ export const routes: Routes = [
         loadChildren: () => import('./views/laboratory/routes').then((m) => m.routes)
       },
       {
+        path: 'partners',
+        loadChildren: () => import('./views/partners/routes').then((m) => m.routes)
+      },
+      {
         path: 'theme',
         loadChildren: () => import('./views/theme/routes').then((m) => m.routes)
       },

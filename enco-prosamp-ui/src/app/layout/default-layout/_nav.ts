@@ -37,6 +37,28 @@ export const navItems: INavData[] = [
     ]
   },
   {
+    name: 'Partnerek',
+    url: '/partners',
+    iconComponent: { name: 'cil-company' },
+    children: [
+      {
+        name: 'Megbízók',
+        url: '/partners/client',
+        icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Üzemek',
+        url: '/partners/company',
+        icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Telephelyek',
+        url: '/partners/location',
+        icon: 'nav-icon-bullet'
+      }
+    ]
+  },
+  {
     name: 'Colors',
     url: '/theme/colors',
     iconComponent: { name: 'cil-drop' }

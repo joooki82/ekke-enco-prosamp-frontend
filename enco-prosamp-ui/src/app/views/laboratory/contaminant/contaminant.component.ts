@@ -14,8 +14,16 @@ import {
   CardBodyComponent,
   CardComponent,
   CardHeaderComponent,
-  ColComponent, FormControlDirective, FormDirective,
-  FormFeedbackComponent, FormLabelDirective, RowComponent
+  ColComponent,
+  FormControlDirective,
+  FormDirective,
+  FormFeedbackComponent,
+  FormLabelDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  RowComponent
 } from "@coreui/angular";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
@@ -31,12 +39,14 @@ import {FormsModule} from "@angular/forms";
     CardComponent,
     ColComponent,
     FormFeedbackComponent,
-    NgIf,
     FormLabelDirective,
     FormsModule,
     FormDirective,
     RowComponent,
-    FormControlDirective
+    ModalFooterComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalHeaderComponent
   ],
   standalone: true,
   templateUrl: './contaminant.component.html',
@@ -49,6 +59,11 @@ export class ContaminantComponent implements OnInit {
   newContaminant: ContaminantRequestDTO = { name: '', description: '', contaminantGroupId: 0 };
   selectedContaminantId: number | null = null;
   formValidated = false;
+
+  isModalOpen = false;
+  filterGroupId: number | null = null;
+
+
 
   constructor(
     private contaminantService: ContaminantService,
@@ -116,4 +131,29 @@ export class ContaminantComponent implements OnInit {
     this.selectedContaminantId = null;
     this.formValidated = false;
   }
+
+  openModal(contaminant?: ContaminantResponseDTO): void {
+    this.resetForm();
+
+    if (contaminant) {
+      this.selectedContaminantId = contaminant.id;
+      this.newContaminant = {
+        name: contaminant.name,
+        description: contaminant.description,
+        contaminantGroupId: contaminant.contaminantGroup.id
+      };
+    }
+
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+  }
+
+  get filteredContaminants(): ContaminantResponseDTO[] {
+    if (!this.filterGroupId) return this.contaminants;
+    return this.contaminants.filter(c => c.contaminantGroup?.id === this.filterGroupId);
+  }
+
 }
