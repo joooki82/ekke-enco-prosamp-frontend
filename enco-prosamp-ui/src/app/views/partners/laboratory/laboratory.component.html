@@ -1,0 +1,90 @@
+<!-- location.component.html -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input class="form-control" placeholder="Keresés labor név vagy email alapján..." [(ngModel)]="filterText" />
+  </c-col>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="openModal()">Új Labor</button>
+  </c-col>
+</c-row>
+
+<c-card>
+  <c-card-header><strong>Laboratóriumok</strong></c-card-header>
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th (click)="toggleSort('name')">Név <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('contactEmail')">Email <span *ngIf="sortColumn === 'contactEmail'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span></th>
+          <th (click)="toggleSort('phone')">Telefon</th>
+          <th (click)="toggleSort('accreditation')">Akkreditáció</th>
+          <th (click)="toggleSort('address')">Cím</th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let lab of filteredLabs">
+          <td>{{ lab.name }}</td>
+          <td>{{ lab.contactEmail }}</td>
+          <td>{{ lab.phone }}</td>
+          <td>{{ lab.accreditation }}</td>
+          <td>{{ lab.address }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(lab)">Szerkesztés</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredLabs.length === 0">
+          <td colspan="6" class="text-center text-muted">Nincs találat.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Modal -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+  <c-modal-header>
+    <h5 class="modal-title">{{ selectedLabId ? 'Labor Módosítása' : 'Új Labor Hozzáadása' }}</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <form #labForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
+      <c-col md="6">
+        <label cLabel>Név</label>
+        <input class="form-control" name="name" required [(ngModel)]="newLab.name" />
+        <c-form-feedback [valid]="false">Kötelező mező</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Email</label>
+        <input class="form-control" name="contactEmail" required type="email" [(ngModel)]="newLab.contactEmail" />
+        <c-form-feedback [valid]="false">Érvényes email szükséges</c-form-feedback>
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Telefon</label>
+        <input class="form-control" name="phone" [(ngModel)]="newLab.phone" />
+      </c-col>
+
+      <c-col md="6">
+        <label cLabel>Akkreditáció</label>
+        <input class="form-control" name="accreditation" [(ngModel)]="newLab.accreditation" />
+      </c-col>
+
+      <c-col md="12">
+        <label cLabel>Cím</label>
+        <input class="form-control" name="address" [(ngModel)]="newLab.address" />
+      </c-col>
+
+      <c-col md="12">
+        <label cLabel>Weboldal</label>
+        <input class="form-control" name="website" [(ngModel)]="newLab.website" />
+      </c-col>
+    </form>
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton color="primary" (click)="onSubmit()">{{ selectedLabId ? 'Mentés' : 'Hozzáadás' }}</button>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+  </c-modal-footer>
+</c-modal>

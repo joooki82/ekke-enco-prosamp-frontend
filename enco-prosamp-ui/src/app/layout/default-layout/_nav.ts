@@ -55,6 +55,11 @@ export const navItems: INavData[] = [
         name: 'Telephelyek',
         url: '/partners/location',
         icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Labroatórium',
+        url: '/partners/laboratory',
+        icon: 'nav-icon-bullet'
       }
     ]
   },
