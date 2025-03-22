@@ -21,7 +21,7 @@
 
           <!-- Submit and Reset Buttons -->
           <c-col xs="12">
-            <button cButton color="primary" type="submit">{{ selectedMethodId ? 'Módosítás' : 'Hozzáadás' }}</button>
+            <button cButton color="primary"  type="submit" class="button-spacing">{{ selectedMethodId ? 'Módosítás' : 'Hozzáadás' }}</button>
             <button *ngIf="selectedMethodId" cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
           </c-col>
         </form>
