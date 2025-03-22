@@ -104,6 +104,48 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-puzzle' }
   },
   {
+    title: true,
+    name: 'Encotech - mintavétel'
+  },
+  {
+    name: 'Mintavétel',
+    url: '/sampling',
+    iconComponent: { name: 'cil-running' },
+    children: [
+      {
+        name: 'Mintavételi jegyzőkönyvek',
+        url: '/sampling/sampling-record-datm200',
+        icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Minták',
+        url: '/sampling/samples',
+        icon: 'nav-icon-bullet'
+      },
+    ]
+  },
+  {
+    title: true,
+    name: 'Encotech - jegyzőkönyvek'
+  },
+  {
+    name: 'Jegyzőkönyvek',
+    url: '/reports',
+    iconComponent: { name: 'cil-description' },
+    children: [
+      {
+        name: 'Analitikai jegyzőkönyvek',
+        url: '/reports/analytical-lab-report',
+        icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Vizsgálati jegyzőkönyvek',
+        url: '/reports/test-report',
+        icon: 'nav-icon-bullet'
+      },
+    ]
+  },
+  {
     name: 'Components',
     title: true
   },
