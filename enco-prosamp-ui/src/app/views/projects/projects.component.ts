@@ -14,7 +14,7 @@ import {
 } from "@coreui/angular";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {ProjectRequestDTO, ProjectResponseDTO, ProjectService} from 'src/app/services/projects/projects.service';
+import {ProjectRequestDTO, ProjectResponseDTO, ProjectsService} from 'src/app/services/projects/projects.service';
 import {ClientResponseDTO } from "../../services/partners/client.service";
 import {NotificationService} from "../../services/notification/notification.service";
 import {ClientLookupModalComponent} from "./client-lookup-modal/client-lookup-modal.component";
@@ -66,7 +66,7 @@ export class ProjectsComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(
-    private projectService: ProjectService,
+    private projectService: ProjectsService,
     private notificationService: NotificationService
   ) {}
 

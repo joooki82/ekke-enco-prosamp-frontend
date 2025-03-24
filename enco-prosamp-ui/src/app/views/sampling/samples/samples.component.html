@@ -1,1 +1,71 @@
-<p>samples works!</p>
+<!-- Header -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Keresés mintanév, státusz..." (ngModelChange)="filterSamples()" />
+  </c-col>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="openModal()">+ Új minta</button>
+  </c-col>
+</c-row>
+
+<!-- Modal -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static">
+  <c-modal-header>
+    <h5>{{ selectedSampleId ? 'Minta szerkesztése' : 'Új minta' }}</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <form class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Minta azonosító</label>
+        <input class="form-control" [(ngModel)]="newSample.sampleIdentifier" name="sampleIdentifier" required />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Státusz</label>
+        <input class="form-control" [(ngModel)]="newSample.status" name="status" required />
+      </div>
+      <!-- Add other fields here... -->
+    </form>
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+    <button cButton color="primary" (click)="onSubmit()">Mentés</button>
+  </c-modal-footer>
+</c-modal>
+
+<!-- Table -->
+<c-card>
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover align-middle mb-0">
+        <thead class="table-light">
+        <tr>
+          <th>Azonosító</th>
+          <th>Hely</th>
+          <th>Alkalmazott</th>
+          <th>Státusz</th>
+          <th>Létrehozva</th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let s of filteredSamples">
+          <td>{{ s.sampleIdentifier }}</td>
+          <td>{{ s.location }}</td>
+          <td>{{ s.employeeName }}</td>
+          <td>{{ s.status }}</td>
+          <td>{{ s.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>
+            <button cButton color="warning" size="sm" (click)="openModal(s)">
+              <i class="fa fa-edit me-1"></i> Szerkesztés
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredSamples.length === 0">
+          <td colspan="6" class="text-center text-muted">Nincs találat.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+

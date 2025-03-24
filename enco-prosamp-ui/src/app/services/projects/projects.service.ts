@@ -32,7 +32,7 @@ export interface ProjectResponseDTO {
 }
 
 @Injectable({ providedIn: 'root' })
-export class ProjectService {
+export class ProjectsService {
   private baseUrl = `${environment.apiUrl}/api/projects`;
 
   constructor(private http: HttpClient) {}

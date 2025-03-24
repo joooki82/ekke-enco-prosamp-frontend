@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ProjectResponseDTO, ProjectService} from "../../../../../services/projects/projects.service";
+import {ProjectResponseDTO, ProjectsService} from "../../../../../services/projects/projects.service";
 import {
   ButtonDirective,
   ModalBodyComponent,
@@ -32,7 +32,7 @@ export class ProjectLookupModalComponent implements OnInit {
   projects: ProjectResponseDTO[] = [];
   filter = '';
 
-  constructor(private projectService: ProjectService) {}
+  constructor(private projectService: ProjectsService) {}
 
   ngOnInit(): void {
     this.loadProjects();
