@@ -1,35 +1,34 @@
 <c-row class="mb-3">
   <!-- Filter Dropdown -->
-  <c-col md="4">
-    <label cLabel for="filterGroupId">Szűrés Csoport Szerint</label>
-    <select id="filterGroupId" class="form-select" [(ngModel)]="filterGroupId">
-      <option [ngValue]="null">-- Összes --</option>
-      <option *ngFor="let group of contaminantGroups" [ngValue]="group.id">{{ group.name }}</option>
-    </select>
+  <c-col md="6">
+    <input id="searchInput"
+           type="text"
+           class="form-control"
+           placeholder="Keresés név vagy leírás alapján..."
+           [(ngModel)]="searchText" />
   </c-col>
-
   <!-- Add New Button -->
-  <c-col md="4" class="align-self-end">
-    <button cButton color="primary" (click)="openModal()">Új Szennyező</button>
+  <c-col class="text-end">
+    <button cButton color="primary" (click)="openModal()">+Új Szennyezőanyag</button>
   </c-col>
 </c-row>
 
 <!-- Contaminant Table -->
 <c-card>
-  <c-card-header><strong>Szennyezők Listája</strong></c-card-header>
+  <c-card-header><strong>Szennyezőanyagok listája</strong></c-card-header>
   <c-card-body>
     <div class="table-responsive"> <!-- ✅ Add this wrapper -->
 
-      <table class="table table-hover">
-        <thead>
+      <table class="table table-bordered table-hover align-middle mb-0">
+        <thead class="table-light">
         <tr>
-          <th>ID</th>
+          <th style="width: 60px;">ID</th>
           <th>Név</th>
           <th>Leírás</th>
           <th>Csoport</th>
           <th>Létrehozva</th>
           <th>Frissítve</th>
-          <th>Műveletek</th>
+          <th style="width: 150px;">Műveletek</th>
         </tr>
         </thead>
         <tbody>
@@ -41,8 +40,13 @@
           <td>{{ c.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>{{ c.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>
-            <button cButton color="warning" (click)="openModal(c)">Szerkesztés</button>
+            <button cButton color="warning" size="sm" (click)="openModal(c)">
+              <i class="fa fa-edit me-1"></i> Szerkesztés
+            </button>
           </td>
+        </tr>
+        <tr *ngIf="filteredContaminants.length === 0">
+          <td colspan="7" class="text-center text-muted">Nincs találat.</td>
         </tr>
         </tbody>
       </table>

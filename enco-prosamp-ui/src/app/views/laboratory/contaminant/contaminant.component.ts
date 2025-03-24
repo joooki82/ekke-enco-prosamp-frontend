@@ -15,7 +15,6 @@ import {
   CardComponent,
   CardHeaderComponent,
   ColComponent,
-  FormControlDirective,
   FormDirective,
   FormFeedbackComponent,
   FormLabelDirective,
@@ -46,7 +45,8 @@ import {FormsModule} from "@angular/forms";
     ModalFooterComponent,
     ModalBodyComponent,
     ModalComponent,
-    ModalHeaderComponent
+    ModalHeaderComponent,
+    NgIf
   ],
   standalone: true,
   templateUrl: './contaminant.component.html',
@@ -63,6 +63,7 @@ export class ContaminantComponent implements OnInit {
   isModalOpen = false;
   filterGroupId: number | null = null;
 
+  searchText: string = '';
 
 
   constructor(
@@ -117,14 +118,6 @@ export class ContaminantComponent implements OnInit {
     }
   }
 
-  editContaminant(contaminant: ContaminantResponseDTO): void {
-    this.selectedContaminantId = contaminant.id;
-    this.newContaminant = {
-      name: contaminant.name,
-      description: contaminant.description,
-      contaminantGroupId: contaminant.contaminantGroup.id
-    };
-  }
 
   resetForm(): void {
     this.newContaminant = { name: '', description: '', contaminantGroupId: 0 };
@@ -151,9 +144,24 @@ export class ContaminantComponent implements OnInit {
     this.isModalOpen = false;
   }
 
+
   get filteredContaminants(): ContaminantResponseDTO[] {
-    if (!this.filterGroupId) return this.contaminants;
-    return this.contaminants.filter(c => c.contaminantGroup?.id === this.filterGroupId);
+    let filtered = this.contaminants;
+
+    if (this.filterGroupId) {
+      filtered = filtered.filter(c => c.contaminantGroup?.id === this.filterGroupId);
+    }
+
+    if (this.searchText?.trim()) {
+      const text = this.searchText.toLowerCase();
+      filtered = filtered.filter(c =>
+        c.name?.toLowerCase().includes(text) ||
+        c.description?.toLowerCase().includes(text)
+      );
+    }
+
+    return filtered;
   }
+
 
 }

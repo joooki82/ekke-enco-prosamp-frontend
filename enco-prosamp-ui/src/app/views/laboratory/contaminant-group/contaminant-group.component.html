@@ -1,67 +1,91 @@
-<c-row>
-  <c-col xs="12">
-    <c-card class="mb-4">
-      <c-card-header>
-        <strong>{{ selectedGroupId ? 'Szennyező Csoport Módosítása' : 'Új Szennyező Csoport Hozzáadása' }}</strong>
-      </c-card-header>
-      <c-card-body>
-        <form #contaminantGroupForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
-          <c-col md="6">
-            <label cLabel for="groupName">Név</label>
-            <input cFormControl id="groupName" [(ngModel)]="newContaminantGroup.name" name="name" required type="text"/>
-            <c-form-feedback [valid]="false">A név megadása kötelező.</c-form-feedback>
-          </c-col>
-          <c-col md="6">
-            <label cLabel for="groupDescription">Leírás</label>
-            <input cFormControl id="groupDescription" [(ngModel)]="newContaminantGroup.description" name="description"
-                   type="text"/>
-          </c-col>
-          <c-col xs="12">
-            <button cButton color="primary" type="submit"
-                    class="button-spacing">{{ selectedGroupId ? 'Módosítás' : 'Hozzáadás' }}
-            </button>
-            <button *ngIf="selectedGroupId" cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
-          </c-col>
-        </form>
-      </c-card-body>
-    </c-card>
+<!-- Search + Button -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input type="text"
+           class="form-control"
+           placeholder="Keresés név vagy leírás alapján..."
+           [(ngModel)]="searchText" />
   </c-col>
-
-  <c-col xs="12">
-    <c-card class="mb-4">
-      <c-card-header>
-        <strong>Szennyező Csoportok</strong>
-      </c-card-header>
-      <c-card-body>
-        <div class="table-responsive"> <!-- ✅ Add this wrapper -->
-
-          <table class="table table-hover">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>Név</th>
-              <th>Leírás</th>
-              <th>Létrehozva</th>
-              <th>Frissítve</th>
-              <th>Műveletek</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let group of contaminantGroups">
-              <td>{{ group.id }}</td>
-              <td>{{ group.name }}</td>
-              <td>{{ group.description }}</td>
-              <td>{{ group.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
-              <td>{{ group.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
-              <td>
-                <button cButton color="warning" (click)="editGroup(group)">Szerkesztés</button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </c-card-body>
-    </c-card>
+  <c-col md="6" class="text-end">
+    <button cButton color="primary" (click)="isModalOpen = true">+ Új Szennyezőanyag Csoport</button>
   </c-col>
 </c-row>
+
+
+<c-card>
+  <c-card-header>
+    <strong>Szennyezőanyag csoportok</strong>
+  </c-card-header>
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover align-middle mb-0">
+        <thead class="table-light">
+        <tr>
+          <th style="width: 60px;">ID</th>
+          <th>Név</th>
+          <th>Leírás</th>
+          <th>Létrehozva</th>
+          <th>Frissítve</th>
+          <th style="width: 150px;">Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let group of filteredGroups">
+          <td>{{ group.id }}</td>
+          <td>{{ group.name }}</td>
+          <td>{{ group.description }}</td>
+          <td>{{ group.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ group.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>
+            <button cButton color="warning" size="sm" (click)="editGroup(group)">
+              <i class="fa fa-edit me-1"></i> Szerkesztés
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredGroups.length === 0">
+          <td colspan="6" class="text-center text-muted">Nincs találat.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+
+
+<c-modal [visible]="isModalOpen" (close)="resetForm()" backdrop="static">
+  <c-modal-header>
+    <h5 class="modal-title">{{ selectedGroupId ? 'Csoport módosítása' : 'Új csoport hozzáadása' }}</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form class="row g-3" (ngSubmit)="onSubmit()" #groupForm="ngForm">
+      <div class="col-md-12">
+        <label class="form-label">Név</label>
+        <input class="form-control"
+               [(ngModel)]="newContaminantGroup.name"
+               name="name"
+               required
+               [class.is-invalid]="formValidated && !newContaminantGroup.name" />
+        <div class="invalid-feedback" *ngIf="formValidated && !newContaminantGroup.name">
+          A név megadása kötelező.
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">Leírás</label>
+        <input class="form-control"
+               [(ngModel)]="newContaminantGroup.description"
+               name="description" />
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
+    <button cButton color="primary" type="button" (click)="onSubmit()">
+      {{ selectedGroupId ? 'Mentés' : 'Hozzáadás' }}
+    </button>
+  </c-modal-footer>
+</c-modal>
+
 

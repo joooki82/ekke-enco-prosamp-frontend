@@ -11,7 +11,8 @@ import {
   CardComponent,
   CardHeaderComponent,
   ColComponent,
-  FormControlDirective, FormDirective, FormFeedbackComponent, FormLabelDirective,
+  ModalBodyComponent, ModalComponent,
+  ModalFooterComponent, ModalHeaderComponent,
   RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
@@ -25,14 +26,14 @@ import {FormsModule} from "@angular/forms";
     CardComponent,
     ColComponent,
     RowComponent,
-    FormControlDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
     FormsModule,
-    FormDirective,
     ButtonDirective,
     NgIf,
-    NgForOf
+    NgForOf,
+    ModalFooterComponent,
+    ModalBodyComponent,
+    ModalHeaderComponent,
+    ModalComponent
   ],
   standalone: true,
   templateUrl: './contaminant-group.component.html',
@@ -43,6 +44,10 @@ export class ContaminantGroupComponent implements OnInit {
   newContaminantGroup: ContaminantGroupRequestDTO = {name: '', description: ''};
   selectedGroupId: number | null = null;
   formValidated = false;
+
+  searchText: string = '';
+  isModalOpen: boolean = false;
+
 
   constructor(
     private contaminantGroupService: ContaminantGroupService,
@@ -90,13 +95,26 @@ export class ContaminantGroupComponent implements OnInit {
 
   editGroup(group: ContaminantGroupResponseDTO): void {
     this.selectedGroupId = group.id;
-    this.newContaminantGroup = {name: group.name, description: group.description};
+    this.newContaminantGroup = { name: group.name, description: group.description };
+    this.isModalOpen = true;
   }
 
   resetForm(): void {
-    this.newContaminantGroup = {name: '', description: ''};
+    this.newContaminantGroup = { name: '', description: '' };
     this.selectedGroupId = null;
     this.formValidated = false;
+    this.isModalOpen = false;
   }
+
+  get filteredGroups(): ContaminantGroupResponseDTO[] {
+    if (!this.searchText.trim()) return this.contaminantGroups;
+
+    const text = this.searchText.toLowerCase();
+    return this.contaminantGroups.filter(group =>
+      group.name?.toLowerCase().includes(text) ||
+      group.description?.toLowerCase().includes(text)
+    );
+  }
+
 
 }
