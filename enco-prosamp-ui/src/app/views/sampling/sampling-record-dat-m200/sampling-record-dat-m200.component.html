@@ -1,29 +1,73 @@
 <!-- Toolbar -->
 <c-row class="mb-3">
-  <c-col md="12" class="text-end">
+  <c-col md="6">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Keresés projekt, cég, státusz vagy telephely alapján..."
+      [(ngModel)]="filterText"
+    />
+  </c-col>
+  <c-col md="6" class="text-end">
     <button cButton color="primary" (click)="openModal()">Új Mintavétel</button>
   </c-col>
 </c-row>
 
+
 <!-- Record List Table -->
 <c-card>
-  <c-card-header><strong>Mintavételi Rekordok (DAT-M200)</strong></c-card-header>
+  <c-card-header><strong>Mintavételi jegyzőkönyvek (DAT-M200)</strong></c-card-header>
   <c-card-body>
     <div class="table-responsive">
 
       <table class="table table-hover table-bordered">
         <thead>
         <tr>
-          <th>Témaszám</th>
-          <th>Projekt neve</th>
-          <th>Mintavétel dátuma</th>
-          <th>Üzem</th>
-          <th>Telephely</th>
+          <th (click)="toggleSort('samplingDate')" class="sortable">
+            Dátum
+            <i class="fa" [ngClass]="{
+      'fa-sort-up': sortColumn === 'samplingDate' && sortDirection === 'asc',
+      'fa-sort-down': sortColumn === 'samplingDate' && sortDirection === 'desc',
+      'fa-sort': sortColumn !== 'samplingDate'
+    }"></i>
+          </th>
+          <th (click)="toggleSort('technology')" class="sortable">
+            Technológia
+            <i class="fa" [ngClass]="{
+      'fa-sort-up': sortColumn === 'technology' && sortDirection === 'asc',
+      'fa-sort-down': sortColumn === 'technology' && sortDirection === 'desc',
+      'fa-sort': sortColumn !== 'technology'
+    }"></i>
+          </th>
+          <th (click)="toggleSort('project')" class="sortable">
+            Projekt
+            <i class="fa" [ngClass]="{
+      'fa-sort-up': sortColumn === 'project' && sortDirection === 'asc',
+      'fa-sort-down': sortColumn === 'project' && sortDirection === 'desc',
+      'fa-sort': sortColumn !== 'project'
+    }"></i>
+          </th>
+          <th (click)="toggleSort('location')" class="sortable">
+            Telephely
+            <i class="fa" [ngClass]="{
+      'fa-sort-up': sortColumn === 'location' && sortDirection === 'asc',
+      'fa-sort-down': sortColumn === 'location' && sortDirection === 'desc',
+      'fa-sort': sortColumn !== 'location'
+    }"></i>
+          </th>
+          <th (click)="toggleSort('company')" class="sortable">
+            Cég
+            <i class="fa" [ngClass]="{
+      'fa-sort-up': sortColumn === 'company' && sortDirection === 'asc',
+      'fa-sort-down': sortColumn === 'company' && sortDirection === 'desc',
+      'fa-sort': sortColumn !== 'company'
+    }"></i>
+          </th>
           <th>Műveletek</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let r of recordList" (click)="openDetails(r)">
+        <tr *ngFor="let r of filteredRecords" (click)="openDetails(r)">
           <td>{{ r.project.projectNumber }}</td>
           <td>{{ r.project.projectName }}</td>
           <td>{{ r.samplingDate | date:'yyyy-MM-dd HH:mm' }}</td>
@@ -56,94 +100,97 @@
   <c-offcanvas-body *ngIf="selectedRecordForDetails" style="overflow-y: auto; max-height: calc(100vh - 4rem);">
     <c-accordion class="shadow-sm rounded-2">
 
-    <!-- Alapadatok -->
-    <c-accordion-item [visible]="true">
-      <ng-template cTemplateId="accordionHeader">
-        Alapadatok
-      </ng-template>
-      <ng-template cTemplateId="accordionBody">
-        <div><strong>Dátum:</strong> {{ selectedRecordForDetails.samplingDate | date:'yyyy-MM-dd HH:mm' }}</div>
-        <div><strong>Technológia:</strong> {{ selectedRecordForDetails.technology }}</div>
-        <div><strong>Projekt:</strong> {{ selectedRecordForDetails.project.projectName }}</div>
-        <div><strong>Cég:</strong> {{ selectedRecordForDetails.company.name }}</div>
-        <div><strong>Cím:</strong> {{ selectedRecordForDetails.company.address }}</div>
-        <div><strong>Telephely:</strong> {{ selectedRecordForDetails.siteLocation.name }} ({{ selectedRecordForDetails.siteLocation.city }})</div>
-        <div><strong>Mintát végző:</strong> {{ selectedRecordForDetails.conductedBy.username }}</div>
-        <div><strong>Státusz:</strong> {{ selectedRecordForDetails.status }}</div>
-      </ng-template>
-    </c-accordion-item>
+      <!-- Alapadatok -->
+      <c-accordion-item [visible]="true">
+        <ng-template cTemplateId="accordionHeader">
+          Alapadatok
+        </ng-template>
+        <ng-template cTemplateId="accordionBody">
+          <div><strong>Dátum:</strong> {{ selectedRecordForDetails.samplingDate | date:'yyyy-MM-dd HH:mm' }}</div>
+          <div><strong>Technológia:</strong> {{ selectedRecordForDetails.technology }}</div>
+          <div><strong>Projekt:</strong> {{ selectedRecordForDetails.project.projectName }}</div>
+          <div><strong>Cég:</strong> {{ selectedRecordForDetails.company.name }}</div>
+          <div><strong>Cím:</strong> {{ selectedRecordForDetails.company.address }}</div>
+          <div><strong>Telephely:</strong> {{ selectedRecordForDetails.siteLocation.name }}
+            ({{ selectedRecordForDetails.siteLocation.city }})
+          </div>
+          <div><strong>Mintát végző:</strong> {{ selectedRecordForDetails.conductedBy.username }}</div>
+          <div><strong>Státusz:</strong> {{ selectedRecordForDetails.status }}</div>
+        </ng-template>
+      </c-accordion-item>
 
-    <!-- Környezeti körülmények -->
-    <c-accordion-item>
-      <ng-template cTemplateId="accordionHeader">
-        Környezeti körülmények
-      </ng-template>
-      <ng-template cTemplateId="accordionBody">
-        <div><strong>Hőmérséklet:</strong> {{ selectedRecordForDetails.temperature }} °C</div>
-        <div><strong>Páratartalom:</strong> {{ selectedRecordForDetails.humidity }} %</div>
-        <div><strong>Szélsebesség:</strong> {{ selectedRecordForDetails.windSpeed }} m/s</div>
-        <div><strong>Nyomás 1:</strong> {{ selectedRecordForDetails.pressure1 }} hPa</div>
-        <div><strong>Nyomás 2:</strong> {{ selectedRecordForDetails.pressure2 }} hPa</div>
-        <div><strong>Egyéb körülmények:</strong> {{ selectedRecordForDetails.otherEnvironmentalConditions }}</div>
-      </ng-template>
-    </c-accordion-item>
+      <!-- Környezeti körülmények -->
+      <c-accordion-item>
+        <ng-template cTemplateId="accordionHeader">
+          Környezeti körülmények
+        </ng-template>
+        <ng-template cTemplateId="accordionBody">
+          <div><strong>Hőmérséklet:</strong> {{ selectedRecordForDetails.temperature }} °C</div>
+          <div><strong>Páratartalom:</strong> {{ selectedRecordForDetails.humidity }} %</div>
+          <div><strong>Szélsebesség:</strong> {{ selectedRecordForDetails.windSpeed }} m/s</div>
+          <div><strong>Nyomás 1:</strong> {{ selectedRecordForDetails.pressure1 }} hPa</div>
+          <div><strong>Nyomás 2:</strong> {{ selectedRecordForDetails.pressure2 }} hPa</div>
+          <div><strong>Egyéb körülmények:</strong> {{ selectedRecordForDetails.otherEnvironmentalConditions }}</div>
+        </ng-template>
+      </c-accordion-item>
 
-    <!-- Működési jellemzők -->
-    <c-accordion-item>
-      <ng-template cTemplateId="accordionHeader">
-        Működési jellemzők
-      </ng-template>
-      <ng-template cTemplateId="accordionBody">
-        <div><strong>Műszak (db és időtartam):</strong> {{ selectedRecordForDetails.shiftCountAndDuration }}</div>
-        <div><strong>Dolgozók műszakonként:</strong> {{ selectedRecordForDetails.workersPerShift }}</div>
-        <div><strong>Kitettségi idő:</strong> {{ selectedRecordForDetails.exposureTime }} perc</div>
-        <div><strong>Légáramlás:</strong> {{ selectedRecordForDetails.airFlowConditions }}</div>
-        <div><strong>Működési mód:</strong> {{ selectedRecordForDetails.operationMode }}</div>
-        <div><strong>Működési szünet:</strong> {{ selectedRecordForDetails.operationBreak }}</div>
-        <div><strong>Helyi elszívás:</strong> {{ selectedRecordForDetails.localAirExtraction }}</div>
-      </ng-template>
-    </c-accordion-item>
+      <!-- Működési jellemzők -->
+      <c-accordion-item>
+        <ng-template cTemplateId="accordionHeader">
+          Működési jellemzők
+        </ng-template>
+        <ng-template cTemplateId="accordionBody">
+          <div><strong>Műszak (db és időtartam):</strong> {{ selectedRecordForDetails.shiftCountAndDuration }}</div>
+          <div><strong>Dolgozók műszakonként:</strong> {{ selectedRecordForDetails.workersPerShift }}</div>
+          <div><strong>Kitettségi idő:</strong> {{ selectedRecordForDetails.exposureTime }} perc</div>
+          <div><strong>Légáramlás:</strong> {{ selectedRecordForDetails.airFlowConditions }}</div>
+          <div><strong>Működési mód:</strong> {{ selectedRecordForDetails.operationMode }}</div>
+          <div><strong>Működési szünet:</strong> {{ selectedRecordForDetails.operationBreak }}</div>
+          <div><strong>Helyi elszívás:</strong> {{ selectedRecordForDetails.localAirExtraction }}</div>
+        </ng-template>
+      </c-accordion-item>
 
-    <!-- Minták -->
-    <c-accordion-item>
-      <ng-template cTemplateId="accordionHeader">
-        Minták
-      </ng-template>
-      <ng-template cTemplateId="accordionBody">
-        <div><strong>Minták sorszáma:</strong> {{ selectedRecordForDetails.serialNumbersOfSamples }}</div>
-        <ul>
-          <li *ngFor="let sample of selectedRecordForDetails.samples">
-            {{ sample.sampleIdentifier }}
-          </li>
-        </ul>
-      </ng-template>
-    </c-accordion-item>
+      <!-- Minták -->
+      <c-accordion-item>
+        <ng-template cTemplateId="accordionHeader">
+          Minták
+        </ng-template>
+        <ng-template cTemplateId="accordionBody">
+          <div><strong>Minták sorszáma:</strong> {{ selectedRecordForDetails.serialNumbersOfSamples }}</div>
+          <ul>
+            <li *ngFor="let sample of selectedRecordForDetails.samples">
+              {{ sample.sampleIdentifier }}
+            </li>
+          </ul>
+        </ng-template>
+      </c-accordion-item>
 
-    <!-- Eszközök -->
-    <c-accordion-item>
-      <ng-template cTemplateId="accordionHeader">
-        Mintavételi eszközök
-      </ng-template>
-      <ng-template cTemplateId="accordionBody">
-        <ul>
-          <li *ngFor="let e of selectedRecordForDetails.samplingRecordEquipments">
-            {{ e.name }} ({{ e.identifier }})
-          </li>
-        </ul>
-      </ng-template>
-    </c-accordion-item>
+      <!-- Eszközök -->
+      <c-accordion-item>
+        <ng-template cTemplateId="accordionHeader">
+          Mintavételi eszközök
+        </ng-template>
+        <ng-template cTemplateId="accordionBody">
+          <ul>
+            <li *ngFor="let e of selectedRecordForDetails.samplingRecordEquipments">
+              {{ e.name }} ({{ e.identifier }})
+            </li>
+          </ul>
+        </ng-template>
+      </c-accordion-item>
 
-    <!-- Egyéb -->
-    <c-accordion-item>
-      <ng-template cTemplateId="accordionHeader">
-        Egyéb információk
-      </ng-template>
-      <ng-template cTemplateId="accordionBody">
-        <div><strong>Megjegyzés:</strong> {{ selectedRecordForDetails.remarks || '—' }}</div>
-        <div><strong>Létrehozva:</strong> {{ selectedRecordForDetails.createdAt | date:'yyyy-MM-dd HH:mm' }}</div>
-        <div><strong>Utoljára módosítva:</strong> {{ selectedRecordForDetails.updatedAt | date:'yyyy-MM-dd HH:mm' }}</div>
-      </ng-template>
-    </c-accordion-item>
+      <!-- Egyéb -->
+      <c-accordion-item>
+        <ng-template cTemplateId="accordionHeader">
+          Egyéb információk
+        </ng-template>
+        <ng-template cTemplateId="accordionBody">
+          <div><strong>Megjegyzés:</strong> {{ selectedRecordForDetails.remarks || '—' }}</div>
+          <div><strong>Létrehozva:</strong> {{ selectedRecordForDetails.createdAt | date:'yyyy-MM-dd HH:mm' }}</div>
+          <div><strong>Utoljára módosítva:</strong> {{ selectedRecordForDetails.updatedAt | date:'yyyy-MM-dd HH:mm' }}
+          </div>
+        </ng-template>
+      </c-accordion-item>
 
     </c-accordion>
   </c-offcanvas-body>
@@ -160,19 +207,20 @@
       <!-- Required fields -->
       <div class="col-md-6">
         <label class="form-label">Dátum</label>
-        <input type="datetime-local" class="form-control" [(ngModel)]="newRecord.samplingDate" name="samplingDate" required />
+        <input type="datetime-local" class="form-control" [(ngModel)]="newRecord.samplingDate" name="samplingDate"
+               required/>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Státusz</label>
-        <input class="form-control" [(ngModel)]="newRecord.status" name="status" />
+        <input class="form-control" [(ngModel)]="newRecord.status" name="status"/>
       </div>
 
       <!-- Lookups -->
       <div class="col-md-6">
         <label class="form-label">Projekt</label>
         <div class="input-group">
-          <input class="form-control" [value]="selectedProjectName" readonly />
+          <input class="form-control" [value]="selectedProjectName" readonly/>
           <button cButton color="info" type="button" (click)="isProjectModalOpen = true">Kiválasztás</button>
         </div>
       </div>
@@ -180,7 +228,7 @@
       <div class="col-md-6">
         <label class="form-label">Cég</label>
         <div class="input-group">
-          <input class="form-control" [value]="selectedCompanyName" readonly />
+          <input class="form-control" [value]="selectedCompanyName" readonly/>
           <button cButton color="info" type="button" (click)="isCompanyModalOpen = true">Kiválasztás</button>
         </div>
       </div>
@@ -188,7 +236,7 @@
       <div class="col-md-6">
         <label class="form-label">Telephely</label>
         <div class="input-group">
-          <input class="form-control" [value]="selectedLocationName" readonly />
+          <input class="form-control" [value]="selectedLocationName" readonly/>
           <button cButton color="info" type="button" (click)="isLocationModalOpen = true">Kiválasztás</button>
         </div>
       </div>
@@ -196,37 +244,81 @@
       <div class="col-md-6">
         <label class="form-label">Mintavételi eszközök</label>
         <div class="input-group">
-          <input class="form-control" [value]="selectedEquipmentsDisplay.join(', ')" readonly />
+          <input class="form-control" [value]="selectedEquipmentsDisplay.join(', ')" readonly/>
           <button cButton color="info" type="button" (click)="isEquipmentModalOpen = true">Kiválasztás</button>
         </div>
       </div>
 
       <!-- Basic Info -->
-      <div class="col-md-6"><label class="form-label">Szennyező technológia</label><input class="form-control" [(ngModel)]="newRecord.technology" name="technology" /></div>
-      <div class="col-md-6"><label class="form-label">Vizsgált üzem</label><input class="form-control" [(ngModel)]="newRecord.testedPlant" name="testedPlant" /></div>
+      <div class="col-md-6"><label class="form-label">Szennyező technológia</label><input class="form-control"
+                                                                                          [(ngModel)]="newRecord.technology"
+                                                                                          name="technology"/></div>
+      <div class="col-md-6"><label class="form-label">Vizsgált üzem</label><input class="form-control"
+                                                                                  [(ngModel)]="newRecord.testedPlant"
+                                                                                  name="testedPlant"/></div>
 
       <!-- Shift and Workforce -->
-      <div class="col-md-6"><label class="form-label">Műszak száma / ideje</label><input type="number" class="form-control" [(ngModel)]="newRecord.shiftCountAndDuration" name="shiftCountAndDuration" /></div>
-      <div class="col-md-6"><label class="form-label">Dolgozókszáma / műszak</label><input type="number" class="form-control" [(ngModel)]="newRecord.workersPerShift" name="workersPerShift" /></div>
+      <div class="col-md-6"><label class="form-label">Műszak száma / ideje</label><input type="number"
+                                                                                         class="form-control"
+                                                                                         [(ngModel)]="newRecord.shiftCountAndDuration"
+                                                                                         name="shiftCountAndDuration"/>
+      </div>
+      <div class="col-md-6"><label class="form-label">Dolgozókszáma / műszak</label><input type="number"
+                                                                                           class="form-control"
+                                                                                           [(ngModel)]="newRecord.workersPerShift"
+                                                                                           name="workersPerShift"/>
+      </div>
 
       <!-- Environment -->
-      <div class="col-md-6"><label class="form-label">Expozíciót idő idő (perc)</label><input type="number" class="form-control" [(ngModel)]="newRecord.exposureTime" name="exposureTime" /></div>
-      <div class="col-md-6"><label class="form-label">Hőmérséklet (°C)</label><input type="number" class="form-control" [(ngModel)]="newRecord.temperature" name="temperature" /></div>
-      <div class="col-md-6"><label class="form-label">Páratartalom (%)</label><input type="number" class="form-control" [(ngModel)]="newRecord.humidity" name="humidity" /></div>
-      <div class="col-md-6"><label class="form-label">Szélsebesség (m/s)</label><input type="number" class="form-control" [(ngModel)]="newRecord.windSpeed" name="windSpeed" /></div>
-      <div class="col-md-6"><label class="form-label">Nyomás 1 (hPa)</label><input type="number" class="form-control" [(ngModel)]="newRecord.pressure1" name="pressure1" /></div>
-      <div class="col-md-6"><label class="form-label">Nyomás 2 (hPa)</label><input type="number" class="form-control" [(ngModel)]="newRecord.pressure2" name="pressure2" /></div>
+      <div class="col-md-6"><label class="form-label">Expozíciót idő idő (perc)</label><input type="number"
+                                                                                              class="form-control"
+                                                                                              [(ngModel)]="newRecord.exposureTime"
+                                                                                              name="exposureTime"/>
+      </div>
+      <div class="col-md-6"><label class="form-label">Hőmérséklet (°C)</label><input type="number" class="form-control"
+                                                                                     [(ngModel)]="newRecord.temperature"
+                                                                                     name="temperature"/></div>
+      <div class="col-md-6"><label class="form-label">Páratartalom (%)</label><input type="number" class="form-control"
+                                                                                     [(ngModel)]="newRecord.humidity"
+                                                                                     name="humidity"/></div>
+      <div class="col-md-6"><label class="form-label">Szélsebesség (m/s)</label><input type="number"
+                                                                                       class="form-control"
+                                                                                       [(ngModel)]="newRecord.windSpeed"
+                                                                                       name="windSpeed"/></div>
+      <div class="col-md-6"><label class="form-label">Nyomás 1 (hPa)</label><input type="number" class="form-control"
+                                                                                   [(ngModel)]="newRecord.pressure1"
+                                                                                   name="pressure1"/></div>
+      <div class="col-md-6"><label class="form-label">Nyomás 2 (hPa)</label><input type="number" class="form-control"
+                                                                                   [(ngModel)]="newRecord.pressure2"
+                                                                                   name="pressure2"/></div>
 
       <!-- Operational -->
-      <div class="col-md-6"><label class="form-label">Légáramlási viszonyok</label><input class="form-control" [(ngModel)]="newRecord.airFlowConditions" name="airFlowConditions" /></div>
-      <div class="col-md-6"><label class="form-label">Üzemvitel</label><input class="form-control" [(ngModel)]="newRecord.operationMode" name="operationMode" /></div>
-      <div class="col-md-6"><label class="form-label">Üzemszünet</label><input class="form-control" [(ngModel)]="newRecord.operationBreak" name="operationBreak" /></div>
-      <div class="col-md-6"><label class="form-label">Helyi elszívás</label><input class="form-control" [(ngModel)]="newRecord.localAirExtraction" name="localAirExtraction" /></div>
+      <div class="col-md-6"><label class="form-label">Légáramlási viszonyok</label><input class="form-control"
+                                                                                          [(ngModel)]="newRecord.airFlowConditions"
+                                                                                          name="airFlowConditions"/>
+      </div>
+      <div class="col-md-6"><label class="form-label">Üzemvitel</label><input class="form-control"
+                                                                              [(ngModel)]="newRecord.operationMode"
+                                                                              name="operationMode"/></div>
+      <div class="col-md-6"><label class="form-label">Üzemszünet</label><input class="form-control"
+                                                                               [(ngModel)]="newRecord.operationBreak"
+                                                                               name="operationBreak"/></div>
+      <div class="col-md-6"><label class="form-label">Helyi elszívás</label><input class="form-control"
+                                                                                   [(ngModel)]="newRecord.localAirExtraction"
+                                                                                   name="localAirExtraction"/></div>
 
       <!-- Extras -->
-      <div class="col-md-12"><label class="form-label">Egyéb körülmények</label><textarea class="form-control" [(ngModel)]="newRecord.otherEnvironmentalConditions" name="otherEnvironmentalConditions"></textarea></div>
-      <div class="col-md-12"><label class="form-label">Minták sorszáma</label><input class="form-control" [(ngModel)]="newRecord.serialNumbersOfSamples" name="serialNumbersOfSamples" /></div>
-      <div class="col-md-12"><label class="form-label">Megjegyzés</label><textarea class="form-control" [(ngModel)]="newRecord.remarks" name="remarks"></textarea></div>
+      <div class="col-md-12"><label class="form-label">Egyéb körülmények</label><textarea class="form-control"
+                                                                                          [(ngModel)]="newRecord.otherEnvironmentalConditions"
+                                                                                          name="otherEnvironmentalConditions"></textarea>
+      </div>
+      <div class="col-md-12"><label class="form-label">Minták sorszáma</label><input class="form-control"
+                                                                                     [(ngModel)]="newRecord.serialNumbersOfSamples"
+                                                                                     name="serialNumbersOfSamples"/>
+      </div>
+      <div class="col-md-12"><label class="form-label">Megjegyzés</label><textarea class="form-control"
+                                                                                   [(ngModel)]="newRecord.remarks"
+                                                                                   name="remarks"></textarea></div>
 
     </form>
   </c-modal-body>

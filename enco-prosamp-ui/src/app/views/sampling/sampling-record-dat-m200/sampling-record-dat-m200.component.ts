@@ -13,7 +13,7 @@ import {
   ColComponent, ModalBodyComponent, ModalComponent, ModalFooterComponent, ModalHeaderComponent,
   OffcanvasBodyComponent, OffcanvasComponent, OffcanvasHeaderComponent, RowComponent, TemplateIdDirective
 } from "@coreui/angular";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {CompanyResponseDTO} from 'src/app/services/partners/company.service';
 import {LocationResponseDTO} from "../../../services/partners/location.service";
 import {ProjectResponseDTO} from "../../../services/projects/projects.service";
@@ -51,7 +51,8 @@ import {FormsModule} from "@angular/forms";
     FormsModule,
     ModalBodyComponent,
     ModalHeaderComponent,
-    ModalComponent
+    ModalComponent,
+    NgClass
   ],
   standalone: true,
   templateUrl: './sampling-record-dat-m200.component.html',
@@ -76,6 +77,13 @@ export class SamplingRecordDatM200Component implements OnInit {
   isLocationModalOpen = false;
   isProjectModalOpen = false;
   isEquipmentModalOpen = false;
+
+  filterText = '';
+
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+
 
   constructor(
     private recordService: SamplingRecordDatM200Service,
@@ -105,6 +113,60 @@ export class SamplingRecordDatM200Component implements OnInit {
       next: data => this.recordList = data,
       error: err => console.error('Failed to load sampling records', err)
     });
+  }
+
+  get filteredRecords(): SamplingRecordResponseDTO[] {
+    let records = this.recordList;
+
+    // Apply filter
+    if (this.filterText) {
+      const text = this.filterText.toLowerCase();
+      records = records.filter(r =>
+        r.project?.projectName?.toLowerCase().includes(text) ||
+        r.company?.name?.toLowerCase().includes(text) ||
+        r.siteLocation?.name?.toLowerCase().includes(text) ||
+        r.status?.toLowerCase().includes(text) ||
+        r.technology?.toLowerCase().includes(text)
+      );
+    }
+
+    // Apply sorting
+    if (this.sortColumn) {
+      records = [...records].sort((a, b) => {
+        const aValue = this.getSortableValue(a, this.sortColumn);
+        const bValue = this.getSortableValue(b, this.sortColumn);
+
+        if (aValue == null) return 1;
+        if (bValue == null) return -1;
+
+        return this.sortDirection === 'asc'
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      });
+    }
+
+    return records;
+  }
+
+  getSortableValue(record: SamplingRecordResponseDTO, column: string): string {
+    switch (column) {
+      case 'project': return record.project?.projectName || '';
+      case 'company': return record.company?.name || '';
+      case 'location': return record.siteLocation?.name || '';
+      case 'status': return record.status || '';
+      case 'technology': return record.technology || '';
+      case 'samplingDate': return record.samplingDate || '';
+      default: return '';
+    }
+  }
+
+  toggleSort(column: string): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
   }
 
   openModal(record?: SamplingRecordResponseDTO): void {
