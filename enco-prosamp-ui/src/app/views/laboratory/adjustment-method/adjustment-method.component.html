@@ -1,68 +1,100 @@
-<c-row>
-  <c-col xs="12">
-    <c-card class="mb-4">
-      <c-card-header>
-        <strong>{{ selectedMethodId ? 'Mintavételi Beállítás Módosítása' : 'Új Mintavételi Beállítás Hozzáadása' }}</strong>
-      </c-card-header>
-      <c-card-body>
-        <form #adjustmentMethodForm="ngForm" (ngSubmit)="onSubmit()" [validated]="formValidated" cForm class="row g-3">
-          <!-- Code Input -->
-          <c-col md="6">
-            <label cLabel for="adjustmentMethodCode">Kód</label>
-            <input cFormControl id="adjustmentMethodCode" [(ngModel)]="newAdjustmentMethod.code" name="code" required type="text" />
-            <c-form-feedback [valid]="false">A kód megadása kötelező.</c-form-feedback>
-          </c-col>
-
-          <!-- Description Input -->
-          <c-col md="6">
-            <label cLabel for="adjustmentMethodDescription">Leírás</label>
-            <input cFormControl id="adjustmentMethodDescription" [(ngModel)]="newAdjustmentMethod.description" name="description" type="text" />
-          </c-col>
-
-          <!-- Submit and Reset Buttons -->
-          <c-col xs="12">
-            <button cButton color="primary"  type="submit" class="button-spacing">{{ selectedMethodId ? 'Módosítás' : 'Hozzáadás' }}</button>
-            <button *ngIf="selectedMethodId" cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
-          </c-col>
-        </form>
-      </c-card-body>
-    </c-card>
+<!-- Header with "Add" Button -->
+<c-row class="mb-3">
+  <c-col md="6">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Keresés kód vagy leírás alapján..."
+      [(ngModel)]="filterText"
+    />
   </c-col>
-
-  <c-col xs="12">
-    <c-card class="mb-4">
-      <c-card-header>
-        <strong>Elérhető Mintavételi Beállítások</strong>
-      </c-card-header>
-      <c-card-body>
-        <div class="table-responsive"> <!-- ✅ Add this wrapper -->
-
-          <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Kód</th>
-            <th>Leírás</th>
-            <th>Létrehozva</th>
-            <th>Frissítve</th>
-            <th>Műveletek</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let method of adjustmentMethods"> <!-- ✅ Uses *ngFor -->
-            <td>{{ method.id }}</td>
-            <td>{{ method.code }}</td>
-            <td>{{ method.description }}</td>
-            <td>{{ method.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
-            <td>{{ method.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
-            <td>
-              <button cButton color="warning" (click)="editMethod(method)">Szerkesztés</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        </div>
-      </c-card-body>
-    </c-card>
+  <c-col class="text-end">
+    <button cButton color="primary" (click)="isModalOpen = true">+ Új Mintavételi Beállítás</button>
   </c-col>
 </c-row>
+
+
+<!-- Existing list of methods -->
+<c-card class="mb-4">
+  <c-card-header>
+    <strong>Mintavételi Beállítások</strong>
+  </c-card-header>
+
+  <c-card-body>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle mb-0">
+        <thead class="table-light">
+        <tr>
+          <th style="width: 60px;">ID</th>
+          <th>Kód</th>
+          <th>Leírás</th>
+          <th>Létrehozva</th>
+          <th>Frissítve</th>
+          <th style="width: 150px;">Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let method of filteredMethods">
+          <td>{{ method.id }}</td>
+          <td>{{ method.code }}</td>
+          <td>{{ method.description }}</td>
+          <td>{{ method.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ method.updatedAt | date: 'yyyy-MM-dd HH:mm' }}</td>
+          <td>
+            <button cButton color="warning" size="sm" (click)="editMethod(method)">
+              <i class="fa fa-edit me-1"></i> Szerkesztés
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredMethods.length === 0">
+          <td colspan="6" class="text-center text-muted">Nincs találat.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Modal for Adding/Editing Adjustment Method -->
+<c-modal [visible]="isModalOpen" (close)="resetForm()" backdrop="static">
+  <c-modal-header>
+    <h5 class="modal-title">
+      {{ selectedMethodId ? 'Beállítás módosítása' : 'Új Beállítás hozzáadása' }}
+    </h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form class="row g-3" (ngSubmit)="onSubmit()" #adjustmentMethodForm="ngForm">
+      <div class="col-md-12">
+        <label class="form-label" for="adjustmentMethodCode">Kód</label>
+        <input type="text"
+               class="form-control"
+               id="adjustmentMethodCode"
+               required
+               [(ngModel)]="newAdjustmentMethod.code"
+               name="code"
+               [class.is-invalid]="formValidated && !newAdjustmentMethod.code" />
+        <div *ngIf="formValidated && !newAdjustmentMethod.code" class="invalid-feedback">
+          A kód megadása kötelező.
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label" for="adjustmentMethodDescription">Leírás</label>
+        <input type="text"
+               class="form-control"
+               id="adjustmentMethodDescription"
+               [(ngModel)]="newAdjustmentMethod.description"
+               name="description" />
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="secondary" type="button" (click)="resetForm()">Mégse</button>
+    <button cButton color="primary" type="button" (click)="onSubmit()">
+      {{ selectedMethodId ? 'Mentés' : 'Hozzáadás' }}
+    </button>
+  </c-modal-footer>
+</c-modal>
+

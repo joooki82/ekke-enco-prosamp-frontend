@@ -10,8 +10,12 @@ import {
   CardBodyComponent,
   CardComponent,
   CardHeaderComponent,
-  ColComponent, FormControlDirective,
-  FormDirective, FormFeedbackComponent, FormLabelDirective,
+  ColComponent,
+  FormDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
   RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
@@ -22,13 +26,19 @@ import {NotificationService} from "../../../services/notification/notification.s
   templateUrl: './adjustment-method.component.html',
   styleUrls: ['./adjustment-method.component.scss'],
   standalone: true,
-  imports: [NgForOf, NgIf, RowComponent, ColComponent, CardComponent, CardHeaderComponent, CardBodyComponent, FormsModule, FormDirective, FormFeedbackComponent, FormControlDirective, FormLabelDirective, ButtonDirective, DatePipe] // ✅ Ensure Angular directives are imported
+  imports: [NgForOf, NgIf, RowComponent, ColComponent, CardComponent, CardHeaderComponent, CardBodyComponent, FormsModule, ButtonDirective, DatePipe, ModalFooterComponent, ModalComponent, ModalHeaderComponent, ModalBodyComponent] // ✅ Ensure Angular directives are imported
 })
 export class AdjustmentMethodComponent implements OnInit {
   adjustmentMethods: AdjustmentMethodResponseDTO[] = [];
   newAdjustmentMethod: AdjustmentMethodRequestDTO = {code: '', description: ''};
   selectedMethodId: number | null = null; // ✅ Tracks if we are editing an existing method
   formValidated = false;
+
+  isModalOpen: boolean = false;
+
+  filterText: string = '';
+
+
 
   constructor(private adjustmentMethodService: AdjustmentMethodService,
               private notificationService: NotificationService) {
@@ -80,16 +90,32 @@ export class AdjustmentMethodComponent implements OnInit {
     }
   }
 
-  /** Load an existing method into the form for editing */
   editMethod(method: AdjustmentMethodResponseDTO): void {
     this.selectedMethodId = method.id;
-    this.newAdjustmentMethod = {code: method.code, description: method.description};
+    this.newAdjustmentMethod = { code: method.code, description: method.description };
+    this.isModalOpen = true;
   }
+
 
   /** Reset form and switch back to create mode */
   resetForm(): void {
-    this.newAdjustmentMethod = {code: '', description: ''};
+    this.newAdjustmentMethod = { code: '', description: '' };
     this.selectedMethodId = null;
     this.formValidated = false;
+    this.isModalOpen = false;
   }
+
+  get filteredMethods(): AdjustmentMethodResponseDTO[] {
+    if (!this.filterText) {
+      return this.adjustmentMethods;
+    }
+
+    const text = this.filterText.toLowerCase();
+    return this.adjustmentMethods.filter(m =>
+      m.code?.toLowerCase().includes(text) ||
+      m.description?.toLowerCase().includes(text)
+    );
+  }
+
+
 }
