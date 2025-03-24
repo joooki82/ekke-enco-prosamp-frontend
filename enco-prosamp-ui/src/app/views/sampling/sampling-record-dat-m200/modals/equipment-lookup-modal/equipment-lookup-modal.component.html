@@ -1,4 +1,4 @@
-<c-modal [visible]="visible" (close)="onClose()" size="xl" backdrop="static">
+<c-modal class="bg-dark rounded shadow-sm" [visible]="visible" (close)="onClose()" size="xl" backdrop="static">
   <c-modal-header><h5>Mintavevő eszközök kiválasztása</h5></c-modal-header>
   <c-modal-body>
     <input class="form-control mb-3" [(ngModel)]="filter" (input)="loadEquipments()" placeholder="Keresés eszköz név alapján..." />

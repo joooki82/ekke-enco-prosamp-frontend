@@ -149,6 +149,94 @@
   </c-offcanvas-body>
 </c-offcanvas>
 
+<!-- Modal for Creating/Editing Sampling Record -->
+<c-modal [visible]="isModalOpen" (close)="closeModal()" size="xl" backdrop="static">
+  <c-modal-header>
+    <h5>{{ selectedRecordId ? 'Mintavételi jegyzőkönyv szerkesztése' : 'Új mintavételi jegyzőkönyv létrehozása' }}</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <form class="row g-3">
+
+      <!-- Required fields -->
+      <div class="col-md-6">
+        <label class="form-label">Dátum</label>
+        <input type="datetime-local" class="form-control" [(ngModel)]="newRecord.samplingDate" name="samplingDate" required />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Státusz</label>
+        <input class="form-control" [(ngModel)]="newRecord.status" name="status" />
+      </div>
+
+      <!-- Lookups -->
+      <div class="col-md-6">
+        <label class="form-label">Projekt</label>
+        <div class="input-group">
+          <input class="form-control" [value]="selectedProjectName" readonly />
+          <button cButton color="info" type="button" (click)="isProjectModalOpen = true">Kiválasztás</button>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Cég</label>
+        <div class="input-group">
+          <input class="form-control" [value]="selectedCompanyName" readonly />
+          <button cButton color="info" type="button" (click)="isCompanyModalOpen = true">Kiválasztás</button>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Telephely</label>
+        <div class="input-group">
+          <input class="form-control" [value]="selectedLocationName" readonly />
+          <button cButton color="info" type="button" (click)="isLocationModalOpen = true">Kiválasztás</button>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Mintavételi eszközök</label>
+        <div class="input-group">
+          <input class="form-control" [value]="selectedEquipmentsDisplay.join(', ')" readonly />
+          <button cButton color="info" type="button" (click)="isEquipmentModalOpen = true">Kiválasztás</button>
+        </div>
+      </div>
+
+      <!-- Basic Info -->
+      <div class="col-md-6"><label class="form-label">Szennyező technológia</label><input class="form-control" [(ngModel)]="newRecord.technology" name="technology" /></div>
+      <div class="col-md-6"><label class="form-label">Vizsgált üzem</label><input class="form-control" [(ngModel)]="newRecord.testedPlant" name="testedPlant" /></div>
+
+      <!-- Shift and Workforce -->
+      <div class="col-md-6"><label class="form-label">Műszak száma / ideje</label><input type="number" class="form-control" [(ngModel)]="newRecord.shiftCountAndDuration" name="shiftCountAndDuration" /></div>
+      <div class="col-md-6"><label class="form-label">Dolgozókszáma / műszak</label><input type="number" class="form-control" [(ngModel)]="newRecord.workersPerShift" name="workersPerShift" /></div>
+
+      <!-- Environment -->
+      <div class="col-md-6"><label class="form-label">Expozíciót idő idő (perc)</label><input type="number" class="form-control" [(ngModel)]="newRecord.exposureTime" name="exposureTime" /></div>
+      <div class="col-md-6"><label class="form-label">Hőmérséklet (°C)</label><input type="number" class="form-control" [(ngModel)]="newRecord.temperature" name="temperature" /></div>
+      <div class="col-md-6"><label class="form-label">Páratartalom (%)</label><input type="number" class="form-control" [(ngModel)]="newRecord.humidity" name="humidity" /></div>
+      <div class="col-md-6"><label class="form-label">Szélsebesség (m/s)</label><input type="number" class="form-control" [(ngModel)]="newRecord.windSpeed" name="windSpeed" /></div>
+      <div class="col-md-6"><label class="form-label">Nyomás 1 (hPa)</label><input type="number" class="form-control" [(ngModel)]="newRecord.pressure1" name="pressure1" /></div>
+      <div class="col-md-6"><label class="form-label">Nyomás 2 (hPa)</label><input type="number" class="form-control" [(ngModel)]="newRecord.pressure2" name="pressure2" /></div>
+
+      <!-- Operational -->
+      <div class="col-md-6"><label class="form-label">Légáramlási viszonyok</label><input class="form-control" [(ngModel)]="newRecord.airFlowConditions" name="airFlowConditions" /></div>
+      <div class="col-md-6"><label class="form-label">Üzemvitel</label><input class="form-control" [(ngModel)]="newRecord.operationMode" name="operationMode" /></div>
+      <div class="col-md-6"><label class="form-label">Üzemszünet</label><input class="form-control" [(ngModel)]="newRecord.operationBreak" name="operationBreak" /></div>
+      <div class="col-md-6"><label class="form-label">Helyi elszívás</label><input class="form-control" [(ngModel)]="newRecord.localAirExtraction" name="localAirExtraction" /></div>
+
+      <!-- Extras -->
+      <div class="col-md-12"><label class="form-label">Egyéb körülmények</label><textarea class="form-control" [(ngModel)]="newRecord.otherEnvironmentalConditions" name="otherEnvironmentalConditions"></textarea></div>
+      <div class="col-md-12"><label class="form-label">Minták sorszáma</label><input class="form-control" [(ngModel)]="newRecord.serialNumbersOfSamples" name="serialNumbersOfSamples" /></div>
+      <div class="col-md-12"><label class="form-label">Megjegyzés</label><textarea class="form-control" [(ngModel)]="newRecord.remarks" name="remarks"></textarea></div>
+
+    </form>
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
+    <button cButton color="primary" (click)="onSubmit()">Mentés</button>
+  </c-modal-footer>
+</c-modal>
+
+
 <!-- Lookup Modals -->
 <app-company-lookup-modal [visible]="isCompanyModalOpen" (close)="isCompanyModalOpen = false"
                           (companySelected)="onCompanySelected($event)"></app-company-lookup-modal>

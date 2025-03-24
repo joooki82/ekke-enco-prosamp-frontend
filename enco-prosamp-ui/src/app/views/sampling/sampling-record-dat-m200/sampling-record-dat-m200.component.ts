@@ -10,7 +10,7 @@ import {
   AccordionItemComponent,
   AccordionModule, ButtonDirective,
   CardBodyComponent, CardComponent, CardHeaderComponent,
-  ColComponent,
+  ColComponent, ModalBodyComponent, ModalComponent, ModalFooterComponent, ModalHeaderComponent,
   OffcanvasBodyComponent, OffcanvasComponent, OffcanvasHeaderComponent, RowComponent, TemplateIdDirective
 } from "@coreui/angular";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
@@ -22,6 +22,7 @@ import {CompanyLookupModalComponent} from "./modals/company-lookup-modal/company
 import {LocationLookupModalComponent} from "./modals/location-lookup-modal/location-lookup-modal.component";
 import {ProjectLookupModalComponent} from "./modals/project-lookup-modal/project-lookup-modal.component";
 import {EquipmentLookupModalComponent} from "./modals/equipment-lookup-modal/equipment-lookup-modal.component";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-sampling-record-dat-m200',
@@ -45,7 +46,12 @@ import {EquipmentLookupModalComponent} from "./modals/equipment-lookup-modal/equ
     TemplateIdDirective,
     ButtonDirective,
     OffcanvasHeaderComponent,
-    OffcanvasComponent
+    OffcanvasComponent,
+    ModalFooterComponent,
+    FormsModule,
+    ModalBodyComponent,
+    ModalHeaderComponent,
+    ModalComponent
   ],
   standalone: true,
   templateUrl: './sampling-record-dat-m200.component.html',
@@ -84,12 +90,12 @@ export class SamplingRecordDatM200Component implements OnInit {
   createEmptyRecord(): SamplingRecordRequestDTO {
     return {
       samplingDate: '',
-      conductedById: '',
+      conductedById: '11111111-1111-1111-1111-111111111111',
       companyId: 0,
       siteLocationId: 0,
       exposureTime: 0,
       projectId: 0,
-      status: '',
+      status: 'ACTIVE',
       equipmentIds: []
     };
   }
@@ -153,10 +159,12 @@ export class SamplingRecordDatM200Component implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.newRecord.samplingDate || !this.newRecord.conductedById || !this.newRecord.companyId) {
-      this.formValidated = true;
-      return;
-    }
+    console.log('onSubmit() called', this.newRecord);  // ✅ Add this line
+
+    // if (!this.newRecord.samplingDate || !this.newRecord.conductedById || !this.newRecord.companyId) {
+    //   this.formValidated = true;
+    //   return;
+    // }
 
     const action = this.selectedRecordId == null
       ? this.recordService.create(this.newRecord)

@@ -1,7 +1,5 @@
-<c-modal [visible]="visible" (close)="onClose()" backdrop="static">
-  <c-modal-header>
-    <h5>Vállalat kiválasztása</h5>
-  </c-modal-header>
+<c-modal class="bg-dark rounded shadow-sm" [visible]="visible" (close)="onClose()" size="xl" backdrop="static">
+  <c-modal-header><h5>Vállalat kiválasztása</h5></c-modal-header>
   <c-modal-body>
     <input
       class="form-control mb-2"

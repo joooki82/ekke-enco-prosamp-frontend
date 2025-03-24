@@ -1,16 +1,30 @@
-<c-modal [visible]="visible" (close)="onClose()" size="xl" backdrop="static">
+<c-modal class="bg-dark rounded shadow-sm" [visible]="visible" (close)="onClose()" size="xl" backdrop="static">
   <c-modal-header><h5>Projekt kiválasztása</h5></c-modal-header>
   <c-modal-body>
-    <input class="form-control mb-3" [(ngModel)]="filter" (input)="loadProjects()" placeholder="Keresés projekt név alapján..." />
+    <input
+      class="form-control mb-3"
+      placeholder="Keresés projekt név alapján..."
+      [(ngModel)]="filter"
+      (input)="loadProjects()"
+    />
     <div class="table-responsive">
       <table class="table table-hover">
-        <thead><tr><th>Projekt Szám</th><th>Név</th><th>Ügyfél</th><th></th></tr></thead>
+        <thead>
+        <tr>
+          <th>Projekt Szám</th>
+          <th>Név</th>
+          <th>Ügyfél</th>
+          <th></th>
+        </tr>
+        </thead>
         <tbody>
         <tr *ngFor="let p of projects">
           <td>{{ p.projectNumber }}</td>
           <td>{{ p.projectName }}</td>
           <td>{{ p.clientName }}</td>
-          <td><button cButton color="primary" (click)="select(p)">Kiválaszt</button></td>
+          <td>
+            <button cButton color="primary" (click)="select(p)">Kiválaszt</button>
+          </td>
         </tr>
         </tbody>
       </table>
