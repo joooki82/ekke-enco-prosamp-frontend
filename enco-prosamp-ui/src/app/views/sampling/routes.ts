@@ -13,8 +13,8 @@ export const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'sampling-record-datm200',
-        loadComponent: () => import('./sampling-record-datm200/sampling-record-datm200.component').then(m => m.SamplingRecordDatm200Component),
+        path: 'sampling-record-dat-m200',
+        loadComponent: () => import('./sampling-record-dat-m200/sampling-record-dat-m200.component').then(m => m.SamplingRecordDatM200Component),
         data: {
           title: 'Mintavételi jegyzőkönyv'
         }

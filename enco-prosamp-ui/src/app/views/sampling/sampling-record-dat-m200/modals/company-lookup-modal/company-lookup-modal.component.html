@@ -1,0 +1,34 @@
+<c-modal [visible]="visible" (close)="onClose()" backdrop="static">
+  <c-modal-header>
+    <h5>Vállalat kiválasztása</h5>
+  </c-modal-header>
+  <c-modal-body>
+    <input
+      class="form-control mb-2"
+      placeholder="Keresés név alapján..."
+      [(ngModel)]="filter"
+      (input)="loadCompanies()"
+    />
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+        <tr><th>Név</th><th>Kapcsolattartó</th><th>Email</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let c of companies">
+          <td>{{ c.name }}</td>
+          <td>{{ c.contactPerson }}</td>
+          <td>{{ c.email }}</td>
+          <td>
+            <button cButton color="primary" (click)="select(c)">Kiválaszt</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="onClose()">Mégse</button>
+  </c-modal-footer>
+</c-modal>
+

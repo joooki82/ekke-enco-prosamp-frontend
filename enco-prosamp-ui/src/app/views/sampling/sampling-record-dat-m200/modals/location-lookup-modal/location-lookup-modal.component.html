@@ -1,0 +1,23 @@
+<c-modal [visible]="visible" (close)="onClose()" size="xl" backdrop="static">
+  <c-modal-header><h5>Telephely kiválasztása</h5></c-modal-header>
+  <c-modal-body>
+    <input class="form-control mb-3" [(ngModel)]="filter" (input)="loadLocations()" placeholder="Keresés név alapján..." />
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead><tr><th>Név</th><th>Kapcsolattartó</th><th>Email</th><th></th></tr></thead>
+        <tbody>
+        <tr *ngFor="let location of locations">
+          <td>{{ location.name }}</td>
+          <td>{{ location.contactPerson }}</td>
+          <td>{{ location.email }}</td>
+          <td><button cButton color="primary" (click)="select(location)">Kiválaszt</button></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-modal-body>
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="onClose()">Mégse</button>
+  </c-modal-footer>
+</c-modal>
+

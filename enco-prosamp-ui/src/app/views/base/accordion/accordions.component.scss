@@ -12,6 +12,17 @@
   }
 }
 
+:host ::ng-deep .offcanvas {
+  max-width: 100%;
+  width: 600px; // or whatever size you want
+  z-index: 1055;
+}
+
+:host ::ng-deep .offcanvas-body {
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
 
 
 

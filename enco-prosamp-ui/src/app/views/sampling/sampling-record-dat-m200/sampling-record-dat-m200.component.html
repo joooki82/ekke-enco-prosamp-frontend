@@ -1,0 +1,160 @@
+<!-- Toolbar -->
+<c-row class="mb-3">
+  <c-col md="12" class="text-end">
+    <button cButton color="primary" (click)="openModal()">Új Mintavétel</button>
+  </c-col>
+</c-row>
+
+<!-- Record List Table -->
+<c-card>
+  <c-card-header><strong>Mintavételi Rekordok (DAT-M200)</strong></c-card-header>
+  <c-card-body>
+    <div class="table-responsive">
+
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th>Témaszám</th>
+          <th>Projekt neve</th>
+          <th>Mintavétel dátuma</th>
+          <th>Üzem</th>
+          <th>Telephely</th>
+          <th>Műveletek</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let r of recordList" (click)="openDetails(r)">
+          <td>{{ r.project.projectNumber }}</td>
+          <td>{{ r.project.projectName }}</td>
+          <td>{{ r.samplingDate | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>{{ r.siteLocation.name }}</td>
+          <td>{{ r.company.name }}</td>
+          <td>
+            <button cButton color="warning" (click)="openModal(r); $event.stopPropagation()">Szerkesztés</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </c-card-body>
+</c-card>
+
+<!-- Details Offcanvas -->
+<c-offcanvas
+  placement="end"
+  [visible]="isDrawerOpen"
+  (visibleChange)="isDrawerOpen = $event"
+  [scroll]="true"
+  [backdrop]="true"
+  class="w-100 w-md-50"
+>
+  <c-offcanvas-header>
+    <h5 class="offcanvas-title">Mintavétel részletei</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeDetails()"></button>
+  </c-offcanvas-header>
+
+  <c-offcanvas-body *ngIf="selectedRecordForDetails" style="overflow-y: auto; max-height: calc(100vh - 4rem);">
+    <c-accordion class="shadow-sm rounded-2">
+
+    <!-- Alapadatok -->
+    <c-accordion-item [visible]="true">
+      <ng-template cTemplateId="accordionHeader">
+        Alapadatok
+      </ng-template>
+      <ng-template cTemplateId="accordionBody">
+        <div><strong>Dátum:</strong> {{ selectedRecordForDetails.samplingDate | date:'yyyy-MM-dd HH:mm' }}</div>
+        <div><strong>Technológia:</strong> {{ selectedRecordForDetails.technology }}</div>
+        <div><strong>Projekt:</strong> {{ selectedRecordForDetails.project.projectName }}</div>
+        <div><strong>Cég:</strong> {{ selectedRecordForDetails.company.name }}</div>
+        <div><strong>Cím:</strong> {{ selectedRecordForDetails.company.address }}</div>
+        <div><strong>Telephely:</strong> {{ selectedRecordForDetails.siteLocation.name }} ({{ selectedRecordForDetails.siteLocation.city }})</div>
+        <div><strong>Mintát végző:</strong> {{ selectedRecordForDetails.conductedBy.username }}</div>
+        <div><strong>Státusz:</strong> {{ selectedRecordForDetails.status }}</div>
+      </ng-template>
+    </c-accordion-item>
+
+    <!-- Környezeti körülmények -->
+    <c-accordion-item>
+      <ng-template cTemplateId="accordionHeader">
+        Környezeti körülmények
+      </ng-template>
+      <ng-template cTemplateId="accordionBody">
+        <div><strong>Hőmérséklet:</strong> {{ selectedRecordForDetails.temperature }} °C</div>
+        <div><strong>Páratartalom:</strong> {{ selectedRecordForDetails.humidity }} %</div>
+        <div><strong>Szélsebesség:</strong> {{ selectedRecordForDetails.windSpeed }} m/s</div>
+        <div><strong>Nyomás 1:</strong> {{ selectedRecordForDetails.pressure1 }} hPa</div>
+        <div><strong>Nyomás 2:</strong> {{ selectedRecordForDetails.pressure2 }} hPa</div>
+        <div><strong>Egyéb körülmények:</strong> {{ selectedRecordForDetails.otherEnvironmentalConditions }}</div>
+      </ng-template>
+    </c-accordion-item>
+
+    <!-- Működési jellemzők -->
+    <c-accordion-item>
+      <ng-template cTemplateId="accordionHeader">
+        Működési jellemzők
+      </ng-template>
+      <ng-template cTemplateId="accordionBody">
+        <div><strong>Műszak (db és időtartam):</strong> {{ selectedRecordForDetails.shiftCountAndDuration }}</div>
+        <div><strong>Dolgozók műszakonként:</strong> {{ selectedRecordForDetails.workersPerShift }}</div>
+        <div><strong>Kitettségi idő:</strong> {{ selectedRecordForDetails.exposureTime }} perc</div>
+        <div><strong>Légáramlás:</strong> {{ selectedRecordForDetails.airFlowConditions }}</div>
+        <div><strong>Működési mód:</strong> {{ selectedRecordForDetails.operationMode }}</div>
+        <div><strong>Működési szünet:</strong> {{ selectedRecordForDetails.operationBreak }}</div>
+        <div><strong>Helyi elszívás:</strong> {{ selectedRecordForDetails.localAirExtraction }}</div>
+      </ng-template>
+    </c-accordion-item>
+
+    <!-- Minták -->
+    <c-accordion-item>
+      <ng-template cTemplateId="accordionHeader">
+        Minták
+      </ng-template>
+      <ng-template cTemplateId="accordionBody">
+        <div><strong>Minták sorszáma:</strong> {{ selectedRecordForDetails.serialNumbersOfSamples }}</div>
+        <ul>
+          <li *ngFor="let sample of selectedRecordForDetails.samples">
+            {{ sample.sampleIdentifier }}
+          </li>
+        </ul>
+      </ng-template>
+    </c-accordion-item>
+
+    <!-- Eszközök -->
+    <c-accordion-item>
+      <ng-template cTemplateId="accordionHeader">
+        Mintavételi eszközök
+      </ng-template>
+      <ng-template cTemplateId="accordionBody">
+        <ul>
+          <li *ngFor="let e of selectedRecordForDetails.samplingRecordEquipments">
+            {{ e.name }} ({{ e.identifier }})
+          </li>
+        </ul>
+      </ng-template>
+    </c-accordion-item>
+
+    <!-- Egyéb -->
+    <c-accordion-item>
+      <ng-template cTemplateId="accordionHeader">
+        Egyéb információk
+      </ng-template>
+      <ng-template cTemplateId="accordionBody">
+        <div><strong>Megjegyzés:</strong> {{ selectedRecordForDetails.remarks || '—' }}</div>
+        <div><strong>Létrehozva:</strong> {{ selectedRecordForDetails.createdAt | date:'yyyy-MM-dd HH:mm' }}</div>
+        <div><strong>Utoljára módosítva:</strong> {{ selectedRecordForDetails.updatedAt | date:'yyyy-MM-dd HH:mm' }}</div>
+      </ng-template>
+    </c-accordion-item>
+
+    </c-accordion>
+  </c-offcanvas-body>
+</c-offcanvas>
+
+<!-- Lookup Modals -->
+<app-company-lookup-modal [visible]="isCompanyModalOpen" (close)="isCompanyModalOpen = false"
+                          (companySelected)="onCompanySelected($event)"></app-company-lookup-modal>
+<app-location-lookup-modal [visible]="isLocationModalOpen" (close)="isLocationModalOpen = false"
+                           (locationSelected)="onLocationSelected($event)"></app-location-lookup-modal>
+<app-project-lookup-modal [visible]="isProjectModalOpen" (close)="isProjectModalOpen = false"
+                          (projectSelected)="onProjectSelected($event)"></app-project-lookup-modal>
+<app-equipment-lookup-modal [visible]="isEquipmentModalOpen" (close)="isEquipmentModalOpen = false"
+                            (equipmentsSelected)="onEquipmentsSelected($event)"></app-equipment-lookup-modal>

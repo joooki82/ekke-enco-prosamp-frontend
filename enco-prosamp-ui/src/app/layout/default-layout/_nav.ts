@@ -114,7 +114,7 @@ export const navItems: INavData[] = [
     children: [
       {
         name: 'Mintavételi jegyzőkönyvek',
-        url: '/sampling/sampling-record-datm200',
+        url: '/sampling/sampling-record-dat-m200',
         icon: 'nav-icon-bullet'
       },
       {
