@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {
@@ -16,6 +16,7 @@ import {
   SampleContaminantLinkService,
   SampleContaminantRequestDTO
 } from "../../../services/analytics/sample-contaminant-link.service";
+import {forkJoin} from "rxjs";
 
 @Component({
   selector: 'app-sample-contaminant-link',
@@ -38,6 +39,8 @@ export class SampleContaminantLinkComponent implements OnInit {
   contaminantGroups: ContaminantGroupResponseDTO[] = [];
 
   selectedContaminants: { [sampleId: number]: Set<number> } = {};
+  initialContaminants: { [sampleId: number]: Set<number> } = {};
+  readySampleIds: Set<number> = new Set<number>();
 
   isLoading = false;
   error: string | null = null;
@@ -48,8 +51,7 @@ export class SampleContaminantLinkComponent implements OnInit {
     private contaminantService: ContaminantService,
     private contaminantGroupService: ContaminantGroupService,
     private sampleContaminantLinkService: SampleContaminantLinkService
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadSamplingRecords();
@@ -66,6 +68,10 @@ export class SampleContaminantLinkComponent implements OnInit {
   onSamplingRecordChange(): void {
     if (!this.selectedSamplingRecordId) return;
 
+    this.selectedContaminants = {};
+    this.initialContaminants = {};
+    this.readySampleIds = new Set<number>();
+
     this.samplingRecordService.get(this.selectedSamplingRecordId).subscribe(record => {
       this.samples = record.samples.map(s => ({
         id: s.id,
@@ -74,11 +80,27 @@ export class SampleContaminantLinkComponent implements OnInit {
         location: s.location,
         employeeName: s.employeeName,
         startTime: s.startTime,
-        endTime: s.endTime,
+        endTime: s.endTime
       }));
 
-      this.selectedContaminants = {};
-      this.samples.forEach(s => this.selectedContaminants[s.id] = new Set());
+      const requests = this.samples.map(sample => ({
+        sampleId: sample.id,
+        request$: this.sampleContaminantLinkService.getContaminantsBySample(sample.id)
+      }));
+
+      forkJoin(requests.map(r => r.request$)).subscribe((results) => {
+        results.forEach((linked, index) => {
+          const sampleId = requests[index].sampleId;
+          const contaminantIds = linked?.contaminants?.map(c => c.id) ?? [];
+
+          this.initialContaminants[sampleId] = new Set(contaminantIds);
+          this.selectedContaminants[sampleId] = new Set(contaminantIds);
+
+          const updated = new Set(this.readySampleIds);
+          updated.add(sampleId);
+          this.readySampleIds = updated;
+        });
+      });
     });
   }
 
@@ -91,51 +113,74 @@ export class SampleContaminantLinkComponent implements OnInit {
   }
 
   toggleContaminant(sampleId: number, contaminantId: number, isChecked: boolean): void {
-    const selectedSet = this.selectedContaminants[sampleId] || new Set<number>();
-    isChecked ? selectedSet.add(contaminantId) : selectedSet.delete(contaminantId);
-    this.selectedContaminants[sampleId] = selectedSet;
+    const selectedSet = this.selectedContaminants[sampleId] ?? new Set<number>();
+
+    if (isChecked) {
+      selectedSet.add(contaminantId);
+    } else {
+      selectedSet.delete(contaminantId);
+    }
+
+    // Trigger change detection by assigning a new Set
+    this.selectedContaminants[sampleId] = new Set(selectedSet);
   }
 
   assignGroup(sampleId: number, groupId: number): void {
     const group = this.contaminantGroups.find(g => g.id === groupId);
     if (!group) return;
-    group.contaminants.forEach(c => this.selectedContaminants[sampleId].add(c.id));
+
+    const selectedSet = new Set(this.selectedContaminants[sampleId] ?? []);
+    group.contaminants.forEach(c => selectedSet.add(c.id));
+    this.selectedContaminants[sampleId] = selectedSet;
   }
 
   removeGroup(sampleId: number, groupId: number): void {
     const group = this.contaminantGroups.find(g => g.id === groupId);
     if (!group) return;
-    group.contaminants.forEach(c => this.selectedContaminants[sampleId].delete(c.id));
+
+    const selectedSet = new Set(this.selectedContaminants[sampleId] ?? []);
+    group.contaminants.forEach(c => selectedSet.delete(c.id));
+    this.selectedContaminants[sampleId] = selectedSet;
   }
 
   saveAssignments(): void {
-    const payload: SampleContaminantRequestDTO[] = [];
+    const payloadToLink: SampleContaminantRequestDTO[] = [];
+    const payloadToUnlink: SampleContaminantRequestDTO[] = [];
 
-    for (const [sampleId, contaminantSet] of Object.entries(this.selectedContaminants)) {
-      for (const contaminantId of contaminantSet) {
-        payload.push({
-          sampleId: Number(sampleId),
-          contaminantId: contaminantId
-        });
+    for (const [sampleIdStr, selectedSet] of Object.entries(this.selectedContaminants)) {
+      const sampleId = Number(sampleIdStr);
+      const initialSet = this.initialContaminants[sampleId] ?? new Set<number>();
+
+      // New links
+      for (const id of selectedSet) {
+        if (!initialSet.has(id)) {
+          payloadToLink.push({ sampleId, contaminantId: id });
+        }
+      }
+
+      // Removed links
+      for (const id of initialSet) {
+        if (!selectedSet.has(id)) {
+          payloadToUnlink.push({ sampleId, contaminantId: id });
+        }
       }
     }
 
     this.isLoading = true;
-    this.error = null;
 
-    // Send requests one-by-one in parallel (could be optimized into a bulk endpoint later)
-    const requests = payload.map(dto => this.sampleContaminantLinkService.linkContaminant(dto));
+    const linkRequests = payloadToLink.map(dto => this.sampleContaminantLinkService.linkContaminant(dto));
+    const unlinkRequests = payloadToUnlink.map(dto => this.sampleContaminantLinkService.unlinkContaminant(dto));
 
-    // Execute all in parallel
-    Promise.all(requests.map(req => req.toPromise()))
-      .then(() => {
-        this.isLoading = false;
-        alert('Contaminants successfully linked to samples.');
-      })
-      .catch(error => {
-        this.isLoading = false;
-        this.error = 'Error linking contaminants to samples.';
-        console.error(error);
-      });
+    Promise.all([
+      ...linkRequests.map(r => r.toPromise()),
+      ...unlinkRequests.map(r => r.toPromise())
+    ]).then(() => {
+      this.isLoading = false;
+      alert('Contaminant links updated successfully.');
+    }).catch(err => {
+      this.isLoading = false;
+      this.error = 'Error saving assignments.';
+      console.error(err);
+    });
   }
 }

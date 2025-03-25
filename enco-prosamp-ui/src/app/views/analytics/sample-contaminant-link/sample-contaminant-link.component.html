@@ -1,6 +1,7 @@
 <div class="container mt-4">
   <h4>Sample-Contaminant Linking</h4>
 
+  <!-- Sampling Record Selector -->
   <div class="form-group">
     <label>Select Sampling Record</label>
     <select class="form-control" [(ngModel)]="selectedSamplingRecordId" (change)="onSamplingRecordChange()">
@@ -10,32 +11,46 @@
     </select>
   </div>
 
+  <!-- Sample Cards -->
   <div *ngIf="samples.length > 0">
-    <div *ngFor="let sample of samples" class="card my-3">
-      <div class="card-header">
+    <div *ngFor="let sample of samples" class="card my-4 border border-primary">
+      <div class="card-header fw-bold bg-light">
         Sample: {{ sample.sampleIdentifier }} (Location: {{ sample.location }})
       </div>
       <div class="card-body">
-        <label>Contaminant Groups:</label>
+        <!-- Group Buttons -->
+        <label class="fw-semibold">Contaminant Groups:</label>
         <div class="mb-2">
-          <button *ngFor="let group of contaminantGroups" class="btn btn-outline-primary btn-sm mx-1"
+          <button *ngFor="let group of contaminantGroups"
+                  class="btn btn-outline-primary btn-sm mx-1"
                   (click)="assignGroup(sample.id, group.id)">
             + {{ group.name }}
           </button>
-          <button *ngFor="let group of contaminantGroups" class="btn btn-outline-danger btn-sm mx-1"
+          <button *ngFor="let group of contaminantGroups"
+                  class="btn btn-outline-danger btn-sm mx-1"
                   (click)="removeGroup(sample.id, group.id)">
             − {{ group.name }}
           </button>
         </div>
 
-        <div class="row">
+        <!-- Loading placeholder -->
+        <div class="text-muted" *ngIf="!readySampleIds.has(sample.id)">
+          <em>Loading contaminants...</em>
+        </div>
+
+        <!-- Contaminant Checkboxes -->
+        <div class="row mt-3" *ngIf="readySampleIds.has(sample.id)">
           <div class="col-md-4" *ngFor="let contaminant of contaminants">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox"
-                     [checked]="selectedContaminants[sample.id].has(contaminant.id)"
+              <input class="form-check-input"
+                     type="checkbox"
+                     [checked]="selectedContaminants[sample.id]?.has(contaminant.id)"
                      (change)="toggleContaminant(sample.id, contaminant.id, $any($event.target).checked)">
               <label class="form-check-label">
-                {{ contaminant.name }} <small class="text-muted">({{ contaminant.contaminantGroup.name }})</small>
+                {{ contaminant.name }}
+                <small class="text-muted">
+                  ({{ contaminant.contaminantGroup?.name || 'No Group' }})
+                </small>
               </label>
             </div>
           </div>
@@ -43,13 +58,14 @@
       </div>
     </div>
 
+    <!-- Save Button -->
     <button class="btn btn-success mt-3" (click)="saveAssignments()" [disabled]="isLoading">
       Save Assignments
     </button>
 
+    <!-- Error Message -->
     <div *ngIf="error" class="alert alert-danger mt-3">
       {{ error }}
     </div>
   </div>
 </div>
-
