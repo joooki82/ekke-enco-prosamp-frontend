@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import {SampleRequestDTO, SampleResponseDTO, SamplesService} from "../../../services/sampling/samples.service";
+import {
+  AdjustmentMethodListItemDTO,
+  MeasurementUnitListItemDTO,
+  SampleRequestDTO,
+  SampleResponseDTO,
+  SamplesService, SamplingRecordDatM200ListItemDTO
+} from "../../../services/sampling/samples.service";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {
   ButtonDirective,
@@ -45,6 +51,7 @@ export class SamplesComponent {
   newSample: SampleRequestDTO = this.createEmptySample();
   selectedSampleId: number | null = null;
   formValidated: boolean = false;
+
 
   constructor(private sampleService: SamplesService) {
     this.loadSamples();

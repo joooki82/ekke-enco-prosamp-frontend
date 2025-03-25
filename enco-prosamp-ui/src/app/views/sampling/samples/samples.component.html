@@ -8,27 +8,105 @@
   </c-col>
 </c-row>
 
-<!-- Modal -->
+<!-- Modal for Creating/Editing Sample -->
 <c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static">
   <c-modal-header>
-    <h5>{{ selectedSampleId ? 'Minta szerkesztése' : 'Új minta' }}</h5>
+    <h5 class="modal-title">
+      {{ selectedSampleId ? 'Minta szerkesztése' : 'Új minta létrehozása' }}
+    </h5>
   </c-modal-header>
+
   <c-modal-body>
     <form class="row g-3">
+
+      <!-- Required fields -->
       <div class="col-md-6">
         <label class="form-label">Minta azonosító</label>
         <input class="form-control" [(ngModel)]="newSample.sampleIdentifier" name="sampleIdentifier" required />
       </div>
+
       <div class="col-md-6">
         <label class="form-label">Státusz</label>
         <input class="form-control" [(ngModel)]="newSample.status" name="status" required />
       </div>
-      <!-- Add other fields here... -->
+
+      <div class="col-md-6">
+        <label class="form-label">Minta típusa</label>
+        <input class="form-control" [(ngModel)]="newSample.sampleType" name="sampleType" required />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Mintavételi jegyzőkönyv ID</label>
+        <input class="form-control" type="number" [(ngModel)]="newSample.samplingRecordId" name="samplingRecordId" required />
+      </div>
+
+      <!-- Optional fields -->
+      <div class="col-md-6">
+        <label class="form-label">Helyszín</label>
+        <input class="form-control" [(ngModel)]="newSample.location" name="location" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Minta vevő neve</label>
+        <input class="form-control" [(ngModel)]="newSample.employeeName" name="employeeName" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Hőmérséklet (°C)</label>
+        <input class="form-control" type="number" [(ngModel)]="newSample.temperature" name="temperature" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Páratartalom (%)</label>
+        <input class="form-control" type="number" [(ngModel)]="newSample.humidity" name="humidity" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Légnyomás (hPa)</label>
+        <input class="form-control" type="number" [(ngModel)]="newSample.pressure" name="pressure" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Térfogatáram (m³/h)</label>
+        <input class="form-control" type="number" [(ngModel)]="newSample.sampleVolumeFlowRate" name="sampleVolumeFlowRate" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Térfogatáram mértékegység ID</label>
+        <input class="form-control" type="number" [(ngModel)]="newSample.sampleVolumeFlowRateUnitId" name="sampleVolumeFlowRateUnitId" required />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Kezdési idő</label>
+        <input class="form-control" type="datetime-local" [(ngModel)]="newSample.startTime" name="startTime" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Befejezési idő</label>
+        <input class="form-control" type="datetime-local" [(ngModel)]="newSample.endTime" name="endTime" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Mintavételi típus ID</label>
+        <input class="form-control" type="number" [(ngModel)]="newSample.samplingTypeId" name="samplingTypeId" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Korrigálási módszer ID</label>
+        <input class="form-control" type="number" [(ngModel)]="newSample.adjustmentMethodId" name="adjustmentMethodId" />
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Megjegyzés</label>
+        <textarea class="form-control" rows="2" [(ngModel)]="newSample.remarks" name="remarks"></textarea>
+      </div>
+
     </form>
   </c-modal-body>
+
   <c-modal-footer>
-    <button cButton color="secondary" (click)="closeModal()">Mégse</button>
-    <button cButton color="primary" (click)="onSubmit()">Mentés</button>
+    <button cButton color="secondary" type="button" (click)="closeModal()">Mégse</button>
+    <button cButton color="primary" type="button" (click)="onSubmit()">Mentés</button>
   </c-modal-footer>
 </c-modal>
 
@@ -68,4 +146,6 @@
     </div>
   </c-card-body>
 </c-card>
+
+
 
