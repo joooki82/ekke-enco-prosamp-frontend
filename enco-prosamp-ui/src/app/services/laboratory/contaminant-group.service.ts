@@ -2,11 +2,13 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {ContaminantListItemDTO} from "../analytics/sample-contaminant-link.service";
 
 export interface ContaminantGroupResponseDTO {
   id: number;
   name: string;
   description: string;
+  contaminants: ContaminantListItemDTO[];
   createdAt: string;
   updatedAt: string;
 }

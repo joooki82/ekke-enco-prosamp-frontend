@@ -1,0 +1,55 @@
+<div class="container mt-4">
+  <h4>Sample-Contaminant Linking</h4>
+
+  <div class="form-group">
+    <label>Select Sampling Record</label>
+    <select class="form-control" [(ngModel)]="selectedSamplingRecordId" (change)="onSamplingRecordChange()">
+      <option *ngFor="let record of samplingRecords" [value]="record.id">
+        {{ record.id }} - {{ record.samplingDate | date:'yyyy-MM-dd' }}
+      </option>
+    </select>
+  </div>
+
+  <div *ngIf="samples.length > 0">
+    <div *ngFor="let sample of samples" class="card my-3">
+      <div class="card-header">
+        Sample: {{ sample.sampleIdentifier }} (Location: {{ sample.location }})
+      </div>
+      <div class="card-body">
+        <label>Contaminant Groups:</label>
+        <div class="mb-2">
+          <button *ngFor="let group of contaminantGroups" class="btn btn-outline-primary btn-sm mx-1"
+                  (click)="assignGroup(sample.id, group.id)">
+            + {{ group.name }}
+          </button>
+          <button *ngFor="let group of contaminantGroups" class="btn btn-outline-danger btn-sm mx-1"
+                  (click)="removeGroup(sample.id, group.id)">
+            − {{ group.name }}
+          </button>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4" *ngFor="let contaminant of contaminants">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox"
+                     [checked]="selectedContaminants[sample.id]?.has(contaminant.id)"
+                     (change)="toggleContaminant(sample.id, contaminant.id, $any($event.target).checked)">
+              <label class="form-check-label">
+                {{ contaminant.name }} <small class="text-muted">({{ contaminant.contaminantGroup.name }})</small>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-success mt-3" (click)="saveAssignments()" [disabled]="isLoading">
+      Save Assignments
+    </button>
+
+    <div *ngIf="error" class="alert alert-danger mt-3">
+      {{ error }}
+    </div>
+  </div>
+</div>
+

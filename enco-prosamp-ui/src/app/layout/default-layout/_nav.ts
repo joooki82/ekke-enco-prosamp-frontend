@@ -126,6 +126,22 @@ export const navItems: INavData[] = [
   },
   {
     title: true,
+    name: 'Encotech - vizsgálatok'
+  },
+  {
+    name: 'Vizsgálatok',
+    url: '/analytics',
+    iconComponent: { name: 'cil-running' },
+    children: [
+      {
+        name: 'Vizsgálandó szennyezők',
+        url: '/analytics/sample-contaminant-link',
+        icon: 'nav-icon-bullet'
+      }
+    ]
+  },
+  {
+    title: true,
     name: 'Encotech - jegyzőkönyvek'
   },
   {
