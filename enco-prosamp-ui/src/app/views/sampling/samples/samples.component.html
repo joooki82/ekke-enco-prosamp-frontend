@@ -150,7 +150,12 @@
           <td>{{ s.status }}</td>
           <td>{{ s.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>
-            <button cButton color="warning" size="sm" (click)="openModal(s)">
+            <button
+              cButton
+              color="warning"
+              size="sm"
+              (click)="openModal(s); $event.stopPropagation()"
+            >
               <i class="fa fa-edit me-1"></i> Szerkesztés
             </button>
           </td>
