@@ -9,7 +9,7 @@
 </c-row>
 
 <!-- Modal for Creating/Editing Sample -->
-<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static">
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" size="xl">
   <c-modal-header>
     <h5 class="modal-title">
       {{ selectedSampleId ? 'Minta szerkesztése' : 'Új minta létrehozása' }}
@@ -26,18 +26,13 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Státusz</label>
-        <input class="form-control" [(ngModel)]="newSample.status" name="status" required />
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Minta típusa</label>
-        <input class="form-control" [(ngModel)]="newSample.sampleType" name="sampleType" required />
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Mintavételi jegyzőkönyv ID</label>
-        <input class="form-control" type="number" [(ngModel)]="newSample.samplingRecordId" name="samplingRecordId" required />
+        <div class="col-md-12">
+          <label class="form-label">Mintavételi jegyzőkönyv</label>
+          <div class="input-group">
+            <input class="form-control" [value]="selectedSamplingRecord?.id || newSample.samplingRecordId" readonly />
+            <button class="btn btn-outline-secondary" type="button" (click)="isRecordLookupOpen = true">Kiválasztás</button>
+          </div>
+        </div>
       </div>
 
       <!-- Optional fields -->
@@ -47,8 +42,20 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Minta vevő neve</label>
+        <label class="form-label">Alkalmazott neve</label>
         <input class="form-control" [(ngModel)]="newSample.employeeName" name="employeeName" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Minta típusa</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="sampleType" id="typeAK" [(ngModel)]="newSample.sampleType" value="AK" required>
+          <label class="form-check-label" for="typeAK">Átlagkoncentráció (AK)</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="sampleType" id="typeCK" [(ngModel)]="newSample.sampleType" value="CK">
+          <label class="form-check-label" for="typeCK">Csúcskoncentráció (CK)</label>
+        </div>
       </div>
 
       <div class="col-md-4">
@@ -73,7 +80,9 @@
 
       <div class="col-md-6">
         <label class="form-label">Térfogatáram mértékegység ID</label>
-        <input class="form-control" type="number" [(ngModel)]="newSample.sampleVolumeFlowRateUnitId" name="sampleVolumeFlowRateUnitId" required />
+        <select class="form-select" [(ngModel)]="newSample.sampleVolumeFlowRateUnitId" name="sampleVolumeFlowRateUnitId" required>
+          <option *ngFor="let unit of measurementUnits" [value]="unit.id">{{ unit.unitCode }}</option>
+        </select>
       </div>
 
       <div class="col-md-6">
@@ -87,13 +96,19 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Mintavételi típus ID</label>
-        <input class="form-control" type="number" [(ngModel)]="newSample.samplingTypeId" name="samplingTypeId" />
+        <label class="form-label">Mintavétel típusa</label>
+        <select class="form-select" [(ngModel)]="newSample.samplingTypeId" name="samplingTypeId">
+          <option [ngValue]="null">-- Válassz --</option>
+          <option *ngFor="let type of samplingTypes" [value]="type.id">{{ type.code }}</option>
+        </select>
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Korrigálási módszer ID</label>
-        <input class="form-control" type="number" [(ngModel)]="newSample.adjustmentMethodId" name="adjustmentMethodId" />
+        <label class="form-label">Térfogatáram beállítás módja</label>
+        <select class="form-select" [(ngModel)]="newSample.adjustmentMethodId" name="adjustmentMethodId">
+          <option [ngValue]="null">-- Válassz --</option>
+          <option *ngFor="let method of adjustmentMethods" [value]="method.id">{{ method.code }}</option>
+        </select>
       </div>
 
       <div class="col-md-12">
@@ -117,8 +132,8 @@
       <table class="table table-striped table-bordered table-hover align-middle mb-0">
         <thead class="table-light">
         <tr>
-          <th>Azonosító</th>
-          <th>Hely</th>
+          <th>Minta szonosító</th>
+          <th>Mintavétel helye</th>
           <th>Alkalmazott</th>
           <th>Státusz</th>
           <th>Létrehozva</th>
@@ -146,6 +161,12 @@
     </div>
   </c-card-body>
 </c-card>
+
+<app-sampling-record-lookup-modal
+  [visible]="isRecordLookupOpen"
+  (close)="isRecordLookupOpen = false"
+  (selected)="onSamplingRecordSelected($event)">
+</app-sampling-record-lookup-modal>
 
 
 

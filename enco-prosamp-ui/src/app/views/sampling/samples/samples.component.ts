@@ -4,7 +4,7 @@ import {
   MeasurementUnitListItemDTO,
   SampleRequestDTO,
   SampleResponseDTO,
-  SamplesService, SamplingRecordDatM200ListItemDTO
+  SamplesService, SamplingRecordDatM200ListItemDTO, SamplingTypeListItemDTO
 } from "../../../services/sampling/samples.service";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {
@@ -19,6 +19,12 @@ import {
   RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
+import {MeasurementUnitService} from "../../../services/laboratory/measurement-unit.service";
+import {AdjustmentMethodService} from "../../../services/laboratory/adjustment-method.service";
+import {SamplingTypeService} from "../../../services/laboratory/sampling-type.service";
+import {
+  SamplingRecordLookupModalComponent
+} from "./modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 
 @Component({
   selector: 'app-samples',
@@ -35,7 +41,8 @@ import {FormsModule} from "@angular/forms";
     CardBodyComponent,
     NgIf,
     ButtonDirective,
-    NgForOf
+    NgForOf,
+    SamplingRecordLookupModalComponent
   ],
   standalone: true,
   templateUrl: './samples.component.html',
@@ -52,10 +59,28 @@ export class SamplesComponent {
   selectedSampleId: number | null = null;
   formValidated: boolean = false;
 
+  measurementUnits: MeasurementUnitListItemDTO[] = [];
+  adjustmentMethods: AdjustmentMethodListItemDTO[] = [];
+  samplingTypes: SamplingTypeListItemDTO[] = [];
 
-  constructor(private sampleService: SamplesService) {
+  isRecordLookupOpen: boolean = false;
+  selectedSamplingRecord?: SamplingRecordDatM200ListItemDTO;
+
+
+  constructor(private sampleService: SamplesService,
+              private measurementUnitService: MeasurementUnitService,
+              private adjustmentMethodService: AdjustmentMethodService,
+              private samplingTypeService: SamplingTypeService) {
     this.loadSamples();
+    this.loadLookups();
   }
+
+  loadLookups(): void {
+    this.measurementUnitService.getAll().subscribe(data => this.measurementUnits = data);
+    this.adjustmentMethodService.getAll().subscribe(data => this.adjustmentMethods = data);
+    this.samplingTypeService.getAll().subscribe(data => this.samplingTypes = data);
+  }
+
 
   loadSamples(): void {
     this.sampleService.getAll().subscribe({
@@ -116,8 +141,8 @@ export class SamplesComponent {
       samplingRecordId: 0,
       sampleIdentifier: '',
       sampleVolumeFlowRateUnitId: 0,
-      sampleType: '',
-      status: ''
+      sampleType: 'AK',
+      status: 'ACTIVE'
     };
   }
 
@@ -144,4 +169,10 @@ export class SamplesComponent {
       error: () => alert('Hiba a mentés során.')
     });
   }
+
+  onSamplingRecordSelected(record: SamplingRecordDatM200ListItemDTO): void {
+    this.selectedSamplingRecord = record;
+    this.newSample.samplingRecordId = record.id;
+  }
+
 }

@@ -1,0 +1,50 @@
+<c-modal class="bg-dark rounded shadow-sm" [visible]="visible" (close)="cancel()" size="xl" backdrop="static">
+  <c-modal-header>
+    <h5 class="modal-title">Mintavételi jegyzőkönyv kiválasztása</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <c-row class="mb-3">
+      <c-col md="6">
+        <input type="text" class="form-control" [(ngModel)]="filterText"
+               placeholder="Keresés projekt, cég, státusz vagy telephely alapján..." />
+      </c-col>
+    </c-row>
+
+    <c-card>
+      <c-card-body class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-light">
+          <tr>
+            <th>Dátum</th>
+            <th>Technológia</th>
+            <th>Projekt</th>
+            <th>Telephely</th>
+            <th>Cég</th>
+            <th>Kiválasztás</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let r of filteredRecords">
+            <td>{{ r.samplingDate | date: 'yyyy-MM-dd HH:mm' }}</td>
+            <td>{{ r.technology }}</td>
+            <td>{{ r.project.projectName }}</td>
+            <td>{{ r.siteLocation.name }}</td>
+            <td>{{ r.company.name }}</td>
+            <td>
+              <button cButton color="primary" size="sm" (click)="select(r)">Kiválaszt</button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredRecords.length === 0">
+            <td colspan="6" class="text-center text-muted">Nincs találat.</td>
+          </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="cancel()">Mégse</button>
+  </c-modal-footer>
+</c-modal>
