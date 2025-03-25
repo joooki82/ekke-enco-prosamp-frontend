@@ -25,6 +25,7 @@ import {SamplingTypeService} from "../../../services/laboratory/sampling-type.se
 import {
   SamplingRecordLookupModalComponent
 } from "./modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
+import {NotificationService} from "../../../services/notification/notification.service";
 
 @Component({
   selector: 'app-samples',
@@ -76,7 +77,8 @@ export class SamplesComponent {
   constructor(private sampleService: SamplesService,
               private measurementUnitService: MeasurementUnitService,
               private adjustmentMethodService: AdjustmentMethodService,
-              private samplingTypeService: SamplingTypeService) {
+              private notificationService: NotificationService,
+              private samplingTypeService: SamplingTypeService ) {
     this.loadSamples();
     this.loadLookups();
   }
@@ -97,9 +99,8 @@ export class SamplesComponent {
       },
       error: err => {
         console.error('API error:', err);
-        alert('❌ Nem sikerült a mintákat betölteni. Ellenőrizd a backendet!');
+        this.notificationService.showError('❌ Nem sikerült a mintákat betölteni.');
       }
-
     });
   }
 
@@ -163,16 +164,22 @@ export class SamplesComponent {
       return;
     }
 
-    const request = this.selectedSampleId
-      ? this.sampleService.update(this.selectedSampleId, this.newSample)
-      : this.sampleService.create(this.newSample);
+    const isNew = this.selectedSampleId == null;
+    const request = isNew
+      ? this.sampleService.create(this.newSample)
+      : this.sampleService.update(this.selectedSampleId!, this.newSample);
 
     request.subscribe({
       next: () => {
+        this.notificationService.showSuccess(
+          isNew ? '✅ Minta sikeresen létrehozva' : '✅ Minta frissítve'
+        );
         this.closeModal();
         this.loadSamples();
       },
-      error: () => alert('Hiba a mentés során.')
+      error: () => {
+        this.notificationService.showError('❌ Hiba történt a mentés során');
+      }
     });
   }
 
