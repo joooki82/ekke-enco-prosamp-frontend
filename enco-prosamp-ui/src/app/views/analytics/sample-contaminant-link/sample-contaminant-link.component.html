@@ -32,7 +32,7 @@
           <div class="col-md-4" *ngFor="let contaminant of contaminants">
             <div class="form-check">
               <input class="form-check-input" type="checkbox"
-                     [checked]="selectedContaminants[sample.id]?.has(contaminant.id)"
+                     [checked]="selectedContaminants[sample.id].has(contaminant.id)"
                      (change)="toggleContaminant(sample.id, contaminant.id, $any($event.target).checked)">
               <label class="form-check-label">
                 {{ contaminant.name }} <small class="text-muted">({{ contaminant.contaminantGroup.name }})</small>

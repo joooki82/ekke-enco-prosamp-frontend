@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -34,9 +34,15 @@ export interface EquipmentDTO {
   identifier: string;
 }
 
-export interface SampleIdentifierDTO {
+export interface SampleListItemDTO {
   id: number;
   sampleIdentifier: string;
+  samplingRecordId: number;
+  location: string;
+  employeeName: string;
+  startTime: string;
+  endTime: string;
+
 }
 
 export interface SamplingRecordResponseDTO {
@@ -65,7 +71,7 @@ export interface SamplingRecordResponseDTO {
   status: string;
   remarks?: string;
   samplingRecordEquipments: EquipmentDTO[];
-  samples: SampleIdentifierDTO[];
+  samples: SampleListItemDTO[];
   createdAt: string;
   updatedAt: string;
 }
@@ -98,12 +104,12 @@ export interface SamplingRecordRequestDTO {
 }
 
 
-
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class SamplingRecordDatM200Service {
   private baseUrl = `${environment.apiUrl}/api/sampling-record-datm200`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getAll(): Observable<SamplingRecordResponseDTO[]> {
     return this.http.get<SamplingRecordResponseDTO[]>(this.baseUrl);

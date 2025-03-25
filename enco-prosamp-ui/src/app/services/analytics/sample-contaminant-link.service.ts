@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {SampleListItemDTO} from "../sampling/sampling-record-dat-m200.service";
 
 
 export interface SampleContaminantRequestDTO {
@@ -21,14 +22,6 @@ export interface SampleContaminantCreatedDTO {
   contaminantName: string;
   contaminantDescription: string;
 }
-
-export interface SampleListItemDTO {
-  id: number;
-  sampleIdentifier: string;
-  samplingRecordId: number;
-  location: string;
-}
-
 
 export interface SampleWithContaminantsDTO {
   sample: SampleListItemDTO;

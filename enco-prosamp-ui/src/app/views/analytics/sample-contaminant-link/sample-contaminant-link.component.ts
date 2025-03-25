@@ -2,10 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {
+  SampleListItemDTO,
   SamplingRecordDatM200Service,
   SamplingRecordResponseDTO
 } from "../../../services/sampling/sampling-record-dat-m200.service";
-import {SampleResponseDTO, SamplesService} from "../../../services/sampling/samples.service";
+import {SamplesService} from "../../../services/sampling/samples.service";
 import {ContaminantResponseDTO, ContaminantService} from "../../../services/laboratory/contaminant.service";
 import {
   ContaminantGroupResponseDTO,
@@ -31,7 +32,7 @@ import {
 export class SampleContaminantLinkComponent implements OnInit {
   samplingRecords: SamplingRecordResponseDTO[] = [];
   selectedSamplingRecordId: number | null = null;
-  samples: SampleResponseDTO[] = [];
+  samples: SampleListItemDTO[] = [];
 
   contaminants: ContaminantResponseDTO[] = [];
   contaminantGroups: ContaminantGroupResponseDTO[] = [];
@@ -64,8 +65,18 @@ export class SampleContaminantLinkComponent implements OnInit {
 
   onSamplingRecordChange(): void {
     if (!this.selectedSamplingRecordId) return;
-    this.sampleService.getAll().subscribe(samples => {
-      this.samples = samples.filter(s => s.samplingRecord.id === this.selectedSamplingRecordId);
+
+    this.samplingRecordService.get(this.selectedSamplingRecordId).subscribe(record => {
+      this.samples = record.samples.map(s => ({
+        id: s.id,
+        samplingRecordId: s.samplingRecordId,
+        sampleIdentifier: s.sampleIdentifier,
+        location: s.location,
+        employeeName: s.employeeName,
+        startTime: s.startTime,
+        endTime: s.endTime,
+      }));
+
       this.selectedContaminants = {};
       this.samples.forEach(s => this.selectedContaminants[s.id] = new Set());
     });
