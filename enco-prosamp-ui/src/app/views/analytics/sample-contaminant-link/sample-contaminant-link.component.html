@@ -26,6 +26,8 @@
                   (click)="assignGroup(sample.id, group.id)">
             + {{ group.name }}
           </button>
+        </div>
+        <div class="mb-2">
           <button *ngFor="let group of contaminantGroups"
                   class="btn btn-outline-danger btn-sm mx-1"
                   (click)="removeGroup(sample.id, group.id)">
