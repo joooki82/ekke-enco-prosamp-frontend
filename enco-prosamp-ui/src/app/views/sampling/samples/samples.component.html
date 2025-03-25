@@ -129,7 +129,7 @@
 <c-card>
   <c-card-body>
     <div class="table-responsive">
-      <table class="table table-striped table-bordered table-hover align-middle mb-0">
+      <table class="table table-bordered table-hover align-middle mb-0">
         <thead class="table-light">
         <tr>
           <th>Minta azonosító</th>
@@ -142,7 +142,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let s of filteredSamples">
+        <tr *ngFor="let s of filteredSamples" (click)="openDetails(s)" style="cursor: pointer;">
           <td>{{ s.sampleIdentifier }}</td>
           <td>{{ s.samplingRecord.samplingDate  | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>{{ s.location }}</td>
@@ -163,6 +163,69 @@
     </div>
   </c-card-body>
 </c-card>
+
+<c-offcanvas
+  placement="end"
+  [visible]="isDrawerOpen"
+  (visibleChange)="isDrawerOpen = $event"
+  [scroll]="true"
+  [backdrop]="true"
+>
+  <c-offcanvas-header>
+    <h5 class="offcanvas-title">Minta Részletei</h5>
+    <button type="button" class="btn-close text-reset" aria-label="Close" (click)="closeDetails()"></button>
+  </c-offcanvas-header>
+
+  <c-offcanvas-body *ngIf="selectedSampleForDetails">
+    <dl class="row">
+      <dt class="col-sm-5">Minta azonosító</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.sampleIdentifier }}</dd>
+
+      <dt class="col-sm-5">Mintavételi jegyzőkönyv</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.samplingRecord?.id }}</dd>
+
+      <dt class="col-sm-5">Helyszín</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.location }}</dd>
+
+      <dt class="col-sm-5">Alkalmazott</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.employeeName }}</dd>
+
+      <dt class="col-sm-5">Típus</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.sampleType }}</dd>
+
+      <dt class="col-sm-5">Státusz</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.status }}</dd>
+
+      <dt class="col-sm-5">Hőmérséklet</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.temperature }}</dd>
+
+      <dt class="col-sm-5">Páratartalom</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.humidity }}</dd>
+
+      <dt class="col-sm-5">Légnyomás</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.pressure }}</dd>
+
+      <dt class="col-sm-5">Térfogatáram</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.sampleVolumeFlowRate }}</dd>
+
+      <dt class="col-sm-5">Időintervallum</dt>
+      <dd class="col-sm-7">
+        {{ selectedSampleForDetails.startTime | date:'yyyy-MM-dd HH:mm' }} -
+        {{ selectedSampleForDetails.endTime | date:'yyyy-MM-dd HH:mm' }}
+      </dd>
+
+      <dt class="col-sm-5">Megjegyzés</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.remarks }}</dd>
+
+      <dt class="col-sm-5">Létrehozva</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.createdAt | date:'yyyy-MM-dd HH:mm' }}</dd>
+
+      <dt class="col-sm-5">Frissítve</dt>
+      <dd class="col-sm-7">{{ selectedSampleForDetails.updatedAt | date:'yyyy-MM-dd HH:mm' }}</dd>
+    </dl>
+  </c-offcanvas-body>
+</c-offcanvas>
+
 
 <app-sampling-record-lookup-modal
   [visible]="isRecordLookupOpen"

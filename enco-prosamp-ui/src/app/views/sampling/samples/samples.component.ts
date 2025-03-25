@@ -15,7 +15,7 @@ import {
   ModalBodyComponent,
   ModalComponent,
   ModalFooterComponent,
-  ModalHeaderComponent,
+  ModalHeaderComponent, OffcanvasBodyComponent, OffcanvasComponent, OffcanvasHeaderComponent,
   RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
@@ -42,7 +42,10 @@ import {
     NgIf,
     ButtonDirective,
     NgForOf,
-    SamplingRecordLookupModalComponent
+    SamplingRecordLookupModalComponent,
+    OffcanvasBodyComponent,
+    OffcanvasHeaderComponent,
+    OffcanvasComponent
   ],
   standalone: true,
   templateUrl: './samples.component.html',
@@ -65,6 +68,9 @@ export class SamplesComponent {
 
   isRecordLookupOpen: boolean = false;
   selectedSamplingRecord?: SamplingRecordDatM200ListItemDTO;
+
+  selectedSampleForDetails: SampleResponseDTO | null = null;
+  isDrawerOpen = false;
 
 
   constructor(private sampleService: SamplesService,
@@ -174,5 +180,17 @@ export class SamplesComponent {
     this.selectedSamplingRecord = record;
     this.newSample.samplingRecordId = record.id;
   }
+
+  // Add these methods to the class
+  openDetails(sample: SampleResponseDTO): void {
+    this.selectedSampleForDetails = sample;
+    this.isDrawerOpen = true;
+  }
+
+  closeDetails(): void {
+    this.selectedSampleForDetails = null;
+    this.isDrawerOpen = false;
+  }
+
 
 }
