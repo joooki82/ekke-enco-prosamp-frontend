@@ -137,6 +137,11 @@ export const navItems: INavData[] = [
         name: 'Vizsgálandó szennyezők',
         url: '/analytics/sample-contaminant-link',
         icon: 'nav-icon-bullet'
+      },
+      {
+        name: 'Vizsgálati eredmények',
+        url: '/analytics/sample-analytical-result',
+        icon: 'nav-icon-bullet'
       }
     ]
   },

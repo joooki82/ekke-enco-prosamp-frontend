@@ -19,6 +19,13 @@ export const routes: Routes = [
         data: {
           title: 'Vizsgálandó szennyezők'
         }
+      },
+      {
+        path: 'sample-analytical-result',
+        loadComponent: () => import('./sample-analytical-result/sample-analytical-result.component').then(m => m.SampleAnalyticalResultComponent),
+        data: {
+          title: 'Vizsgálati eredmények'
+        }
       }
     ]
   }
