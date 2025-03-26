@@ -27,6 +27,13 @@ export interface ContaminantCreatedDTO {
   description: string;
 }
 
+export interface ContaminantListItemDTO {
+  id: number;
+  name: string;
+  description: string;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })

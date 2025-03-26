@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ContaminantListItemDTO} from "../analytics/sample-contaminant-link.service";
+import {ContaminantListItemDTO} from "./contaminant.service";
 
 export interface ContaminantGroupResponseDTO {
   id: number;

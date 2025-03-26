@@ -5,12 +5,18 @@ import {Observable} from "rxjs";
 import {SampleListItemDTO} from "../sampling/sampling-record-dat-m200.service";
 
 
+
+/**
+ * Request DTO for linking contaminant to sample
+ */
 export interface SampleContaminantRequestDTO {
   sampleId: number;
   contaminantId: number;
 }
 
-
+/**
+ * Response DTO after linking
+ */
 export interface SampleContaminantCreatedDTO {
   id: number;
   sampleId: number;
@@ -23,16 +29,56 @@ export interface SampleContaminantCreatedDTO {
   contaminantDescription: string;
 }
 
-export interface SampleWithContaminantsDTO {
-  sample: SampleListItemDTO;
-  contaminants: ContaminantListItemDTO[];
+/**
+ * Used when fetching sample with contaminant list (includes SampleContaminant ID)
+ */
+export interface SampleContaminantListItem2DTO {
+  id: number; // ← SampleContaminant ID
+  contaminant: ContaminantListNameDTO;
 }
 
-export interface ContaminantListItemDTO {
+export interface ContaminantListNameDTO {
   id: number;
   name: string;
-  description: string;
 }
+
+/**
+ * DTO returned by /{sampleId}/samplecontaminants
+ */
+export interface SampleWithSampleContaminantsDTO {
+  sample: {
+    id: number;
+    sampleIdentifier: string;
+  };
+  sampleContaminants: SampleContaminantListItem2DTO[];
+}
+
+/**
+ * DTO returned by /{sampleId}/samplecontaminants
+ */
+export interface SampleWithContaminantsDTO {
+  sample: {
+    id: number;
+    sampleIdentifier: string;
+  };
+  sampleContaminants: SampleContaminantListItem2DTO[];
+}
+
+export interface SampleIdentifierDTO {
+  id: number;
+  sampleIdentifier: string;
+}
+
+export interface ContaminantListNameDTO {
+  id: number;
+  name: string;
+}
+
+export interface SampleWithContaminantsDTO {
+  sample: SampleIdentifierDTO;
+  contaminants: ContaminantListNameDTO[];
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +96,17 @@ export class SampleContaminantLinkService {
     return this.http.request<void>('delete', `${this.baseUrl}/unlink`, { body: request });
   }
 
+  /**
+   * Gets all sample contaminants (with SampleContaminant ID) by sample ID
+   */
   getContaminantsBySample(sampleId: number): Observable<SampleWithContaminantsDTO> {
     return this.http.get<SampleWithContaminantsDTO>(`${this.baseUrl}/${sampleId}/contaminants`);
+  }
+
+  /**
+   * Gets all sample contaminants (with SampleContaminant ID) by sample ID
+   */
+  getSampleContaminantsBySample(sampleId: number): Observable<SampleWithSampleContaminantsDTO> {
+    return this.http.get<SampleWithSampleContaminantsDTO>(`${this.baseUrl}/${sampleId}/samplecontaminants`);
   }
 }
