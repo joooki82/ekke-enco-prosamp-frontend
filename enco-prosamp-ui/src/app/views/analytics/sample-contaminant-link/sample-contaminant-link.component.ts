@@ -17,6 +17,9 @@ import {
   SampleContaminantRequestDTO
 } from "../../../services/analytics/sample-contaminant-link.service";
 import {forkJoin} from "rxjs";
+import {
+  SamplingRecordLookupModalComponent
+} from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 
 @Component({
   selector: 'app-sample-contaminant-link',
@@ -24,7 +27,8 @@ import {forkJoin} from "rxjs";
     NgIf,
     NgForOf,
     FormsModule,
-    DatePipe
+    DatePipe,
+    SamplingRecordLookupModalComponent
   ],
   standalone: true,
   templateUrl: './sample-contaminant-link.component.html',
@@ -33,8 +37,9 @@ import {forkJoin} from "rxjs";
 export class SampleContaminantLinkComponent implements OnInit {
   samplingRecords: SamplingRecordResponseDTO[] = [];
   selectedSamplingRecordId: number | null = null;
-  samples: SampleListItemDTO[] = [];
+  selectedSamplingRecord: SamplingRecordResponseDTO | null = null;
 
+  samples: SampleListItemDTO[] = [];
   contaminants: ContaminantResponseDTO[] = [];
   contaminantGroups: ContaminantGroupResponseDTO[] = [];
 
@@ -42,6 +47,7 @@ export class SampleContaminantLinkComponent implements OnInit {
   initialContaminants: { [sampleId: number]: Set<number> } = {};
   readySampleIds: Set<number> = new Set<number>();
 
+  showModal: boolean = false;
   isLoading = false;
   error: string | null = null;
 
@@ -65,14 +71,29 @@ export class SampleContaminantLinkComponent implements OnInit {
     });
   }
 
-  onSamplingRecordChange(): void {
-    if (!this.selectedSamplingRecordId) return;
+  openSamplingRecordModal(): void {
+    this.showModal = true;
+  }
 
+  onSamplingRecordSelected(record: SamplingRecordResponseDTO): void {
+    this.selectedSamplingRecordId = record.id;
+    this.selectedSamplingRecord = record;
+    this.showModal = false;
+    this.loadSamplesForRecord(record.id);
+  }
+
+  onSamplingRecordChange(): void {
+    if (this.selectedSamplingRecordId) {
+      this.loadSamplesForRecord(this.selectedSamplingRecordId);
+    }
+  }
+
+  loadSamplesForRecord(samplingRecordId: number): void {
     this.selectedContaminants = {};
     this.initialContaminants = {};
     this.readySampleIds = new Set<number>();
 
-    this.samplingRecordService.get(this.selectedSamplingRecordId).subscribe(record => {
+    this.samplingRecordService.get(samplingRecordId).subscribe(record => {
       this.samples = record.samples.map(s => ({
         id: s.id,
         samplingRecordId: s.samplingRecordId,
@@ -121,8 +142,7 @@ export class SampleContaminantLinkComponent implements OnInit {
       selectedSet.delete(contaminantId);
     }
 
-    // Trigger change detection by assigning a new Set
-    this.selectedContaminants[sampleId] = new Set(selectedSet);
+    this.selectedContaminants[sampleId] = new Set(selectedSet); // trigger change detection
   }
 
   assignGroup(sampleId: number, groupId: number): void {
@@ -151,14 +171,12 @@ export class SampleContaminantLinkComponent implements OnInit {
       const sampleId = Number(sampleIdStr);
       const initialSet = this.initialContaminants[sampleId] ?? new Set<number>();
 
-      // New links
       for (const id of selectedSet) {
         if (!initialSet.has(id)) {
           payloadToLink.push({ sampleId, contaminantId: id });
         }
       }
 
-      // Removed links
       for (const id of initialSet) {
         if (!selectedSet.has(id)) {
           payloadToUnlink.push({ sampleId, contaminantId: id });
@@ -174,13 +192,15 @@ export class SampleContaminantLinkComponent implements OnInit {
     Promise.all([
       ...linkRequests.map(r => r.toPromise()),
       ...unlinkRequests.map(r => r.toPromise())
-    ]).then(() => {
-      this.isLoading = false;
-      alert('Contaminant links updated successfully.');
-    }).catch(err => {
-      this.isLoading = false;
-      this.error = 'Error saving assignments.';
-      console.error(err);
-    });
+    ])
+      .then(() => {
+        this.isLoading = false;
+        alert('Contaminant links updated successfully.');
+      })
+      .catch(err => {
+        this.isLoading = false;
+        this.error = 'Error saving assignments.';
+        console.error(err);
+      });
   }
 }

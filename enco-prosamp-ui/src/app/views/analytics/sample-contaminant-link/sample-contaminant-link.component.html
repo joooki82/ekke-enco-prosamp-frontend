@@ -1,15 +1,25 @@
 <div class="container mt-4">
   <h4>Sample-Contaminant Linking</h4>
 
-  <!-- Sampling Record Selector -->
+  <!-- Sampling Record Selector (with Modal) -->
   <div class="form-group">
-    <label>Select Sampling Record</label>
-    <select class="form-control" [(ngModel)]="selectedSamplingRecordId" (change)="onSamplingRecordChange()">
-      <option *ngFor="let record of samplingRecords" [value]="record.id">
-        {{ record.id }} - {{ record.samplingDate | date:'yyyy-MM-dd' }}
-      </option>
-    </select>
+    <label class="form-label">Select Sampling Record</label>
+    <div class="d-flex align-items-center">
+      <button class="btn btn-outline-primary me-3" (click)="openSamplingRecordModal()">🔍 Choose Sampling Record</button>
+      <span *ngIf="selectedSamplingRecord">
+      <strong>ID:</strong> {{ selectedSamplingRecord.id }} |
+      <strong>Date:</strong> {{ selectedSamplingRecord.samplingDate | date:'yyyy-MM-dd' }} |
+      <strong>Project:</strong> {{ selectedSamplingRecord.project.projectName }}
+    </span>
+    </div>
   </div>
+
+  <!-- Lookup Modal -->
+  <app-sampling-record-lookup-modal
+    [visible]="showModal"
+    (selected)="onSamplingRecordSelected($event)"
+    (close)="showModal = false">
+  </app-sampling-record-lookup-modal>
 
   <!-- Sample Cards -->
   <div *ngIf="samples.length > 0">
@@ -51,7 +61,7 @@
               <label class="form-check-label">
                 {{ contaminant.name }}
                 <small class="text-muted">
-                  ({{ contaminant.contaminantGroup?.name || 'No Group' }})
+                  ({{ contaminant.contaminantGroup.name || 'No Group' }})
                 </small>
               </label>
             </div>
