@@ -6,8 +6,8 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {forkJoin, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {forkJoin, Observable, of, switchMap} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
 
 import {
   SampleAnalyticalResultRequestDTO,
@@ -101,65 +101,83 @@ export class SampleAnalyticalResultComponent implements OnInit {
     this.sampleDataMap.clear();
 
     const sampleIds = this.samples.map(s => s.id);
-    this.loadContaminantsAndResults(sampleIds);
+
+    this.loadContaminantsAndResults(sampleIds).subscribe(() => {
+      this.notification.showInfo("Szennyező anyag adatok betöltve.");
+    });
   }
 
-  private loadContaminantsAndResults(sampleIds: number[]): void {
+  private loadContaminantsAndResults(sampleIds: number[]): Observable<void> {
     const contaminantRequests = sampleIds.map(id =>
       this.contaminantService.getSampleContaminantsBySample(id)
     );
 
-    forkJoin(contaminantRequests).subscribe((results: SampleWithSampleContaminantsDTO[]) => {
-      for (const dto of results) {
-        const sampleId = dto.sample.id;
-        const contaminants = dto.sampleContaminants;
-        const resultMap = new Map<number, SampleAnalyticalResultRequestDTO & { id?: number }>();
-        this.sampleDataMap.set(sampleId, {contaminants, results: resultMap});
+    return forkJoin(contaminantRequests).pipe(
+      switchMap((results: SampleWithSampleContaminantsDTO[]) => {
+        const resultFetches = [];
 
-        for (const entry of contaminants) {
-          const contaminantId = entry.contaminant.id;
-          const sampleContaminantId = entry.id;
+        for (const dto of results) {
+          const sampleId = dto.sample.id;
+          const contaminants = dto.sampleContaminants;
+          const resultMap = new Map<number, SampleAnalyticalResultRequestDTO & { id?: number }>();
+          this.sampleDataMap.set(sampleId, { contaminants, results: resultMap });
 
-          this.resultService.get(sampleContaminantId).pipe(
-            catchError(() => of(null))
-          ).subscribe((saved: SampleAnalyticalResultResponseDTO | null) => {
-            const value = saved ? {
-              id: saved.id,
-              sampleContaminantId,
-              resultMain: saved.resultMain,
-              resultControl: saved.resultControl,
-              resultMainControl: saved.resultMainControl,
-              resultMeasurementUnitId: saved.resultMeasurementUnit.id,
-              isBelowDetectionLimit: saved.isBelowDetectionLimit,
-              detectionLimit: saved.detectionLimit,
-              measurementUncertainty: saved.measurementUncertainty,
-              analysisMethod: saved.analysisMethod,
-              labReportId: saved.labReport.id,
-              analysisDate: saved.analysisDate
-            } : {
-              sampleContaminantId,
-              resultMain: 0,
-              resultControl: 0,
-              resultMainControl: 0,
-              resultMeasurementUnitId: this.measurementUnits[0]?.id || 0,
-              isBelowDetectionLimit: false,
-              detectionLimit: 0,
-              measurementUncertainty: 0,
-              analysisMethod: '',
-              labReportId: this.labReports[0]?.id || 0,
-              analysisDate: new Date().toISOString().slice(0, 16)
-            };
+          for (const entry of contaminants) {
+            const contaminantId = entry.contaminant.id;
+            const sampleContaminantId = entry.id;
 
-            resultMap.set(contaminantId, value);
-          });
+            const fetch$ = this.resultService.get(sampleContaminantId).pipe(
+              catchError(() => of(null)),
+              tap((saved) => {
+                const value = saved ? {
+                  id: saved.id,
+                  sampleContaminantId,
+                  resultMain: saved.resultMain,
+                  resultControl: saved.resultControl,
+                  resultMainControl: saved.resultMainControl,
+                  resultMeasurementUnitId: saved.resultMeasurementUnit.id,
+                  isBelowDetectionLimit: saved.isBelowDetectionLimit,
+                  detectionLimit: saved.detectionLimit,
+                  measurementUncertainty: saved.measurementUncertainty,
+                  analysisMethod: saved.analysisMethod,
+                  labReportId: saved.labReport.id,
+                  analysisDate: saved.analysisDate
+                } : {
+                  sampleContaminantId,
+                  resultMain: 0,
+                  resultControl: 0,
+                  resultMainControl: 0,
+                  resultMeasurementUnitId: this.measurementUnits[0]?.id || 0,
+                  isBelowDetectionLimit: false,
+                  detectionLimit: 0,
+                  measurementUncertainty: 0,
+                  analysisMethod: '',
+                  labReportId: this.labReports[0]?.id || 0,
+                  analysisDate: new Date().toISOString().slice(0, 16)
+                };
+
+                resultMap.set(contaminantId, value);
+              })
+            );
+
+            resultFetches.push(fetch$);
+          }
         }
-      }
-    });
+
+        return forkJoin(resultFetches).pipe(map(() => void 0));
+      })
+    );
   }
 
   openSampleModal(sample: SampleListItemDTO): void {
+    const data = this.sampleDataMap.get(sample.id);
+    if (!data || data.results.size === 0) {
+      this.notification.showWarning("Az adatok még nem töltődtek be teljesen. Próbálja meg később.");
+      return;
+    }
     this.selectedSample = sample;
   }
+
 
   closeSampleModal(): void {
     this.selectedSample = null;
