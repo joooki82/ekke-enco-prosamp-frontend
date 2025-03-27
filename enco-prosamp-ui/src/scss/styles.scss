@@ -67,4 +67,19 @@ th.sortable {
   white-space: nowrap;
 }
 
+/* analytical-result-modal.component.scss */
+/* Remove number input spinners (Chrome, Safari, Edge) */
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove number input spinners (Firefox) */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 

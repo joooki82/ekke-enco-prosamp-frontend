@@ -1,0 +1,29 @@
+/* Remove input number spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Set minimum width for inputs and selects */
+.input-min {
+  min-width: 100px;
+}
+
+.input-wide {
+  min-width: 160px;
+}
+
+.select-min {
+  min-width: 120px;
+}
+
+.checkbox-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

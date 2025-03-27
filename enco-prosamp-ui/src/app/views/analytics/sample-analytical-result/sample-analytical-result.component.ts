@@ -19,7 +19,6 @@ import {
   SampleListItemDTO,
   SamplingRecordResponseDTO
 } from "../../../services/sampling/sampling-record-dat-m200.service";
-import {SamplesService} from "../../../services/sampling/samples.service";
 
 import {
   AnalyticalLabReportResponseDTO,
@@ -39,7 +38,7 @@ import {
 
 import {FormsModule} from "@angular/forms";
 import {SamplingRecordLookupModalComponent} from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
-import {AnalyticalResultModalComponent} from "../../../services/analytics/modal/analytical-result-modal.component";
+import {AnalyticalResultModalComponent} from "./modal/analytical-result-modal.component";
 import {ButtonDirective, CardBodyComponent, CardComponent} from "@coreui/angular";
 
 @Component({
@@ -50,9 +49,7 @@ import {ButtonDirective, CardBodyComponent, CardComponent} from "@coreui/angular
     FormsModule,
     SamplingRecordLookupModalComponent,
     AnalyticalResultModalComponent,
-    ButtonDirective,
-    CardComponent,
-    CardBodyComponent
+    ButtonDirective
   ],
   templateUrl: './sample-analytical-result.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush

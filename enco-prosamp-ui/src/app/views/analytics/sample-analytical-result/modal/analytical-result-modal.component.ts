@@ -3,17 +3,18 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {SampleListItemDTO} from "../../sampling/sampling-record-dat-m200.service";
-import {SampleContaminantListItem2DTO} from "../sample-contaminant-link.service";
-import {SampleAnalyticalResultRequestDTO} from "../sample-analytical-result.service";
-import {MeasurementUnitResponseDTO} from "../../laboratory/measurement-unit.service";
-import {AnalyticalLabReportResponseDTO} from "../../reports/analytical-lab-report.service";
+import {SampleListItemDTO} from "../../../../services/sampling/sampling-record-dat-m200.service";
+import {SampleContaminantListItem2DTO} from "../../../../services/analytics/sample-contaminant-link.service";
+import {SampleAnalyticalResultRequestDTO} from "../../../../services/analytics/sample-analytical-result.service";
+import {MeasurementUnitResponseDTO} from "../../../../services/laboratory/measurement-unit.service";
+import {AnalyticalLabReportResponseDTO} from "../../../../services/reports/analytical-lab-report.service";
 
 @Component({
   selector: 'app-analytical-result-modal',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './analytical-result-modal.component.html'
+  templateUrl: './analytical-result-modal.component.html',
+  styleUrls: ['./analytical-result-modal.component.scss'] // ✅ MUST INCLUDE THIS
 })
 export class AnalyticalResultModalComponent {
   @Input() sample!: SampleListItemDTO;
