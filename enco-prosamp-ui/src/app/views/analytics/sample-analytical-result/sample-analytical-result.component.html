@@ -1,3 +1,5 @@
+<!-- sample-analytical-result.component.html -->
+
 <app-sampling-record-lookup-modal
   [visible]="showLookupModal"
   (close)="handleModalClose()"
@@ -10,117 +12,33 @@
   </button>
 </div>
 
+<!-- Display selected record details -->
 <div *ngIf="selectedRecord">
   <h5 class="text-primary mb-4">
     Projekt: {{ selectedRecord.project.projectName }}
   </h5>
 
-  <form *ngFor="let sample of samples" class="mb-4">
-    <c-card>
-      <c-card-body>
-        <h6 class="mb-3">
-          <strong>Minta:</strong> {{ sample.sampleIdentifier }} &mdash; {{ sample.location }}
-        </h6>
-
-        <table class="table table-bordered align-middle">
-          <thead class="table-light">
-          <tr>
-            <th>Szennyező</th>
-            <th>Fő mérés</th>
-            <th>Kontroll</th>
-            <th>Fő + Kontroll</th>
-            <th>Egység</th>
-            <th>Határ alatt?</th>
-            <th>Kimutatási határ</th>
-            <th>Bizonytalanság (%)</th>
-            <th>Módszer</th>
-            <th>Dátum</th>
-            <th>Vizsgálati jelentés</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let sc of getContaminants(sample.id)">
-            <ng-container *ngIf="getResultValue(sample.id, sc.contaminant.id) as result">
-              <td>{{ sc.contaminant.name }}</td>
-
-              <td>
-                <input type="number" step="0.0001" class="form-control"
-                       [(ngModel)]="result.resultMain"
-                       name="main-{{sample.id}}-{{sc.id}}" />
-              </td>
-
-              <td>
-                <input type="number" step="0.0001" class="form-control"
-                       [(ngModel)]="result.resultControl"
-                       name="control-{{sample.id}}-{{sc.id}}" />
-              </td>
-
-              <td>
-                <input type="number" step="0.0001" class="form-control"
-                       [(ngModel)]="result.resultMainControl"
-                       name="mainControl-{{sample.id}}-{{sc.id}}" />
-              </td>
-
-              <td>
-                <select class="form-select"
-                        [(ngModel)]="result.resultMeasurementUnitId"
-                        name="unit-{{sample.id}}-{{sc.id}}">
-                  <option *ngFor="let unit of measurementUnits" [value]="unit.id">
-                    {{ unit.unitCode }}
-                  </option>
-                </select>
-              </td>
-
-              <td class="text-center">
-                <input type="checkbox"
-                       [(ngModel)]="result.isBelowDetectionLimit"
-                       name="bdl-{{sample.id}}-{{sc.id}}" />
-              </td>
-
-              <td>
-                <input type="number" step="0.0001" class="form-control"
-                       [(ngModel)]="result.detectionLimit"
-                       name="dl-{{sample.id}}-{{sc.id}}" />
-              </td>
-
-              <td>
-                <input type="number" step="0.01" class="form-control"
-                       [(ngModel)]="result.measurementUncertainty"
-                       name="uncertainty-{{sample.id}}-{{sc.id}}" />
-              </td>
-
-              <td>
-                <input type="text" maxlength="255" class="form-control"
-                       [(ngModel)]="result.analysisMethod"
-                       name="method-{{sample.id}}-{{sc.id}}" />
-              </td>
-
-              <td>
-                <input type="datetime-local" class="form-control"
-                       [(ngModel)]="result.analysisDate"
-                       name="date-{{sample.id}}-{{sc.id}}" />
-              </td>
-
-              <td>
-                <select class="form-select"
-                        [(ngModel)]="result.labReportId"
-                        name="report-{{sample.id}}-{{sc.id}}">
-                  <option *ngFor="let report of labReports" [value]="report.id">
-                    {{ report.reportNumber }}
-                  </option>
-                </select>
-              </td>
-            </ng-container>
-          </tr>
-          </tbody>
-        </table>
-      </c-card-body>
-    </c-card>
-  </form>
-
-  <div class="text-end mt-4">
-    <button cButton color="success" (click)="saveAll()" [disabled]="loading">
-      <i class="bi bi-save me-2"></i> Minden eredmény mentése
-    </button>
+  <!-- Sample list -->
+  <div class="row">
+    <div class="col-md-6 col-lg-4 mb-3" *ngFor="let sample of samples">
+      <div class="card shadow-sm h-100" (click)="openSampleModal(sample)" style="cursor: pointer;">
+        <div class="card-body">
+          <h6 class="card-title">{{ sample.sampleIdentifier }}</h6>
+          <p class="card-text text-muted">{{ sample.location }}</p>
+          <p class="small text-secondary">Azonosító: {{ sample.id }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- Modal for selected sample -->
+<app-analytical-result-modal
+  *ngIf="selectedSample"
+  [sample]="selectedSample"
+  [data]="sampleDataMap.get(selectedSample.id)!"
+  [measurementUnits]="measurementUnits"
+  [labReports]="labReports"
+  (save)="saveSampleResults($event)"
+  (close)="closeSampleModal()">
+</app-analytical-result-modal>
