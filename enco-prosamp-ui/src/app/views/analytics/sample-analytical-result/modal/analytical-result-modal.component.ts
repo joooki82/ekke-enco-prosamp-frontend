@@ -27,6 +27,7 @@ export class AnalyticalResultModalComponent {
   @Input() labReports: AnalyticalLabReportResponseDTO[] = [];
 
   @Output() save = new EventEmitter<Map<number, SampleAnalyticalResultRequestDTO & { id?: number }>>();
+  @Output() autosave = new EventEmitter<SampleAnalyticalResultRequestDTO & { id?: number }>();
   @Output() close = new EventEmitter<void>();
 
   onSave() {
@@ -36,4 +37,22 @@ export class AnalyticalResultModalComponent {
   onCancel() {
     this.close.emit();
   }
+
+  onAutoSave() {
+    for (const result of this.data.results.values()) {
+      this.autosave.emit(result); // emit each change individually
+    }
+  }
+
+
+  onNDChange(result: SampleAnalyticalResultRequestDTO & { id?: number }) {
+    if (result.isBelowDetectionLimit) {
+      result.resultMain = 0;
+      result.resultControl = 0;
+      result.resultMainControl = 0;
+    }
+
+    this.onAutoSave();
+  }
+
 }

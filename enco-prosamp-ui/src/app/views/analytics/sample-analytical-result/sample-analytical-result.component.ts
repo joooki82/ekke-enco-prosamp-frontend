@@ -3,7 +3,7 @@
 import {
   Component,
   OnInit,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {forkJoin, Observable, of, switchMap} from 'rxjs';
@@ -66,6 +66,8 @@ export class SampleAnalyticalResultComponent implements OnInit {
   measurementUnits: MeasurementUnitResponseDTO[] = [];
   labReports: AnalyticalLabReportResponseDTO[] = [];
 
+  isLoading = false;
+
   sampleDataMap = new Map<
     number,
     {
@@ -74,16 +76,14 @@ export class SampleAnalyticalResultComponent implements OnInit {
     }
   >();
 
-  isLoading = false;
-
   constructor(
     private contaminantService: SampleContaminantLinkService,
     private resultService: SampleAnalyticalResultService,
     private measurementUnitService: MeasurementUnitService,
     private labReportService: AnalyticalLabReportService,
-    private notification: NotificationService
-  ) {
-  }
+    private notification: NotificationService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadMeasurementUnits();
@@ -104,43 +104,62 @@ export class SampleAnalyticalResultComponent implements OnInit {
     this.sampleDataMap.clear();
 
     const sampleIds = this.samples.map(s => s.id);
-
     this.isLoading = true;
 
     this.loadContaminantsAndResults(sampleIds).subscribe({
       next: () => {
         this.isLoading = false;
         this.notification.showSuccess('Szennyezőanyag adatok betöltve.');
+        console.log("✅ Final sampleDataMap:", this.sampleDataMap);
+        this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err) => {
         this.isLoading = false;
         this.notification.showError('Hiba történt az adatok betöltése közben.');
+        console.error("❌ Failed to load results:", err);
+        this.cdr.detectChanges();
       }
     });
   }
 
-  private loadContaminantsAndResults(sampleIds: number[]) {
+  private loadContaminantsAndResults(sampleIds: number[]): Observable<void> {
     const contaminantRequests = sampleIds.map(id =>
-      this.contaminantService.getSampleContaminantsBySample(id)
+      this.contaminantService.getSampleContaminantsBySample(id).pipe(
+        catchError(err => {
+          console.error(`❌ Failed to load contaminants for sampleId=${id}`, err);
+          return of(null); // continue gracefully
+        })
+      )
     );
 
     return forkJoin(contaminantRequests).pipe(
-      // use inner observable to wait for analytical result calls
-      switchMap((results: SampleWithSampleContaminantsDTO[]) => {
-        const resultFetches = [];
+      switchMap((results: (SampleWithSampleContaminantsDTO | null)[]) => {
+        const sampleMapUpdates: Observable<void>[] = [];
 
         for (const dto of results) {
+          if (!dto) {
+            console.warn("⚠️ Skipping null DTO from forkJoin result.");
+            continue;
+          }
+
           const sampleId = dto.sample.id;
           const contaminants = dto.sampleContaminants;
           const resultMap = new Map<number, SampleAnalyticalResultRequestDTO & { id?: number }>();
 
-          this.sampleDataMap.set(sampleId, {contaminants, results: resultMap});
+          console.log(`🔍 Loading for sampleId=${sampleId}, contaminants=`, contaminants);
+
+          const resultFetches: Observable<any>[] = [];
 
           for (const entry of contaminants) {
             const sampleContaminantId = entry.id;
 
             const fetch$ = this.resultService.getBySampleContaminantId(sampleContaminantId).pipe(
-              catchError(() => of(null)),
+              catchError(err => {
+                if (err.status !== 404) {
+                  console.error(`❌ Error fetching analytical result for SCID=${sampleContaminantId}`, err);
+                }
+                return of(null);
+              }),
               tap((saved: SampleAnalyticalResultResponseDTO | null) => {
                 const value = saved ? {
                   id: saved.id,
@@ -170,41 +189,61 @@ export class SampleAnalyticalResultComponent implements OnInit {
                 };
 
                 resultMap.set(sampleContaminantId, value);
-
-                console.log("Set result:", {
-                  sampleId,
-                  sampleContaminantId,
-                  value
-                });
               })
             );
 
             resultFetches.push(fetch$);
           }
+
+          const perSample$ = forkJoin(resultFetches).pipe(
+            tap(() => {
+              this.sampleDataMap.set(sampleId, {
+                contaminants,
+                results: new Map(resultMap)
+              });
+              console.log(`✅ Results loaded for sampleId=${sampleId}`, {
+                contaminants,
+                resultMap
+              });
+            }),
+            map(() => void 0)
+          );
+
+          sampleMapUpdates.push(perSample$);
         }
 
-        return forkJoin(resultFetches);
-      }),
-      map(() => void 0)
+        return forkJoin(sampleMapUpdates).pipe(map(() => void 0));
+      })
     );
   }
 
   openSampleModal(sample: SampleListItemDTO): void {
     const data = this.sampleDataMap.get(sample.id);
+    console.log("🧪 Trying to open modal for:", sample.id);
+    console.log("🧪 Data from sampleDataMap:", data);
+
     if (this.isLoading) {
       this.notification.showWarning("Kérem, várjon az adatok betöltéséig.");
       return;
     }
-    if (!data || data.results.size === 0) {
-      this.notification.showWarning("Nincs elérhető adat ehhez a mintához.");
+
+    if (!data) {
+      this.notification.showWarning("Az adatok még nem töltődtek be. Próbálja újra.");
+      return;
+    }
+
+    if (!data.contaminants?.length) {
+      this.notification.showWarning("A mintához nem tartozik szennyezőanyag.");
       return;
     }
 
     this.selectedSample = sample;
+    this.cdr.detectChanges();
   }
 
   closeSampleModal(): void {
     this.selectedSample = null;
+    this.cdr.detectChanges();
   }
 
   saveSampleResults(updated: Map<number, SampleAnalyticalResultRequestDTO & { id?: number }>): void {
@@ -229,9 +268,27 @@ export class SampleAnalyticalResultComponent implements OnInit {
       next: () => {
         this.notification.showSuccess('Eredmények sikeresen mentve.');
         this.selectedSample = null;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.notification.showError('Hiba történt a mentés során.');
+      }
+    });
+  }
+
+  autosaveSingleResult(result: SampleAnalyticalResultRequestDTO & { id?: number }): void {
+    const dto = { ...result };
+
+    const request$ = dto.id
+      ? this.resultService.update(dto.id, dto)
+      : this.resultService.create(dto);
+
+    request$.subscribe({
+      next: (saved) => {
+        dto.id = saved.id;
+      },
+      error: () => {
+        this.notification.showError('Hiba történt az automatikus mentés során.');
       }
     });
   }
