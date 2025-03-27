@@ -19,49 +19,57 @@
   <c-card-header><strong>Mintavételi jegyzőkönyvek (DAT-M200)</strong></c-card-header>
   <c-card-body>
     <div class="table-responsive">
-
       <table class="table table-hover table-bordered">
+
         <thead>
         <tr>
           <th (click)="toggleSort('samplingDate')" class="sortable">
-            Dátum
+            <span class="sort-header">
+            Projekt témaszám
             <i class="fa" [ngClass]="{
-      'fa-sort-up': sortColumn === 'samplingDate' && sortDirection === 'asc',
-      'fa-sort-down': sortColumn === 'samplingDate' && sortDirection === 'desc',
-      'fa-sort': sortColumn !== 'samplingDate'
-    }"></i>
+              'fa-sort-up': sortColumn === 'samplingDate' && sortDirection === 'asc',
+              'fa-sort-down': sortColumn === 'samplingDate' && sortDirection === 'desc',
+              'fa-sort': sortColumn !== 'samplingDate'
+            }"></i>
+            </span>
           </th>
           <th (click)="toggleSort('technology')" class="sortable">
-            Technológia
+            Projekt témakör
             <i class="fa" [ngClass]="{
-      'fa-sort-up': sortColumn === 'technology' && sortDirection === 'asc',
-      'fa-sort-down': sortColumn === 'technology' && sortDirection === 'desc',
-      'fa-sort': sortColumn !== 'technology'
-    }"></i>
+              'fa-sort-up': sortColumn === 'technology' && sortDirection === 'asc',
+              'fa-sort-down': sortColumn === 'technology' && sortDirection === 'desc',
+              'fa-sort': sortColumn !== 'technology'
+            }"></i>
           </th>
           <th (click)="toggleSort('project')" class="sortable">
-            Projekt
+            <span class="sort-header">
+            Mintavétel dátuma
             <i class="fa" [ngClass]="{
-      'fa-sort-up': sortColumn === 'project' && sortDirection === 'asc',
-      'fa-sort-down': sortColumn === 'project' && sortDirection === 'desc',
-      'fa-sort': sortColumn !== 'project'
-    }"></i>
+              'fa-sort-up': sortColumn === 'project' && sortDirection === 'asc',
+              'fa-sort-down': sortColumn === 'project' && sortDirection === 'desc',
+              'fa-sort': sortColumn !== 'project'
+            }"></i>
+            </span>
           </th>
           <th (click)="toggleSort('location')" class="sortable">
+            <span class="sort-header">
             Telephely
             <i class="fa" [ngClass]="{
-      'fa-sort-up': sortColumn === 'location' && sortDirection === 'asc',
-      'fa-sort-down': sortColumn === 'location' && sortDirection === 'desc',
-      'fa-sort': sortColumn !== 'location'
-    }"></i>
+              'fa-sort-up': sortColumn === 'location' && sortDirection === 'asc',
+              'fa-sort-down': sortColumn === 'location' && sortDirection === 'desc',
+              'fa-sort': sortColumn !== 'location'
+            }"></i>
+            </span>
           </th>
           <th (click)="toggleSort('company')" class="sortable">
+            <span class="sort-header">
             Cég
             <i class="fa" [ngClass]="{
-      'fa-sort-up': sortColumn === 'company' && sortDirection === 'asc',
-      'fa-sort-down': sortColumn === 'company' && sortDirection === 'desc',
-      'fa-sort': sortColumn !== 'company'
-    }"></i>
+            'fa-sort-up': sortColumn === 'company' && sortDirection === 'asc',
+            'fa-sort-down': sortColumn === 'company' && sortDirection === 'desc',
+            'fa-sort': sortColumn !== 'company'
+          }"></i>
+            </span>
           </th>
           <th>Műveletek</th>
         </tr>

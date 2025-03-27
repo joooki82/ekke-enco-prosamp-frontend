@@ -40,6 +40,7 @@ import {FormsModule} from "@angular/forms";
 import {SamplingRecordLookupModalComponent} from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {AnalyticalResultModalComponent} from "./modal/analytical-result-modal.component";
 import {ButtonDirective, CardBodyComponent, CardComponent} from "@coreui/angular";
+import {NotificationService} from "../../../services/notification/notification.service";
 
 @Component({
   selector: 'app-sample-analytical-result',
@@ -76,7 +77,8 @@ export class SampleAnalyticalResultComponent implements OnInit {
     private contaminantService: SampleContaminantLinkService,
     private resultService: SampleAnalyticalResultService,
     private measurementUnitService: MeasurementUnitService,
-    private labReportService: AnalyticalLabReportService
+    private labReportService: AnalyticalLabReportService,
+    private notification: NotificationService // ✅ Inject
   ) {
   }
 
@@ -167,17 +169,28 @@ export class SampleAnalyticalResultComponent implements OnInit {
     const saveOps = [];
 
     for (const result of updated.values()) {
-      const dto = {...result};
-      if (result.id) {
-        saveOps.push(this.resultService.update(result.id, dto));
+      const dto = { ...result };
+
+      if (dto.id) {
+        saveOps.push(this.resultService.update(dto.id, dto));
       } else {
         saveOps.push(this.resultService.create(dto));
       }
     }
 
-    forkJoin(saveOps).subscribe(() => {
-      console.log("Saved sample results.");
-      this.selectedSample = null;
+    if (saveOps.length === 0) {
+      this.notification.showWarning('Nincs mentendő adat.');
+      return;
+    }
+
+    forkJoin(saveOps).subscribe({
+      next: () => {
+        this.notification.showSuccess('Eredmények sikeresen mentve.');
+        this.selectedSample = null;
+      },
+      error: () => {
+        this.notification.showError('Hiba történt a mentés során.');
+      }
     });
   }
 
