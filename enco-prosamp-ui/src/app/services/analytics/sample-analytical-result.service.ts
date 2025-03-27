@@ -84,4 +84,11 @@ export class SampleAnalyticalResultService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  getBySampleContaminantId(sampleContaminantId: number): Observable<SampleAnalyticalResultResponseDTO> {
+    return this.http.get<SampleAnalyticalResultResponseDTO>(
+      `${this.baseUrl}/by-sample-contaminant/${sampleContaminantId}`
+    );
+  }
+
 }

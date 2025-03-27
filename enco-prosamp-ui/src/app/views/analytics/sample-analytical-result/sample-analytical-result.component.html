@@ -19,7 +19,7 @@
   </h5>
 
   <!-- Sample list -->
-  <div class="row">
+  <div class="row" *ngIf="!isLoading">
     <div class="col-md-6 col-lg-4 mb-3" *ngFor="let sample of samples">
       <div class="card shadow-sm h-100" (click)="openSampleModal(sample)" style="cursor: pointer;">
         <div class="card-body">
@@ -31,6 +31,8 @@
     </div>
   </div>
 </div>
+
+<c-spinner *ngIf="isLoading" color="primary" class="my-4 d-flex justify-content-center"></c-spinner>
 
 <!-- Modal for selected sample -->
 <app-analytical-result-modal

@@ -39,7 +39,7 @@ import {
 import {FormsModule} from "@angular/forms";
 import {SamplingRecordLookupModalComponent} from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {AnalyticalResultModalComponent} from "./modal/analytical-result-modal.component";
-import {ButtonDirective, CardBodyComponent, CardComponent} from "@coreui/angular";
+import {ButtonDirective, CardBodyComponent, CardComponent, SpinnerComponent} from "@coreui/angular";
 import {NotificationService} from "../../../services/notification/notification.service";
 
 @Component({
@@ -50,7 +50,8 @@ import {NotificationService} from "../../../services/notification/notification.s
     FormsModule,
     SamplingRecordLookupModalComponent,
     AnalyticalResultModalComponent,
-    ButtonDirective
+    ButtonDirective,
+    SpinnerComponent
   ],
   templateUrl: './sample-analytical-result.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -73,12 +74,14 @@ export class SampleAnalyticalResultComponent implements OnInit {
     }
   >();
 
+  isLoading = false;
+
   constructor(
     private contaminantService: SampleContaminantLinkService,
     private resultService: SampleAnalyticalResultService,
     private measurementUnitService: MeasurementUnitService,
     private labReportService: AnalyticalLabReportService,
-    private notification: NotificationService // ✅ Inject
+    private notification: NotificationService
   ) {
   }
 
@@ -102,17 +105,27 @@ export class SampleAnalyticalResultComponent implements OnInit {
 
     const sampleIds = this.samples.map(s => s.id);
 
-    this.loadContaminantsAndResults(sampleIds).subscribe(() => {
-      this.notification.showInfo("Szennyező anyag adatok betöltve.");
+    this.isLoading = true;
+
+    this.loadContaminantsAndResults(sampleIds).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.notification.showSuccess('Szennyezőanyag adatok betöltve.');
+      },
+      error: () => {
+        this.isLoading = false;
+        this.notification.showError('Hiba történt az adatok betöltése közben.');
+      }
     });
   }
 
-  private loadContaminantsAndResults(sampleIds: number[]): Observable<void> {
+  private loadContaminantsAndResults(sampleIds: number[]) {
     const contaminantRequests = sampleIds.map(id =>
       this.contaminantService.getSampleContaminantsBySample(id)
     );
 
     return forkJoin(contaminantRequests).pipe(
+      // use inner observable to wait for analytical result calls
       switchMap((results: SampleWithSampleContaminantsDTO[]) => {
         const resultFetches = [];
 
@@ -120,15 +133,15 @@ export class SampleAnalyticalResultComponent implements OnInit {
           const sampleId = dto.sample.id;
           const contaminants = dto.sampleContaminants;
           const resultMap = new Map<number, SampleAnalyticalResultRequestDTO & { id?: number }>();
-          this.sampleDataMap.set(sampleId, { contaminants, results: resultMap });
+
+          this.sampleDataMap.set(sampleId, {contaminants, results: resultMap});
 
           for (const entry of contaminants) {
-            const contaminantId = entry.contaminant.id;
             const sampleContaminantId = entry.id;
 
-            const fetch$ = this.resultService.get(sampleContaminantId).pipe(
+            const fetch$ = this.resultService.getBySampleContaminantId(sampleContaminantId).pipe(
               catchError(() => of(null)),
-              tap((saved) => {
+              tap((saved: SampleAnalyticalResultResponseDTO | null) => {
                 const value = saved ? {
                   id: saved.id,
                   sampleContaminantId,
@@ -156,7 +169,13 @@ export class SampleAnalyticalResultComponent implements OnInit {
                   analysisDate: new Date().toISOString().slice(0, 16)
                 };
 
-                resultMap.set(contaminantId, value);
+                resultMap.set(sampleContaminantId, value);
+
+                console.log("Set result:", {
+                  sampleId,
+                  sampleContaminantId,
+                  value
+                });
               })
             );
 
@@ -164,20 +183,25 @@ export class SampleAnalyticalResultComponent implements OnInit {
           }
         }
 
-        return forkJoin(resultFetches).pipe(map(() => void 0));
-      })
+        return forkJoin(resultFetches);
+      }),
+      map(() => void 0)
     );
   }
 
   openSampleModal(sample: SampleListItemDTO): void {
     const data = this.sampleDataMap.get(sample.id);
-    if (!data || data.results.size === 0) {
-      this.notification.showWarning("Az adatok még nem töltődtek be teljesen. Próbálja meg később.");
+    if (this.isLoading) {
+      this.notification.showWarning("Kérem, várjon az adatok betöltéséig.");
       return;
     }
+    if (!data || data.results.size === 0) {
+      this.notification.showWarning("Nincs elérhető adat ehhez a mintához.");
+      return;
+    }
+
     this.selectedSample = sample;
   }
-
 
   closeSampleModal(): void {
     this.selectedSample = null;

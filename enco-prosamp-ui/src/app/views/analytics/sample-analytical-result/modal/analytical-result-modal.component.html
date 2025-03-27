@@ -30,7 +30,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let c of data.contaminants">
-                <ng-container *ngIf="data.results.get(c.contaminant.id) as result">
+                <ng-container *ngIf="data.results.get(c.id) as result">
                   <td>{{ c.contaminant.name }}</td>
 
                   <td>
