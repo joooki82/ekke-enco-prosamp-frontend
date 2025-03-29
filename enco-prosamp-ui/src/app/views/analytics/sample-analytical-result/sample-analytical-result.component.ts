@@ -276,22 +276,6 @@ export class SampleAnalyticalResultComponent implements OnInit {
     });
   }
 
-  autosaveSingleResult(result: SampleAnalyticalResultRequestDTO & { id?: number }): void {
-    const dto = { ...result };
-
-    const request$ = dto.id
-      ? this.resultService.update(dto.id, dto)
-      : this.resultService.create(dto);
-
-    request$.subscribe({
-      next: (saved) => {
-        dto.id = saved.id;
-      },
-      error: () => {
-        this.notification.showError('Hiba történt az automatikus mentés során.');
-      }
-    });
-  }
 
   getContaminants(sampleId: number) {
     return this.sampleDataMap.get(sampleId)?.contaminants ?? [];

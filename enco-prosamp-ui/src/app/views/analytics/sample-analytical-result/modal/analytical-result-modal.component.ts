@@ -27,7 +27,6 @@ export class AnalyticalResultModalComponent {
   @Input() labReports: AnalyticalLabReportResponseDTO[] = [];
 
   @Output() save = new EventEmitter<Map<number, SampleAnalyticalResultRequestDTO & { id?: number }>>();
-  @Output() autosave = new EventEmitter<SampleAnalyticalResultRequestDTO & { id?: number }>();
   @Output() close = new EventEmitter<void>();
 
   onSave() {
@@ -38,11 +37,6 @@ export class AnalyticalResultModalComponent {
     this.close.emit();
   }
 
-  onAutoSave() {
-    for (const result of this.data.results.values()) {
-      this.autosave.emit(result); // emit each change individually
-    }
-  }
 
 
   onNDChange(result: SampleAnalyticalResultRequestDTO & { id?: number }) {
@@ -52,7 +46,6 @@ export class AnalyticalResultModalComponent {
       result.resultMainControl = 0;
     }
 
-    this.onAutoSave();
   }
 
 }
