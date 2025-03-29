@@ -21,7 +21,7 @@ import {
 import {
   SamplingRecordLookupModalComponent
 } from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-test-report',
@@ -42,7 +42,8 @@ import {NgClass, NgForOf, NgIf} from "@angular/common";
     RowComponent,
     NgClass,
     NgForOf,
-    NgIf
+    NgIf,
+    DatePipe
   ],
   standalone: true,
   templateUrl: './test-report.component.html',

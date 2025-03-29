@@ -81,82 +81,120 @@
 </c-card>
 
 <!-- Modal -->
-<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
+<c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false" size="xl">
   <c-modal-header>
     <h5 class="modal-title">{{ selectedReportId ? 'Edit Test Report' : 'New Test Report' }}</h5>
   </c-modal-header>
   <c-modal-body>
     <form #reportForm="ngForm" (ngSubmit)="onSubmit(reportForm)" [validated]="formValidated" cForm class="row g-3">
 
-      <!-- Report Number -->
-      <c-col md="6">
-        <label cLabel for="reportNumber">Report Number</label>
-        <input class="form-control" id="reportNumber" name="reportNumber" required [(ngModel)]="newReport.reportNumber" />
-        <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
-      </c-col>
+      <!-- Basic Information -->
+      <fieldset class="border p-3 rounded bg-light mb-3">
+        <legend class="w-auto">Basic Information</legend>
+        <c-col md="6">
+          <label cLabel for="reportNumber">Report Number</label>
+          <input class="form-control" id="reportNumber" name="reportNumber" required [(ngModel)]="newReport.reportNumber" />
+          <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
+        </c-col>
 
-      <!-- Title -->
-      <c-col md="6">
-        <label cLabel for="title">Title</label>
-        <input class="form-control" id="title" name="title" required [(ngModel)]="newReport.title" />
-        <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
-      </c-col>
+        <c-col md="6">
+          <label cLabel for="title">Title</label>
+          <input class="form-control" id="title" name="title" required [(ngModel)]="newReport.title" />
+          <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
+        </c-col>
+      </fieldset>
 
-      <!-- Aim of Test -->
-      <c-col md="12">
-        <label cLabel for="aimOfTest">Aim of Test</label>
-        <textarea class="form-control" id="aimOfTest" name="aimOfTest" [(ngModel)]="newReport.aimOfTest"></textarea>
-      </c-col>
+      <!-- Test Details -->
+      <fieldset class="border p-3 rounded bg-light mb-3">
+        <legend class="w-auto">Test Details</legend>
+        <c-col md="12">
+          <label cLabel for="aimOfTest">Aim of Test</label>
+          <textarea class="form-control" id="aimOfTest" name="aimOfTest" [(ngModel)]="newReport.aimOfTest"></textarea>
+        </c-col>
 
-      <!-- Sampling Record Selection -->
-      <c-col md="6" class="mt-3">
-        <label cLabel>Sampling Record</label>
-        <button cButton color="primary" (click)="openSamplingRecordLookup()">Select Sampling Record</button>
-      </c-col>
+        <c-col md="12">
+          <label cLabel for="technology">Technology</label>
+          <input class="form-control" id="technology" name="technology" [(ngModel)]="newReport.technology" />
+        </c-col>
 
-      <!-- Információs Panel a kiválasztott Sampling Record adataival -->
-      <c-col md="12" class="mt-3">
-        <div class="border p-3 rounded bg-light">
-          <strong>Selected Sampling Record Details:</strong>
-          <div *ngIf="selectedSamplingRecord; else noRecord">
-            <p class="mb-1"><strong>Sampling Date:</strong> {{ selectedSamplingRecord.samplingDate }}</p>
-            <p class="mb-1">
-              <strong>Company:</strong> {{ selectedSamplingRecord.company?.name }} - {{ selectedSamplingRecord.company?.address }}
-            </p>
-            <p class="mb-0">
-              <strong>Location:</strong> {{ selectedSamplingRecord.siteLocation?.name }} - {{ selectedSamplingRecord.siteLocation?.city }}
-            </p>
+        <c-col md="12">
+          <label cLabel for="samplingConditionsDates">Sampling Conditions and Dates</label>
+          <textarea class="form-control" id="samplingConditionsDates" name="samplingConditionsDates" [(ngModel)]="newReport.samplingConditionsDates"></textarea>
+        </c-col>
+      </fieldset>
+
+      <!-- Sampling Record -->
+      <fieldset class="border p-3 rounded bg-light mb-3">
+        <legend class="w-auto">Sampling Record</legend>
+
+        <!-- Button to Select Sampling Record -->
+        <c-col md="12" class="mb-3 d-flex justify-content-start align-items-center">
+          <button cButton color="primary" (click)="openSamplingRecordLookup()">Select Sampling Record</button>
+        </c-col>
+
+        <!-- Display Selected Sampling Record Details -->
+        <c-col md="12">
+          <div class="card border-0 shadow-sm p-3 mb-3 bg-white rounded">
+            <h6 class="text-primary mb-2">Selected Sampling Record Details</h6>
+            <div *ngIf="selectedSamplingRecord; else noRecord" class="ms-3">
+
+              <!-- Sampling Date -->
+              <div class="form-group mb-2">
+                <label class="form-label"><strong>Sampling Date</strong></label>
+                <div class="form-control bg-light">{{ selectedSamplingRecord.samplingDate | date:'yyyy-MM-dd HH:mm' }}</div>
+              </div>
+
+              <!-- Company Name -->
+              <div class="form-group mb-2">
+                <label class="form-label"><strong>Company</strong></label>
+                <div class="form-control bg-light">{{ selectedSamplingRecord.company?.name }}</div>
+              </div>
+
+              <!-- Company Address -->
+              <div class="form-group mb-2">
+                <label class="form-label"><strong>Address</strong></label>
+                <div class="form-control bg-light">{{ selectedSamplingRecord.company?.address }}</div>
+              </div>
+
+              <!-- Location Name -->
+              <div class="form-group mb-2">
+                <label class="form-label"><strong>Location</strong></label>
+                <div class="form-control bg-light">{{ selectedSamplingRecord.siteLocation?.name }}</div>
+              </div>
+
+              <!-- Location City -->
+              <div class="form-group mb-2">
+                <label class="form-label"><strong>City</strong></label>
+                <div class="form-control bg-light">{{ selectedSamplingRecord.siteLocation?.city }}</div>
+              </div>
+
+            </div>
+            <ng-template #noRecord>
+              <p class="text-muted">No sampling record selected.</p>
+            </ng-template>
           </div>
-          <ng-template #noRecord>
-            <p class="mb-0">No sampling record selected.</p>
-          </ng-template>
-        </div>
-      </c-col>
+        </c-col>
+      </fieldset>
 
-      <!-- Issue Date and Report Status -->
-      <c-col md="6">
-        <label cLabel for="issueDate">Issue Date</label>
-        <input class="form-control" type="date" id="issueDate" name="issueDate" required [(ngModel)]="newReport.issueDate" />
-        <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
-      </c-col>
-      <c-col md="6">
-        <label cLabel for="reportStatus">Report Status</label>
-        <select class="form-control" id="reportStatus" name="reportStatus" required [(ngModel)]="newReport.reportStatus">
-          <option value="DRAFT">Draft</option>
-          <option value="FINAL">Final</option>
-        </select>
-        <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
-      </c-col>
 
-      <!-- Technology and Sampling Conditions -->
-      <c-col md="12">
-        <label cLabel for="technology">Technology</label>
-        <input class="form-control" id="technology" name="technology" [(ngModel)]="newReport.technology" />
-      </c-col>
-      <c-col md="12">
-        <label cLabel for="samplingConditionsDates">Sampling Conditions and Dates</label>
-        <textarea class="form-control" id="samplingConditionsDates" name="samplingConditionsDates" [(ngModel)]="newReport.samplingConditionsDates"></textarea>
-      </c-col>
+      <!-- Report Metadata -->
+      <fieldset class="border p-3 rounded bg-light mb-3">
+        <legend class="w-auto">Report Metadata</legend>
+        <c-col md="6">
+          <label cLabel for="issueDate">Issue Date</label>
+          <input class="form-control" type="date" id="issueDate" name="issueDate" required [(ngModel)]="newReport.issueDate" />
+          <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
+        </c-col>
+
+        <c-col md="6">
+          <label cLabel for="reportStatus">Report Status</label>
+          <select class="form-control" id="reportStatus" name="reportStatus" required [(ngModel)]="newReport.reportStatus">
+            <option value="DRAFT">Draft</option>
+            <option value="FINAL">Final</option>
+          </select>
+          <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
+        </c-col>
+      </fieldset>
 
       <!-- Action Buttons -->
       <c-col md="12" class="text-end mt-3">
