@@ -21,7 +21,7 @@ import {
 import {
   SamplingRecordLookupModalComponent
 } from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
-import {NgClass, NgForOf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-test-report',
@@ -34,8 +34,6 @@ import {NgClass, NgForOf} from "@angular/common";
     FormDirective,
     ModalHeaderComponent,
     ModalComponent,
-    ProjectLookupModalComponent,
-    LocationLookupModalComponent,
     SamplingRecordLookupModalComponent,
     FormFeedbackComponent,
     CardComponent,
@@ -43,7 +41,8 @@ import {NgClass, NgForOf} from "@angular/common";
     CardBodyComponent,
     RowComponent,
     NgClass,
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   standalone: true,
   templateUrl: './test-report.component.html',
@@ -59,10 +58,11 @@ export class TestReportComponent implements OnInit {
   sortColumn: keyof TestReportResponseDTO | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  // Modal visibility states
-  isProjectLookupOpen = false;
-  isLocationLookupOpen = false;
+  // Csak a Sampling Record lookup modal szükséges
   isSamplingRecordLookupOpen = false;
+
+  // A kiválasztott Sampling Record teljes adatait itt tároljuk
+  selectedSamplingRecord: any = null;
 
   constructor(
     private testReportService: TestReportService,
@@ -86,11 +86,16 @@ export class TestReportComponent implements OnInit {
     return {
       reportNumber: '',
       title: '',
+      approvedBy: '',
+      preparedBy: '',
+      checkedBy: '',
       projectId: 0,
       locationId: 0,
       samplingRecordId: 0,
       issueDate: '',
       reportStatus: 'DRAFT',
+      testReportStandardIds: [],
+      testReportSamplerIds: [],
       aimOfTest: '',
       technology: '',
       samplingConditionsDates: '',
@@ -102,9 +107,12 @@ export class TestReportComponent implements OnInit {
     if (report) {
       this.selectedReportId = report.id;
       this.newReport = { ...report };
+      // Amennyiben szerkesztésről van szó, nem módosítjuk a kiválasztott sampling record adatot
+      // Feltételezhető, hogy az adatok már megvannak
     } else {
       this.selectedReportId = null;
       this.newReport = this.createEmptyReport();
+      this.selectedSamplingRecord = null;
     }
     this.isModalOpen = true;
   }
@@ -120,7 +128,7 @@ export class TestReportComponent implements OnInit {
       this.notificationService.showError('Kérjük, töltse ki az összes kötelező mezőt!');
       return;
     }
-
+    console.log('Form submitted:', this.newReport);
     const action = this.selectedReportId === null
       ? this.testReportService.create(this.newReport)
       : this.testReportService.update(this.selectedReportId, this.newReport);
@@ -172,32 +180,24 @@ export class TestReportComponent implements OnInit {
     }
   }
 
-  // Lookup modal open methods
-  openProjectLookup() {
-    this.isProjectLookupOpen = true;
-  }
-
-  openLocationLookup() {
-    this.isLocationLookupOpen = true;
-  }
-
+  // Megnyitja a Sampling Record lookup modalt
   openSamplingRecordLookup() {
     this.isSamplingRecordLookupOpen = true;
   }
 
-  // Callback functions from lookup modals
-  onProjectSelected(project: any) {
-    this.newReport.projectId = project.id;
-    this.isProjectLookupOpen = false;
-  }
-
-  onLocationSelected(location: any) {
-    this.newReport.locationId = location.id;
-    this.isLocationLookupOpen = false;
-  }
-
+  // A sampling record kiválasztása után:
+  // - beállítjuk a newReport.samplingRecordId-t,
+  // - kinyerjük belőle a project.id és siteLocation.id értékét,
+  // - eltároljuk a teljes kiválasztott objektumot a megjelenítéshez.
   onSamplingRecordSelected(record: any) {
     this.newReport.samplingRecordId = record.id;
+    if (record.project && record.project.id) {
+      this.newReport.projectId = record.project.id;
+    }
+    if (record.siteLocation && record.siteLocation.id) {
+      this.newReport.locationId = record.siteLocation.id;
+    }
+    this.selectedSamplingRecord = record;
     this.isSamplingRecordLookupOpen = false;
   }
 }
