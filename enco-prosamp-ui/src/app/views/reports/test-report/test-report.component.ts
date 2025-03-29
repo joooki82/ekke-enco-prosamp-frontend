@@ -1,11 +1,203 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {
+  TestReportRequestDTO,
+  TestReportResponseDTO,
+  TestReportService
+} from "../../../services/reports/testreport.service";
+import {NotificationService} from "../../../services/notification/notification.service";
+import {
+  ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent,
+  ColComponent, FormDirective, FormFeedbackComponent, FormLabelDirective,
+  ModalBodyComponent, ModalComponent,
+  ModalHeaderComponent, RowComponent,
+} from "@coreui/angular";
+import {FormsModule, NgForm} from "@angular/forms";
+import {
+  ProjectLookupModalComponent
+} from "../../sampling/sampling-record-dat-m200/modals/project-lookup-modal/project-lookup-modal.component";
+import {
+  LocationLookupModalComponent
+} from "../../sampling/sampling-record-dat-m200/modals/location-lookup-modal/location-lookup-modal.component";
+import {
+  SamplingRecordLookupModalComponent
+} from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
+import {NgClass, NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-test-report',
-  imports: [],
+  imports: [
+    ColComponent,
+    ButtonDirective,
+    FormsModule,
+    FormLabelDirective,
+    ModalBodyComponent,
+    FormDirective,
+    ModalHeaderComponent,
+    ModalComponent,
+    ProjectLookupModalComponent,
+    LocationLookupModalComponent,
+    SamplingRecordLookupModalComponent,
+    FormFeedbackComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    RowComponent,
+    NgClass,
+    NgForOf
+  ],
+  standalone: true,
   templateUrl: './test-report.component.html',
   styleUrl: './test-report.component.scss'
 })
-export class TestReportComponent {
+export class TestReportComponent implements OnInit {
+  reports: TestReportResponseDTO[] = [];
+  newReport: TestReportRequestDTO;
+  selectedReportId: number | null = null;
+  isModalOpen = false;
+  formValidated = false;
+  filterText: string = '';
+  sortColumn: keyof TestReportResponseDTO | null = null;
+  sortDirection: 'asc' | 'desc' = 'asc';
 
+  // Modal visibility states
+  isProjectLookupOpen = false;
+  isLocationLookupOpen = false;
+  isSamplingRecordLookupOpen = false;
+
+  constructor(
+    private testReportService: TestReportService,
+    private notificationService: NotificationService
+  ) {
+    this.newReport = this.createEmptyReport();
+  }
+
+  ngOnInit(): void {
+    this.loadReports();
+  }
+
+  loadReports(): void {
+    this.testReportService.getAll().subscribe({
+      next: data => this.reports = data,
+      error: err => console.error('Failed to load test reports', err)
+    });
+  }
+
+  createEmptyReport(): TestReportRequestDTO {
+    return {
+      reportNumber: '',
+      title: '',
+      projectId: 0,
+      locationId: 0,
+      samplingRecordId: 0,
+      issueDate: '',
+      reportStatus: 'DRAFT',
+      aimOfTest: '',
+      technology: '',
+      samplingConditionsDates: '',
+      determinationOfPollutantConcentration: ''
+    };
+  }
+
+  openModal(report?: TestReportResponseDTO): void {
+    if (report) {
+      this.selectedReportId = report.id;
+      this.newReport = { ...report };
+    } else {
+      this.selectedReportId = null;
+      this.newReport = this.createEmptyReport();
+    }
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.formValidated = false;
+  }
+
+  onSubmit(form: NgForm): void {
+    if (!form.valid) {
+      this.formValidated = true;
+      this.notificationService.showError('Kérjük, töltse ki az összes kötelező mezőt!');
+      return;
+    }
+
+    const action = this.selectedReportId === null
+      ? this.testReportService.create(this.newReport)
+      : this.testReportService.update(this.selectedReportId, this.newReport);
+
+    action.subscribe({
+      next: () => {
+        this.notificationService.showSuccess(
+          this.selectedReportId ? 'Jelentés frissítve' : 'Jelentés létrehozva'
+        );
+        this.closeModal();
+        this.loadReports();
+      },
+      error: (err) => {
+        console.error('Hiba mentés közben:', err);
+        this.notificationService.showError('Hiba történt a mentés során');
+      }
+    });
+  }
+
+  get filteredReports(): TestReportResponseDTO[] {
+    let filtered = this.reports;
+
+    if (this.filterText) {
+      const lower = this.filterText.toLowerCase();
+      filtered = filtered.filter(r =>
+        r.reportNumber.toLowerCase().includes(lower) ||
+        r.title?.toLowerCase().includes(lower)
+      );
+    }
+
+    if (this.sortColumn !== null) {
+      filtered = [...filtered].sort((a, b) => {
+        const column = this.sortColumn!;
+        const aVal = (a[column] ?? '').toString().toLowerCase();
+        const bVal = (b[column] ?? '').toString().toLowerCase();
+        return aVal.localeCompare(bVal) * (this.sortDirection === 'asc' ? 1 : -1);
+      });
+    }
+
+    return filtered;
+  }
+
+  toggleSort(column: keyof TestReportResponseDTO): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+  }
+
+  // Lookup modal open methods
+  openProjectLookup() {
+    this.isProjectLookupOpen = true;
+  }
+
+  openLocationLookup() {
+    this.isLocationLookupOpen = true;
+  }
+
+  openSamplingRecordLookup() {
+    this.isSamplingRecordLookupOpen = true;
+  }
+
+  // Callback functions from lookup modals
+  onProjectSelected(project: any) {
+    this.newReport.projectId = project.id;
+    this.isProjectLookupOpen = false;
+  }
+
+  onLocationSelected(location: any) {
+    this.newReport.locationId = location.id;
+    this.isLocationLookupOpen = false;
+  }
+
+  onSamplingRecordSelected(record: any) {
+    this.newReport.samplingRecordId = record.id;
+    this.isSamplingRecordLookupOpen = false;
+  }
 }
