@@ -214,4 +214,22 @@ export class TestReportComponent implements OnInit {
     this.newReport.testReportStandardIds = selectedIds;
     this.isStandardLookupOpen = false;
   }
+
+  generateReport(id: number): void {
+    this.testReportService.generateReport(id).subscribe({
+      next: (blob: Blob) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `report_${id}.pdf`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        this.notificationService.showSuccess('Jelentés sikeresen letöltve.');
+      },
+      error: (err) => {
+        console.error('Hiba a jelentés generálása során:', err);
+        this.notificationService.showError('Hiba történt a jelentés generálása során');
+      }
+    });
+  }
+
 }

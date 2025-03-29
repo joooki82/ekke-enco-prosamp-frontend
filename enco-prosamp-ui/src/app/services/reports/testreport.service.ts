@@ -59,4 +59,9 @@ export class TestReportService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  generateReport(id: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/${id}/generate`, { responseType: 'blob' });
+  }
+
 }

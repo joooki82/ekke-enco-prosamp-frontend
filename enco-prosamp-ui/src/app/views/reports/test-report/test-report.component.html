@@ -70,8 +70,13 @@
           <td>{{ report.title }}</td>
           <td>{{ report.issueDate }}</td>
           <td>{{ report.reportStatus }}</td>
-          <td>
-            <button cButton color="warning" (click)="openModal(report)">Szerkesztés</button>
+          <td class="d-flex flex-column gap-1">
+            <button cButton color="warning" class="w-100 rounded-pill mb-1" (click)="openModal(report)">
+              <i class="fa fa-edit me-1"></i>Szerkesztés
+            </button>
+            <button cButton color="success" class="w-100 rounded-pill" (click)="generateReport(report.id)">
+              <i class="fa fa-file-pdf me-1"></i>Jegyzőkönyv generálás
+            </button>
           </td>
         </tr>
         </tbody>
