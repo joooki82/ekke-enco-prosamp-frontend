@@ -8,7 +8,7 @@ import {NotificationService} from "../../../services/notification/notification.s
 import {
   ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent,
   ColComponent, FormDirective, FormFeedbackComponent, FormLabelDirective,
-  ModalBodyComponent, ModalComponent,
+  ModalBodyComponent, ModalComponent, ModalFooterComponent,
   ModalHeaderComponent, RowComponent,
 } from "@coreui/angular";
 import {FormsModule, NgForm} from "@angular/forms";
@@ -45,7 +45,8 @@ import {StandardLookupModalComponent} from "./modal/standard-lookup-modal/standa
     NgForOf,
     NgIf,
     DatePipe,
-    StandardLookupModalComponent
+    StandardLookupModalComponent,
+    ModalFooterComponent
   ],
   standalone: true,
   templateUrl: './test-report.component.html',
