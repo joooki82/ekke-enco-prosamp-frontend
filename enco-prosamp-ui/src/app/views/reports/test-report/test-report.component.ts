@@ -22,6 +22,7 @@ import {
   SamplingRecordLookupModalComponent
 } from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {StandardLookupModalComponent} from "./modal/standard-lookup-modal/standard-lookup-modal.component";
 
 @Component({
   selector: 'app-test-report',
@@ -43,7 +44,8 @@ import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
     NgClass,
     NgForOf,
     NgIf,
-    DatePipe
+    DatePipe,
+    StandardLookupModalComponent
   ],
   standalone: true,
   templateUrl: './test-report.component.html',
@@ -64,6 +66,8 @@ export class TestReportComponent implements OnInit {
 
   // A kiválasztott Sampling Record teljes adatait itt tároljuk
   selectedSamplingRecord: any = null;
+
+  isStandardLookupOpen = false;
 
   constructor(
     private testReportService: TestReportService,
@@ -200,5 +204,14 @@ export class TestReportComponent implements OnInit {
     }
     this.selectedSamplingRecord = record;
     this.isSamplingRecordLookupOpen = false;
+  }
+
+  openStandardLookup(): void {
+    this.isStandardLookupOpen = true;
+  }
+
+  onStandardsSelected(selectedIds: number[]): void {
+    this.newReport.testReportStandardIds = selectedIds;
+    this.isStandardLookupOpen = false;
   }
 }

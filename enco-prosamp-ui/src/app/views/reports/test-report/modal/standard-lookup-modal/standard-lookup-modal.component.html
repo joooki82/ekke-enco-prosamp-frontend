@@ -1,0 +1,49 @@
+<c-modal [visible]="visible" (close)="cancel()" size="xl" backdrop="static">
+  <c-modal-header>
+    <h5 class="modal-title">Select Standards</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <c-row class="mb-3">
+      <c-col md="6">
+        <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Search for standards..." />
+      </c-col>
+    </c-row>
+
+    <c-card>
+      <c-card-body class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-light">
+          <tr>
+            <th>Select</th>
+            <th>Standard ID</th>
+            <th>Standard Name</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let standard of standards">
+            <td>
+              <input
+                type="checkbox"
+                [checked]="selectedStandardIds.has(standard.id)"
+                (change)="toggleSelection(standard.id)"
+              />
+            </td>
+            <td>{{ standard.id }}</td>
+            <td>{{ standard.name }}</td>
+          </tr>
+          <tr *ngIf="standards.length === 0">
+            <td colspan="3" class="text-center text-muted">No standards found.</td>
+          </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="primary" (click)="submitSelection()">Save Selection</button>
+    <button cButton color="secondary" (click)="cancel()">Cancel</button>
+  </c-modal-footer>
+</c-modal>
+

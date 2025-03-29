@@ -2,7 +2,7 @@
 <c-row class="mb-3">
   <c-col md="6">
     <input class="form-control" placeholder="Keresés jelentés száma vagy címe alapján..."
-           [(ngModel)]="filterText" />
+           [(ngModel)]="filterText"/>
   </c-col>
   <c-col md="6" class="text-end">
     <button cButton color="primary" (click)="openModal()">Új Jelentés</button>
@@ -93,13 +93,14 @@
         <legend class="w-auto">Basic Information</legend>
         <c-col md="6">
           <label cLabel for="reportNumber">Report Number</label>
-          <input class="form-control" id="reportNumber" name="reportNumber" required [(ngModel)]="newReport.reportNumber" />
+          <input class="form-control" id="reportNumber" name="reportNumber" required
+                 [(ngModel)]="newReport.reportNumber"/>
           <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
         </c-col>
 
         <c-col md="6">
           <label cLabel for="title">Title</label>
-          <input class="form-control" id="title" name="title" required [(ngModel)]="newReport.title" />
+          <input class="form-control" id="title" name="title" required [(ngModel)]="newReport.title"/>
           <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
         </c-col>
       </fieldset>
@@ -114,12 +115,13 @@
 
         <c-col md="12">
           <label cLabel for="technology">Technology</label>
-          <input class="form-control" id="technology" name="technology" [(ngModel)]="newReport.technology" />
+          <input class="form-control" id="technology" name="technology" [(ngModel)]="newReport.technology"/>
         </c-col>
 
         <c-col md="12">
           <label cLabel for="samplingConditionsDates">Sampling Conditions and Dates</label>
-          <textarea class="form-control" id="samplingConditionsDates" name="samplingConditionsDates" [(ngModel)]="newReport.samplingConditionsDates"></textarea>
+          <textarea class="form-control" id="samplingConditionsDates" name="samplingConditionsDates"
+                    [(ngModel)]="newReport.samplingConditionsDates"></textarea>
         </c-col>
       </fieldset>
 
@@ -141,7 +143,8 @@
               <!-- Sampling Date -->
               <div class="form-group mb-2">
                 <label class="form-label"><strong>Sampling Date</strong></label>
-                <div class="form-control bg-light">{{ selectedSamplingRecord.samplingDate | date:'yyyy-MM-dd HH:mm' }}</div>
+                <div class="form-control bg-light">{{ selectedSamplingRecord.samplingDate | date:'yyyy-MM-dd HH:mm' }}
+                </div>
               </div>
 
               <!-- Company Name -->
@@ -174,6 +177,16 @@
             </ng-template>
           </div>
         </c-col>
+
+        <!-- Standard Selection -->
+        <c-col md="12" class="mt-3">
+          <label cLabel>Standards</label>
+          <button cButton color="primary" (click)="openStandardLookup()">Select Standards</button>
+          <div class="mt-2">
+            <span *ngFor="let id of newReport.testReportStandardIds" class="badge bg-primary me-1">{{ id }}</span>
+          </div>
+        </c-col>
+
       </fieldset>
 
 
@@ -182,13 +195,15 @@
         <legend class="w-auto">Report Metadata</legend>
         <c-col md="6">
           <label cLabel for="issueDate">Issue Date</label>
-          <input class="form-control" type="date" id="issueDate" name="issueDate" required [(ngModel)]="newReport.issueDate" />
+          <input class="form-control" type="date" id="issueDate" name="issueDate" required
+                 [(ngModel)]="newReport.issueDate"/>
           <c-form-feedback [valid]="false">This field is required.</c-form-feedback>
         </c-col>
 
         <c-col md="6">
           <label cLabel for="reportStatus">Report Status</label>
-          <select class="form-control" id="reportStatus" name="reportStatus" required [(ngModel)]="newReport.reportStatus">
+          <select class="form-control" id="reportStatus" name="reportStatus" required
+                  [(ngModel)]="newReport.reportStatus">
             <option value="DRAFT">Draft</option>
             <option value="FINAL">Final</option>
           </select>
@@ -206,5 +221,16 @@
 </c-modal>
 
 <!-- Lookup Modal for Sampling Record -->
-<app-sampling-record-lookup-modal [visible]="isSamplingRecordLookupOpen" (close)="isSamplingRecordLookupOpen = false"
-                                  (selected)="onSamplingRecordSelected($event)"></app-sampling-record-lookup-modal>
+<app-sampling-record-lookup-modal
+  [visible]="isSamplingRecordLookupOpen"
+  (close)="isSamplingRecordLookupOpen = false"
+  (selected)="onSamplingRecordSelected($event)">
+</app-sampling-record-lookup-modal>
+
+<!-- Standard Lookup Modal -->
+<app-standard-lookup-modal
+  [visible]="isStandardLookupOpen"
+  (close)="isStandardLookupOpen = false"
+  (selectedStandards)="onStandardsSelected($event)">
+</app-standard-lookup-modal>
+
