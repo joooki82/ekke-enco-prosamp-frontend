@@ -138,6 +138,7 @@ export class TestReportComponent implements OnInit {
     const action = this.selectedReportId === null
       ? this.testReportService.create(this.newReport)
       : this.testReportService.update(this.selectedReportId, this.newReport);
+    console.log('Report request:', this.newReport);
 
     action.subscribe({
       next: () => {

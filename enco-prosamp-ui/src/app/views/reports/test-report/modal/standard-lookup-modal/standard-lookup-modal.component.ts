@@ -9,6 +9,7 @@ import {
 } from "@coreui/angular";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {StandardResponseDTO, StandardService} from "../../../../../services/laboratory/standard.service";
 
 @Component({
   selector: 'app-standard-lookup-modal',
@@ -36,21 +37,24 @@ export class StandardLookupModalComponent implements OnInit {
   @Output() selectedStandards = new EventEmitter<number[]>();
 
   filterText: string = '';
-  standards: { id: number; name: string }[] = [];
+  standards: StandardResponseDTO[] = [];
   selectedStandardIds: Set<number> = new Set<number>();
+
+  constructor(private standardService: StandardService) {}
 
   ngOnInit(): void {
     this.loadStandards();
   }
 
   loadStandards(): void {
-    // Simulated data, replace with actual API call
-    this.standards = [
-      { id: 1, name: 'ISO 9001' },
-      { id: 2, name: 'ISO 14001' },
-      { id: 3, name: 'ISO 17025' },
-      { id: 4, name: 'ISO 45001' },
-    ];
+    this.standardService.getAll().subscribe({
+      next: (data) => {
+        this.standards = data;
+      },
+      error: (err) => {
+        console.error('Error fetching standards:', err);
+      }
+    });
   }
 
   toggleSelection(id: number): void {
