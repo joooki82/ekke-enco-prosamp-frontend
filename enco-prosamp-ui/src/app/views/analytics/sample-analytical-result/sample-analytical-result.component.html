@@ -5,22 +5,39 @@
   (selected)="onSamplingRecordSelected($event)">
 </app-sampling-record-lookup-modal>
 
-<!-- Select button -->
-<div class="text-end my-3">
-  <button cButton color="primary" (click)="openRecordSelector()">Mintavételi jegyzőkönyv kiválasztása</button>
-</div>
+<div class="container mt-4">
+  <h4>Analitikai vizsgálati eredmények rögzítése</h4>
 
-<!-- Spinner while loading -->
-<div *ngIf="isLoading" class="d-flex justify-content-center my-4">
-  <c-spinner color="primary" class="my-4 d-flex justify-content-center"></c-spinner>
-</div>
 
-<!-- Display selected record -->
-<div *ngIf="selectedRecord && !isLoading">
-  <h5 class="text-primary mb-4">Projekt: {{ selectedRecord.project.projectName }}</h5>
+  <!-- Sampling Record Selector (with Modal) -->
+  <!--  <div class="text-end my-3">-->
+  <!--    <button cButton color="primary" (click)="openRecordSelector()">Mintavételi jegyzőkönyv kiválasztása</button>-->
+  <!--  </div>-->
+
+  <!-- Sampling Record Selector (with Modal) -->
+  <div class="form-group">
+    <label class="form-label">Mintavételi jegyzőkönyv kiválasztása</label>
+    <div class="d-flex align-items-center">
+      <button class="btn btn-outline-primary me-3" (click)="openRecordSelector()">🔍 Válassz jegyzőkönyvet</button>
+      <span *ngIf="selectedRecord && !isLoading">
+      <strong>Azonosító:</strong> {{ selectedRecord.id }} |
+      <strong>Mintavételi dátum:</strong> {{ selectedRecord.samplingDate | date:'yyyy-MM-dd' }} |
+      <strong>Projekt:</strong> {{ selectedRecord.project.projectName }}
+    </span>
+    </div>
+  </div>
+
+  <!-- Spinner while loading -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-4">
+    <c-spinner color="primary" class="my-4 d-flex justify-content-center"></c-spinner>
+  </div>
+
+  <!-- Display selected record -->
+  <!--  <div *ngIf="selectedRecord && !isLoading">-->
+  <!--    <h5 class="text-primary mb-4">Projekt: {{ selectedRecord.project.projectName }}</h5>-->
 
   <!-- Sample list -->
-  <div class="row">
+  <div class="row mt-3">
     <div class="col-md-6 col-lg-4 mb-3" *ngFor="let sample of samples">
       <div class="card shadow-sm h-100" (click)="openSampleModal(sample)" style="cursor: pointer;">
         <div class="card-body">
@@ -31,6 +48,7 @@
       </div>
     </div>
   </div>
+  <!--  </div>-->
 </div>
 
 <!-- Modal for sample -->

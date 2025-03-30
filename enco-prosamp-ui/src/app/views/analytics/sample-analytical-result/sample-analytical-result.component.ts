@@ -39,7 +39,7 @@ import {
 import {FormsModule} from "@angular/forms";
 import {SamplingRecordLookupModalComponent} from "../../../shared/lookup-modals/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {AnalyticalResultModalComponent} from "./modal/analytical-result-modal.component";
-import {ButtonDirective, CardBodyComponent, CardComponent, SpinnerComponent} from "@coreui/angular";
+import {SpinnerComponent} from "@coreui/angular";
 import {NotificationService} from "../../../services/notification/notification.service";
 
 @Component({
@@ -50,7 +50,6 @@ import {NotificationService} from "../../../services/notification/notification.s
     FormsModule,
     SamplingRecordLookupModalComponent,
     AnalyticalResultModalComponent,
-    ButtonDirective,
     SpinnerComponent
   ],
   templateUrl: './sample-analytical-result.component.html',
