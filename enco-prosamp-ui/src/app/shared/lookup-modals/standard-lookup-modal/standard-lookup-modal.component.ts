@@ -9,7 +9,7 @@ import {
 } from "@coreui/angular";
 import {NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {StandardResponseDTO, StandardService} from "../../../../../services/laboratory/standard.service";
+import {StandardResponseDTO, StandardService} from "../../../services/laboratory/standard.service";
 
 @Component({
   selector: 'app-standard-lookup-modal',

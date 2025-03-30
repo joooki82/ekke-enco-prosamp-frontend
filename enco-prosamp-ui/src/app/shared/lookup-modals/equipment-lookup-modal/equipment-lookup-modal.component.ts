@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {EquipmentResponseDTO, EquipmentService} from "../../../../../services/laboratory/equipment.service";
+import {EquipmentResponseDTO, EquipmentService} from "../../../services/laboratory/equipment.service";
 import {
   ButtonDirective,
   ModalBodyComponent,

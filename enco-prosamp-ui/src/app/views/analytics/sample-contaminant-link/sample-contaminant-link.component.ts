@@ -19,7 +19,7 @@ import {
 import {forkJoin} from "rxjs";
 import {
   SamplingRecordLookupModalComponent
-} from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
+} from "../../../shared/lookup-modals/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 
 @Component({
   selector: 'app-sample-contaminant-link',

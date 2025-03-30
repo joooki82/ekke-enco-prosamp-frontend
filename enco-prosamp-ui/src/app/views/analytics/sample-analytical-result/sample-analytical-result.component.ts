@@ -37,7 +37,7 @@ import {
 } from "../../../services/analytics/sample-contaminant-link.service";
 
 import {FormsModule} from "@angular/forms";
-import {SamplingRecordLookupModalComponent} from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
+import {SamplingRecordLookupModalComponent} from "../../../shared/lookup-modals/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {AnalyticalResultModalComponent} from "./modal/analytical-result-modal.component";
 import {ButtonDirective, CardBodyComponent, CardComponent, SpinnerComponent} from "@coreui/angular";
 import {NotificationService} from "../../../services/notification/notification.service";

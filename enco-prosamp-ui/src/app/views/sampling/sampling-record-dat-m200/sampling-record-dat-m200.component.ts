@@ -18,10 +18,10 @@ import {CompanyResponseDTO} from 'src/app/services/partners/company.service';
 import {LocationResponseDTO} from "../../../services/partners/location.service";
 import {ProjectResponseDTO} from "../../../services/projects/projects.service";
 import {EquipmentResponseDTO} from "../../../services/laboratory/equipment.service";
-import {CompanyLookupModalComponent} from "./modals/company-lookup-modal/company-lookup-modal.component";
-import {LocationLookupModalComponent} from "./modals/location-lookup-modal/location-lookup-modal.component";
-import {ProjectLookupModalComponent} from "./modals/project-lookup-modal/project-lookup-modal.component";
-import {EquipmentLookupModalComponent} from "./modals/equipment-lookup-modal/equipment-lookup-modal.component";
+import {CompanyLookupModalComponent} from "../../../shared/lookup-modals/company-lookup-modal/company-lookup-modal.component";
+import {LocationLookupModalComponent} from "../../../shared/lookup-modals/location-lookup-modal/location-lookup-modal.component";
+import {ProjectLookupModalComponent} from "../../../shared/lookup-modals/project-lookup-modal/project-lookup-modal.component";
+import {EquipmentLookupModalComponent} from "../../../shared/lookup-modals/equipment-lookup-modal/equipment-lookup-modal.component";
 import {FormsModule} from "@angular/forms";
 
 @Component({

@@ -17,7 +17,7 @@ import {FormsModule} from "@angular/forms";
 import {ProjectRequestDTO, ProjectResponseDTO, ProjectsService} from 'src/app/services/projects/projects.service';
 import {ClientResponseDTO } from "../../services/partners/client.service";
 import {NotificationService} from "../../services/notification/notification.service";
-import {ClientLookupModalComponent} from "./client-lookup-modal/client-lookup-modal.component";
+import {ClientLookupModalComponent} from "../../shared/lookup-modals/client-lookup-modal/client-lookup-modal.component";
 
 @Component({
   selector: 'app-projects',

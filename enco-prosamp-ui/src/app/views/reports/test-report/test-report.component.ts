@@ -14,16 +14,16 @@ import {
 import {FormsModule, NgForm} from "@angular/forms";
 import {
   ProjectLookupModalComponent
-} from "../../sampling/sampling-record-dat-m200/modals/project-lookup-modal/project-lookup-modal.component";
+} from "../../../shared/lookup-modals/project-lookup-modal/project-lookup-modal.component";
 import {
   LocationLookupModalComponent
-} from "../../sampling/sampling-record-dat-m200/modals/location-lookup-modal/location-lookup-modal.component";
+} from "../../../shared/lookup-modals/location-lookup-modal/location-lookup-modal.component";
 import {
   SamplingRecordLookupModalComponent
-} from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
+} from "../../../shared/lookup-modals/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {StandardLookupModalComponent} from "./modal/standard-lookup-modal/standard-lookup-modal.component";
-import {SamplerLookupModalComponent} from "./modal/sampler-lookup-modal/sampler-lookup-modal.component";
+import {StandardLookupModalComponent} from "../../../shared/lookup-modals/standard-lookup-modal/standard-lookup-modal.component";
+import {SamplerLookupModalComponent} from "../../../shared/lookup-modals/sampler-lookup-modal/sampler-lookup-modal.component";
 
 @Component({
   selector: 'app-test-report',

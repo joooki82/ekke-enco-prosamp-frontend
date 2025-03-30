@@ -24,7 +24,7 @@ import {AdjustmentMethodService} from "../../../services/laboratory/adjustment-m
 import {SamplingTypeService} from "../../../services/laboratory/sampling-type.service";
 import {
   SamplingRecordLookupModalComponent
-} from "./modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
+} from "../../../shared/lookup-modals/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {NotificationService} from "../../../services/notification/notification.service";
 
 @Component({

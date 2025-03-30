@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from "@angular/core";
-import {UserDTO, UserService} from "../../../../../services/user/user.service";
+import {UserDTO, UserService} from "../../../services/user/user.service";
 import {
   ButtonDirective,
   CardBodyComponent,

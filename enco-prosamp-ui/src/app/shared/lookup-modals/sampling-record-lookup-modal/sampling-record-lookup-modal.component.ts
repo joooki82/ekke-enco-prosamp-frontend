@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {
   SamplingRecordDatM200Service,
   SamplingRecordResponseDTO
-} from "../../../../../services/sampling/sampling-record-dat-m200.service";
+} from "../../../services/sampling/sampling-record-dat-m200.service";
 import {
   ButtonDirective,
   CardBodyComponent,

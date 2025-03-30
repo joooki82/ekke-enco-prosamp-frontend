@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {LocationResponseDTO, LocationService} from "../../../../../services/partners/location.service";
+import {LocationResponseDTO, LocationService} from "../../../services/partners/location.service";
 import {
   ButtonDirective,
   ModalBodyComponent,

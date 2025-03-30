@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ProjectResponseDTO, ProjectsService} from "../../../../../services/projects/projects.service";
+import {ProjectResponseDTO, ProjectsService} from "../../../services/projects/projects.service";
 import {
   ButtonDirective,
   ModalBodyComponent,
