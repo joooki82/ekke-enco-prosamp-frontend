@@ -223,6 +223,10 @@ export class TestReportComponent implements OnInit {
     this.isStandardLookupOpen = true;
   }
 
+  openStandardLookupWithSelection(): void {
+    this.isStandardLookupOpen = true;
+  }
+
   onStandardsSelected(selectedIds: number[]): void {
     this.newReport.testReportStandardIds = selectedIds;
     this.isStandardLookupOpen = false;

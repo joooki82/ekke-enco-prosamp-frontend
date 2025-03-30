@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {
   ButtonDirective,
   CardBodyComponent,
@@ -33,6 +33,7 @@ import {StandardResponseDTO, StandardService} from "../../../../../services/labo
 })
 export class StandardLookupModalComponent implements OnInit {
   @Input() visible: boolean = false;
+  @Input() preselectedStandardIds: number[] = [];  // New input for preselection
   @Output() close = new EventEmitter<void>();
   @Output() selectedStandards = new EventEmitter<number[]>();
 
@@ -44,6 +45,13 @@ export class StandardLookupModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadStandards();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Update selected standards when input changes
+    if (changes['preselectedStandardIds'] && this.preselectedStandardIds) {
+      this.selectedStandardIds = new Set(this.preselectedStandardIds);
+    }
   }
 
   loadStandards(): void {

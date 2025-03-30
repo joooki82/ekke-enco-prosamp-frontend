@@ -236,7 +236,7 @@
 <!-- Standard Lookup Modal -->
 <app-standard-lookup-modal
   [visible]="isStandardLookupOpen"
+  [preselectedStandardIds]="newReport.testReportStandardIds || []"
   (close)="isStandardLookupOpen = false"
   (selectedStandards)="onStandardsSelected($event)">
 </app-standard-lookup-modal>
-
