@@ -1,15 +1,15 @@
 <div class="container mt-4">
-  <h4>Sample-Contaminant Linking</h4>
+  <h4>Vizsgálandó szennyezők kiválasztása a mintákból</h4>
 
   <!-- Sampling Record Selector (with Modal) -->
   <div class="form-group">
-    <label class="form-label">Select Sampling Record</label>
+    <label class="form-label">Mintavételi jegyzőkönyv kiválasztása</label>
     <div class="d-flex align-items-center">
-      <button class="btn btn-outline-primary me-3" (click)="openSamplingRecordModal()">🔍 Choose Sampling Record</button>
+      <button class="btn btn-outline-primary me-3" (click)="openSamplingRecordModal()">🔍 Válassz jegyzőkönyvet</button>
       <span *ngIf="selectedSamplingRecord">
-      <strong>ID:</strong> {{ selectedSamplingRecord.id }} |
-      <strong>Date:</strong> {{ selectedSamplingRecord.samplingDate | date:'yyyy-MM-dd' }} |
-      <strong>Project:</strong> {{ selectedSamplingRecord.project.projectName }}
+      <strong>Azonosító:</strong> {{ selectedSamplingRecord.id }} |
+      <strong>Dátum:</strong> {{ selectedSamplingRecord.samplingDate | date:'yyyy-MM-dd' }} |
+      <strong>Projekt:</strong> {{ selectedSamplingRecord.project.projectName }}
     </span>
     </div>
   </div>
@@ -25,11 +25,11 @@
   <div *ngIf="samples.length > 0">
     <div *ngFor="let sample of samples" class="card my-4 border border-primary">
       <div class="card-header fw-bold bg-light">
-        Sample: {{ sample.sampleIdentifier }} (Location: {{ sample.location }})
+        Minta jele: {{ sample.sampleIdentifier }} (Location: {{ sample.location }})
       </div>
       <div class="card-body">
         <!-- Group Buttons -->
-        <label class="fw-semibold">Contaminant Groups:</label>
+        <label class="fw-semibold">Szennyezőanyag csoportok:</label>
         <div class="mb-2">
           <button *ngFor="let group of contaminantGroups"
                   class="btn btn-outline-primary btn-sm mx-1"
@@ -72,7 +72,7 @@
 
     <!-- Save Button -->
     <button class="btn btn-success mt-3" (click)="saveAssignments()" [disabled]="isLoading">
-      Save Assignments
+      Szennyezők mentése
     </button>
 
     <!-- Error Message -->
