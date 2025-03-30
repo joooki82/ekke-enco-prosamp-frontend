@@ -37,13 +37,15 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
   @Input() visible: boolean = false;
   @Input() preselectedSamplerIds: string[] = [];
   @Output() close = new EventEmitter<void>();
-  @Output() selectedSamplers = new EventEmitter<string[]>();
+  @Output() selectedSamplers = new EventEmitter<{ id: string, username: string }[]>();
 
   filterText: string = '';
   samplers: UserDTO[] = [];
   selectedSamplerIds: Set<string> = new Set<string>();
+  selectedSamplerMap: Map<string, string> = new Map<string, string>();
 
-  constructor(private samplerService: UserService) {}
+  constructor(private samplerService: UserService) {
+  }
 
   ngOnInit(): void {
     this.loadSamplers();
@@ -52,6 +54,18 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['preselectedSamplerIds'] && this.preselectedSamplerIds) {
       this.selectedSamplerIds = new Set(this.preselectedSamplerIds);
+
+      // Prepopulate the map with existing sampler IDs and their names
+      if (this.samplers.length > 0) {
+        this.preselectedSamplerIds.forEach(id => {
+          const foundSampler = this.samplers.find(s => s.id === id);
+          if (foundSampler) {
+            this.selectedSamplerMap.set(foundSampler.id, foundSampler.username);
+          }
+        });
+      } else {
+        this.loadSamplers();
+      }
     }
   }
 
@@ -67,20 +81,35 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
     });
   }
 
-  toggleSelection(id: string): void {
-    if (this.selectedSamplerIds.has(id)) {
-      this.selectedSamplerIds.delete(id);
+  toggleSelection(sampler: UserDTO): void {
+    if (this.selectedSamplerIds.has(sampler.id)) {
+      this.selectedSamplerIds.delete(sampler.id);
+      this.selectedSamplerMap.delete(sampler.id);
     } else {
-      this.selectedSamplerIds.add(id);
+      this.selectedSamplerIds.add(sampler.id);
+      this.selectedSamplerMap.set(sampler.id, sampler.username);
     }
   }
 
+
   submitSelection(): void {
-    this.selectedSamplers.emit(Array.from(this.selectedSamplerIds));
+    // Construct an array of objects containing both ID and username
+    const selectedSamplers = Array.from(this.selectedSamplerIds).map(id => ({
+      id,
+      username: this.selectedSamplerMap.get(id) || ''
+    }));
+    this.selectedSamplers.emit(selectedSamplers);
     this.close.emit();
   }
+
 
   cancel(): void {
     this.close.emit();
   }
+
+
+
+
+
+
 }

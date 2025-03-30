@@ -68,6 +68,8 @@ export class TestReportComponent implements OnInit {
   selectedSamplingRecord: any = null;
   isStandardLookupOpen = false;
   isSamplerLookupOpen = false;
+  selectedSamplerNames: string[] = [];
+
 
 
   constructor(
@@ -135,11 +137,13 @@ export class TestReportComponent implements OnInit {
       this.selectedReportId = report.id;
       this.newReport = this.mapToRequestDTO(report);
       this.selectedSamplingRecord = report.samplingRecord;
-      // console.log('report:', report);
-      // console.log('Mapping response to request DTO:', this.newReport);
+
+      // Map saved sampler IDs to usernames
+      this.selectedSamplerNames = report.testReportSamplers?.map(sampler => sampler.username) || [];
     } else {
       this.selectedReportId = null;
       this.newReport = this.createEmptyReport();
+      this.selectedSamplerNames = [];
       this.selectedSamplingRecord = null;
     }
     this.isModalOpen = true;
@@ -243,12 +247,28 @@ export class TestReportComponent implements OnInit {
   openSamplerLookupWithSelection(): void {
     this.isSamplerLookupOpen = true;
   }
+  onSamplersSelected(selectedSamplers: { id: string, username: string }[]): void {
+    // Use a Map to maintain unique sampler IDs with corresponding names
+    const samplerMap = new Map<string, string>();
 
-  onSamplersSelected(selectedIds: string[]): void {
-    this.newReport.testReportSamplerIds = selectedIds;
+    // Add previously saved samplers
+    if (this.newReport.testReportSamplerIds && this.selectedSamplerNames) {
+      this.newReport.testReportSamplerIds.forEach((id, index) => {
+        samplerMap.set(id, this.selectedSamplerNames[index]);
+      });
+    }
+
+    // Add newly selected samplers or update existing ones
+    selectedSamplers.forEach(sampler => {
+      samplerMap.set(sampler.id, sampler.username);
+    });
+
+    // Update the component properties from the map
+    this.newReport.testReportSamplerIds = Array.from(samplerMap.keys());
+    this.selectedSamplerNames = Array.from(samplerMap.values());
+
     this.isSamplerLookupOpen = false;
   }
-
 
   generateReport(id: number): void {
     this.testReportService.generateReport(id).subscribe({
