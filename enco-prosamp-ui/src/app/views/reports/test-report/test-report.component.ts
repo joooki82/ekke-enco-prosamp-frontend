@@ -23,6 +23,7 @@ import {
 } from "../../sampling/samples/modal/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {StandardLookupModalComponent} from "./modal/standard-lookup-modal/standard-lookup-modal.component";
+import {SamplerLookupModalComponent} from "./modal/sampler-lookup-modal/sampler-lookup-modal.component";
 
 @Component({
   selector: 'app-test-report',
@@ -46,7 +47,8 @@ import {StandardLookupModalComponent} from "./modal/standard-lookup-modal/standa
     NgIf,
     DatePipe,
     StandardLookupModalComponent,
-    ModalFooterComponent
+    ModalFooterComponent,
+    SamplerLookupModalComponent
   ],
   standalone: true,
   templateUrl: './test-report.component.html',
@@ -65,6 +67,8 @@ export class TestReportComponent implements OnInit {
   isSamplingRecordLookupOpen = false;
   selectedSamplingRecord: any = null;
   isStandardLookupOpen = false;
+  isSamplerLookupOpen = false;
+
 
   constructor(
     private testReportService: TestReportService,
@@ -231,6 +235,20 @@ export class TestReportComponent implements OnInit {
     this.newReport.testReportStandardIds = selectedIds;
     this.isStandardLookupOpen = false;
   }
+
+  openSamplerLookup(): void {
+    this.isSamplerLookupOpen = true;
+  }
+
+  openSamplerLookupWithSelection(): void {
+    this.isSamplerLookupOpen = true;
+  }
+
+  onSamplersSelected(selectedIds: string[]): void {
+    this.newReport.testReportSamplerIds = selectedIds;
+    this.isSamplerLookupOpen = false;
+  }
+
 
   generateReport(id: number): void {
     this.testReportService.generateReport(id).subscribe({

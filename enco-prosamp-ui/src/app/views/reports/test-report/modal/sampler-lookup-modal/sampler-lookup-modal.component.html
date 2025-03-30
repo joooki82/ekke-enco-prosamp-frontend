@@ -1,0 +1,49 @@
+<c-modal [visible]="visible" (close)="cancel()" size="xl" backdrop="static">
+  <c-modal-header>
+    <h5 class="modal-title">Select Samplers</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <c-row class="mb-3">
+      <c-col md="6">
+        <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Search for samplers..." />
+      </c-col>
+    </c-row>
+
+    <c-card>
+      <c-card-body class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-light">
+          <tr>
+            <th>Select</th>
+            <th>Sampler ID</th>
+            <th>Sampler Name</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let sampler of samplers">
+            <td>
+              <input
+                type="checkbox"
+                [checked]="selectedSamplerIds.has(sampler.id)"
+                (change)="toggleSelection(sampler.id)"
+              />
+            </td>
+            <td>{{ sampler.id }}</td>
+            <td>{{ sampler.username }}</td>
+          </tr>
+          <tr *ngIf="samplers.length === 0">
+            <td colspan="3" class="text-center text-muted">No samplers found.</td>
+          </tr>
+          </tbody>
+        </table>
+      </c-card-body>
+    </c-card>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="primary" (click)="submitSelection()">Save Selection</button>
+    <button cButton color="secondary" (click)="cancel()">Cancel</button>
+  </c-modal-footer>
+</c-modal>
+
