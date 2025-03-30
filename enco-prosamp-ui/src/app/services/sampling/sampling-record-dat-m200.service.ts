@@ -2,11 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-
-export interface UserDTO {
-  id: string;
-  username: string;
-}
+import {UserDTO} from "../user/user.service";
 
 export interface CompanyDTO {
   id: number;

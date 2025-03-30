@@ -6,6 +6,7 @@ import {ProjectResponseDTO} from "../projects/projects.service";
 import {LocationResponseDTO} from "../partners/location.service";
 import {SamplingRecordResponseDTO} from "../sampling/sampling-record-dat-m200.service";
 import {StandardResponseDTO} from "../laboratory/standard.service";
+import {UserDTO} from "../user/user.service";
 
 
 export interface TestReportRequestDTO {
@@ -25,11 +26,6 @@ export interface TestReportRequestDTO {
   determinationOfPollutantConcentration?: string;
   issueDate: string;
   reportStatus: string;
-}
-
-export interface UserDTO {
-  id: string;
-  username: string;
 }
 
 // Response DTO
