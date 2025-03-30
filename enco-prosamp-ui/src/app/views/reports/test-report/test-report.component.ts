@@ -62,12 +62,8 @@ export class TestReportComponent implements OnInit {
   sortColumn: keyof TestReportResponseDTO | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  // Csak a Sampling Record lookup modal szükséges
   isSamplingRecordLookupOpen = false;
-
-  // A kiválasztott Sampling Record teljes adatait itt tároljuk
   selectedSamplingRecord: any = null;
-
   isStandardLookupOpen = false;
 
   constructor(
@@ -109,12 +105,34 @@ export class TestReportComponent implements OnInit {
     };
   }
 
+  mapToRequestDTO(response: TestReportResponseDTO): TestReportRequestDTO {
+    return {
+      reportNumber: response.reportNumber,
+      title: response.title,
+      approvedBy: response.approvedBy?.id || '',
+      preparedBy: response.preparedBy?.id || '',
+      checkedBy: response.checkedBy?.id || '',
+      projectId: response.project?.id || 0,
+      locationId: response.location?.id || 0,
+      samplingRecordId: response.samplingRecord?.id || 0,
+      issueDate: response.issueDate,
+      reportStatus: response.reportStatus,
+      testReportStandardIds: response.testReportStandards?.map(s => s.id) || [],
+      testReportSamplerIds: response.testReportSamplers?.map(s => s.id) || [],
+      aimOfTest: response.aimOfTest,
+      technology: response.technology,
+      samplingConditionsDates: response.samplingConditionsDates,
+      determinationOfPollutantConcentration: response.determinationOfPollutantConcentration
+    };
+  }
+
   openModal(report?: TestReportResponseDTO): void {
     if (report) {
       this.selectedReportId = report.id;
-      this.newReport = { ...report };
-      // Amennyiben szerkesztésről van szó, nem módosítjuk a kiválasztott sampling record adatot
-      // Feltételezhető, hogy az adatok már megvannak
+      this.newReport = this.mapToRequestDTO(report);
+      this.selectedSamplingRecord = report.samplingRecord;
+      // console.log('report:', report);
+      // console.log('Mapping response to request DTO:', this.newReport);
     } else {
       this.selectedReportId = null;
       this.newReport = this.createEmptyReport();
@@ -131,33 +149,31 @@ export class TestReportComponent implements OnInit {
   onSubmit(form: NgForm): void {
     if (!form.valid) {
       this.formValidated = true;
-      this.notificationService.showError('Kérjük, töltse ki az összes kötelező mezőt!');
+      this.notificationService.showError('Please fill out all required fields!');
       return;
     }
-    console.log('Form submitted:', this.newReport);
+
     const action = this.selectedReportId === null
       ? this.testReportService.create(this.newReport)
       : this.testReportService.update(this.selectedReportId, this.newReport);
-    console.log('Report request:', this.newReport);
 
     action.subscribe({
       next: () => {
         this.notificationService.showSuccess(
-          this.selectedReportId ? 'Jelentés frissítve' : 'Jelentés létrehozva'
+          this.selectedReportId ? 'Report updated successfully' : 'Report created successfully'
         );
         this.closeModal();
         this.loadReports();
       },
       error: (err) => {
-        console.error('Hiba mentés közben:', err);
-        this.notificationService.showError('Hiba történt a mentés során');
+        console.error('Error during save:', err);
+        this.notificationService.showError('An error occurred while saving');
       }
     });
   }
 
   get filteredReports(): TestReportResponseDTO[] {
     let filtered = this.reports;
-
     if (this.filterText) {
       const lower = this.filterText.toLowerCase();
       filtered = filtered.filter(r =>
@@ -187,15 +203,10 @@ export class TestReportComponent implements OnInit {
     }
   }
 
-  // Megnyitja a Sampling Record lookup modalt
   openSamplingRecordLookup() {
     this.isSamplingRecordLookupOpen = true;
   }
 
-  // A sampling record kiválasztása után:
-  // - beállítjuk a newReport.samplingRecordId-t,
-  // - kinyerjük belőle a project.id és siteLocation.id értékét,
-  // - eltároljuk a teljes kiválasztott objektumot a megjelenítéshez.
   onSamplingRecordSelected(record: any) {
     this.newReport.samplingRecordId = record.id;
     if (record.project && record.project.id) {
@@ -233,5 +244,5 @@ export class TestReportComponent implements OnInit {
       }
     });
   }
-
 }
+

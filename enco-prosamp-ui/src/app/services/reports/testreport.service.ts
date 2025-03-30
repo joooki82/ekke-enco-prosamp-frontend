@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {ProjectResponseDTO} from "../projects/projects.service";
+import {LocationResponseDTO} from "../partners/location.service";
+import {SamplingRecordResponseDTO} from "../sampling/sampling-record-dat-m200.service";
+import {StandardResponseDTO} from "../laboratory/standard.service";
 
 
 export interface TestReportRequestDTO {
@@ -23,19 +27,32 @@ export interface TestReportRequestDTO {
   reportStatus: string;
 }
 
+export interface UserDTO {
+  id: string;
+  username: string;
+}
+
 // Response DTO
-export interface TestReportResponseDTO extends TestReportRequestDTO {
+export interface TestReportResponseDTO {
   id: number;
+  reportNumber: string;
+  title: string;
+  aimOfTest: string;
   createdAt: string;
   updatedAt: string;
-  approvedByUser?: any;
-  preparedByUser?: any;
-  checkedByUser?: any;
-  project?: any;
-  location?: any;
-  samplingRecord?: any;
-  testReportStandards?: any[];
-  testReportSamplers?: any[];
+  approvedBy: UserDTO;
+  preparedBy: UserDTO;
+  checkedBy: UserDTO;
+  project: ProjectResponseDTO;
+  location: LocationResponseDTO;
+  samplingRecord?: SamplingRecordResponseDTO;
+  testReportStandards: StandardResponseDTO[];
+  testReportSamplers: UserDTO[];
+  technology: string;
+  samplingConditionsDates?: string;
+  determinationOfPollutantConcentration?: string;
+  issueDate: string;
+  reportStatus: string;
 }
 
 @Injectable({ providedIn: 'root' })
