@@ -69,6 +69,8 @@ export class TestReportComponent implements OnInit {
   isStandardLookupOpen = false;
   isSamplerLookupOpen = false;
   selectedSamplerNames: string[] = [];
+  isGeneratingReport: boolean = false;
+
 
 
 
@@ -271,6 +273,8 @@ export class TestReportComponent implements OnInit {
   }
 
   generateReport(id: number): void {
+    this.isGeneratingReport = true;  // Start the spinner
+
     this.testReportService.generateReport(id).subscribe({
       next: (blob: Blob) => {
         const link = document.createElement('a');
@@ -278,11 +282,13 @@ export class TestReportComponent implements OnInit {
         link.download = `report_${id}.pdf`;
         link.click();
         URL.revokeObjectURL(link.href);
-        this.notificationService.showSuccess('Jelentés sikeresen letöltve.');
+        this.isGeneratingReport = false;  // Stop the spinner
+        this.notificationService.showSuccess('Report successfully downloaded.');
       },
       error: (err) => {
-        console.error('Hiba a jelentés generálása során:', err);
-        this.notificationService.showError('Hiba történt a jelentés generálása során');
+        console.error('Error generating the report:', err);
+        this.isGeneratingReport = false;  // Stop the spinner
+        this.notificationService.showError('Error generating the report.');
       }
     });
   }
