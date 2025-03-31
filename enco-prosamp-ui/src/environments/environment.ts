@@ -1,4 +1,12 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8081'  // ✅ Development API URL
+  disableAuth: false,
+  apiUrl: 'http://localhost:8081/api',
+  // keycloak: {
+  //   enable: true,                       // Enable or disable Keycloak for Frontend app
+  //   authority: 'http://localhost:8082', // Keycloak URL
+  //   realm: 'encotech',                  // Realm name
+  //   clientId: 'enco-prosamp-angular-ui',
+  //   redirectUri: 'http://localhost:4200' // Frontend app URL for redirects
+  // }
 };

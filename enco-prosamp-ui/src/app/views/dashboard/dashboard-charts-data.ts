@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ChartData, ChartDataset, ChartOptions, ChartType, PluginOptionsByType, ScaleOptions, TooltipLabelStyle } from 'chart.js';
-import { DeepPartial } from 'chart.js/dist/types/utils';
 import { getStyle } from '@coreui/utils';
+// @ts-ignore
+import {DeepPartial} from "chart.js/dist/types/utils";
 
 export interface IChartProps {
   data?: ChartData;
@@ -126,7 +127,7 @@ export class DashboardChartsData {
       },
       tooltip: {
         callbacks: {
-          labelColor: (context) => ({ backgroundColor: context.dataset.borderColor } as TooltipLabelStyle)
+          labelColor: (context: { dataset: { borderColor: any; }; }) => ({ backgroundColor: context.dataset.borderColor } as TooltipLabelStyle)
         }
       }
     };
