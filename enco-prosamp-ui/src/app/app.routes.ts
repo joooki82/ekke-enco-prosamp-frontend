@@ -9,29 +9,35 @@ export const routes: Routes = [
     redirectTo: 'dashboard',
     pathMatch: 'full',
     // canActivate: [canActivateAuthRole],
+    // data: { role: 'managing_director' }
   },
   {
     path: '',
     component: DefaultLayoutComponent,
     // canActivate: [canActivateAuthRole],
-    data: {
-      title: 'Home'
-    },
+    // data: {
+    //   title: 'Home',
+    //   role: 'view-books'
+    // },
     children: [
       {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes),
         // canActivate: [canActivateAuthRole],
+        // data: { role: 'managing_director' }
       },
+
       {
         path: 'analytics',
         loadChildren: () => import('./views/analytics/routes').then((m) => m.routes),
         // canActivate: [canActivateAuthRole],
+        // data: { role: 'managing_director' }
       },
       {
         path: 'laboratorium',
         loadChildren: () => import('./views/laboratory/routes').then((m) => m.routes),
         canActivate: [canActivateAuthRole],
+        data: { role: 'managing_director' }
       },
       {
         path: 'partners',

@@ -1,4 +1,5 @@
 import { INavData } from '@coreui/angular';
+import {canActivateAuthRole} from "../../guards/auth-role.guard";
 
 export const navItems: INavData[] = [
   {

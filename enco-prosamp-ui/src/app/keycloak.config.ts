@@ -20,15 +20,15 @@ export const provideKeycloakAngular = () =>
       clientId: 'enco-prosamp-angular-ui'
     },
     initOptions: {
-      onLoad: 'check-sso',
-      // onLoad: 'login-required',
+      // onLoad: 'check-sso',
+      onLoad: 'login-required',
       silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
       redirectUri: window.location.origin + '/'
     },
     features: [
       withAutoRefreshToken({
         onInactivityTimeout: 'logout',
-        sessionTimeout: 60000
+        sessionTimeout: 1800000
       })
     ],
     providers: [
