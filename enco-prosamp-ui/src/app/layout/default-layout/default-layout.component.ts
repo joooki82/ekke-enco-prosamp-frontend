@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit, ViewChild} from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgScrollbar } from 'ngx-scrollbar';
 
@@ -19,6 +19,7 @@ import { DefaultFooterComponent, DefaultHeaderComponent } from './';
 import { navItems } from './_nav';
 import {NotificationService} from "../../services/notification/notification.service";
 import {ToastersComponent} from "../../shared/components/toasters/toasters.component";
+import Keycloak from "keycloak-js";
 
 function isOverflown(element: HTMLElement) {
   return (
@@ -51,6 +52,7 @@ function isOverflown(element: HTMLElement) {
 })
 export class DefaultLayoutComponent  {
   public navItems = [...navItems];
+
 
   constructor() {}
 
