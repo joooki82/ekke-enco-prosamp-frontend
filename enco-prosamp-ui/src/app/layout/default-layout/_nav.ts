@@ -154,6 +154,12 @@ export const navItems: INavData[] = [
         url: '/reports/test-report',
         icon: 'nav-icon-bullet'
       },
+
     ]
+  },
+  {
+    name: 'login',
+    url: '/pages/login',
+    icon: 'nav-icon-bullet'
   }
 ];

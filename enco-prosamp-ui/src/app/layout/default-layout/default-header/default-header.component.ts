@@ -23,6 +23,7 @@ import {
 } from '@coreui/angular';
 
 import { IconDirective } from '@coreui/icons-angular';
+import Keycloak from "keycloak-js";
 
 @Component({
     selector: 'app-default-header',
@@ -33,6 +34,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   readonly #colorModeService = inject(ColorModeService);
   readonly colorMode = this.#colorModeService.colorMode;
+  private readonly keycloak = inject(Keycloak);
 
   readonly colorModes = [
     { name: 'light', text: 'Light', icon: 'cilSun' },
@@ -125,5 +127,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
     { id: 3, title: 'Add new layouts', value: 75, color: 'info' },
     { id: 4, title: 'Angular Version', value: 100, color: 'success' }
   ];
+
+  logout() {
+    this.keycloak.logout();
+  }
 
 }

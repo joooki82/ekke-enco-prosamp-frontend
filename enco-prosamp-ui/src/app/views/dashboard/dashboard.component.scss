@@ -5,3 +5,56 @@
     }
   }
 }
+body {
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+img {
+  max-width: 180px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #555;
+  margin: 10px 0;
+}
+
+.contact-info p {
+  margin: 5px 0;
+}
+
+.footer {
+  margin-top: 30px;
+  font-size: 0.9em;
+  color: #777;
+}
+
+a {
+  color: #0069d9;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.motivational {
+  margin: 20px 0;
+  font-style: italic;
+  color: #007bff;
+}

@@ -61,5 +61,16 @@ export const routes: Routes = [
       },
     ]
   },
+  {
+    path: 'pages',
+    loadChildren: () => import('./views/pages/routes').then((m) => m.routes)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./views/pages/login/login.component').then(m => m.LoginComponent),
+    data: {
+      title: 'Login Page'
+    }
+  },
   {path: '**', redirectTo: 'dashboard'}
 ];
