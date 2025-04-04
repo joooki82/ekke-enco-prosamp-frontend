@@ -22,32 +22,34 @@ import {
   MeasurementUnitResponseDTO, MeasurementUnitService
 } from "../../../services/laboratory/measurement-unit.service";
 import {Observable} from "rxjs";
+import {HasRolesDirective} from "keycloak-angular";
 
 @Component({
   selector: 'app-measurement-unit',
   standalone: true,
   templateUrl: './measurement-unit.component.html',
   styleUrl: './measurement-unit.component.scss',
-  imports: [
-    ColComponent,
-    RowComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardBodyComponent,
-    ButtonDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalBodyComponent,
-    ModalFooterComponent,
-    FormDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    NgForOf,
-    NgIf,
-    DatePipe,
-    NgClass
-  ]
+    imports: [
+        ColComponent,
+        RowComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardBodyComponent,
+        ButtonDirective,
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalBodyComponent,
+        ModalFooterComponent,
+        FormDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        NgForOf,
+        NgIf,
+        DatePipe,
+        NgClass,
+        HasRolesDirective
+    ]
 })
 export class MeasurementUnitComponent implements OnInit {
   units: MeasurementUnitResponseDTO[] = [];

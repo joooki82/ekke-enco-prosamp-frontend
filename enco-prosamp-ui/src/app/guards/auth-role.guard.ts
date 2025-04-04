@@ -1,6 +1,6 @@
-import { AuthGuardData, createAuthGuard } from 'keycloak-angular';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { inject } from '@angular/core';
+import {AuthGuardData, createAuthGuard} from 'keycloak-angular';
+import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {inject} from '@angular/core';
 
 /**
  * The logic below is a simple example, please make it more robust when implementing in your application.
@@ -13,7 +13,7 @@ const isAccessAllowed = async (
   __: RouterStateSnapshot,
   authData: AuthGuardData
 ): Promise<boolean | UrlTree> => {
-  const { authenticated, grantedRoles } = authData;
+  const {authenticated, grantedRoles} = authData;
 
   const requiredRole = route.data['role'];
   if (!requiredRole) {

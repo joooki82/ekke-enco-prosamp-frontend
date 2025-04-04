@@ -10,28 +10,30 @@ import {FormsModule} from "@angular/forms";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {StandardRequestDTO, StandardResponseDTO, StandardService} from "../../../services/laboratory/standard.service";
 import {NotificationService} from "../../../services/notification/notification.service";
+import {HasRolesDirective} from "keycloak-angular";
 
 @Component({
   selector: 'app-standard',
-  imports: [
-    ColComponent,
-    FormLabelDirective,
-    FormsModule,
-    ModalFooterComponent,
-    ButtonDirective,
-    FormFeedbackComponent,
-    ModalBodyComponent,
-    ModalHeaderComponent,
-    ModalComponent,
-    NgClass,
-    CardHeaderComponent,
-    CardBodyComponent,
-    CardComponent,
-    RowComponent,
-    NgForOf,
-    NgIf,
-    FormDirective
-  ],
+    imports: [
+        ColComponent,
+        FormLabelDirective,
+        FormsModule,
+        ModalFooterComponent,
+        ButtonDirective,
+        FormFeedbackComponent,
+        ModalBodyComponent,
+        ModalHeaderComponent,
+        ModalComponent,
+        NgClass,
+        CardHeaderComponent,
+        CardBodyComponent,
+        CardComponent,
+        RowComponent,
+        NgForOf,
+        NgIf,
+        FormDirective,
+        HasRolesDirective
+    ],
   standalone: true,
   templateUrl: './standard.component.html',
   styleUrl: './standard.component.scss'

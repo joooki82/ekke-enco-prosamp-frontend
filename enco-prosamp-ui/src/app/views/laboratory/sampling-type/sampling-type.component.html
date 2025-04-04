@@ -4,7 +4,7 @@
     <input class="form-control" placeholder="Keresés kód vagy leírás alapján..." [(ngModel)]="filterText" />
   </c-col>
   <c-col md="6" class="text-end">
-    <button cButton color="primary" (click)="openModal()">Új Típus</button>
+    <button cButton color="primary" (click)="openModal()" *kaHasRoles="['head_of_laboratory']">Új Típus</button>
   </c-col>
 </c-row>
 
@@ -36,14 +36,14 @@
                    }"></i>
               </span>
           </th>
-          <th>Műveletek</th>
+          <th *kaHasRoles="['head_of_laboratory']">Műveletek</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let s of filtered">
           <td>{{ s.code }}</td>
           <td>{{ s.description }}</td>
-          <td>
+          <td *kaHasRoles="['head_of_laboratory']">
             <button cButton color="warning" (click)="openModal(s)">Szerkesztés</button>
           </td>
         </tr>

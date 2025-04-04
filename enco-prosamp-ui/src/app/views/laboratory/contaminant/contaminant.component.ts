@@ -26,28 +26,30 @@ import {
 } from "@coreui/angular";
 import {DatePipe, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {HasRolesDirective} from "keycloak-angular";
 
 @Component({
   selector: 'app-contaminant',
-  imports: [
-    ButtonDirective,
-    DatePipe,
-    NgForOf,
-    CardBodyComponent,
-    CardHeaderComponent,
-    CardComponent,
-    ColComponent,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    FormsModule,
-    FormDirective,
-    RowComponent,
-    ModalFooterComponent,
-    ModalBodyComponent,
-    ModalComponent,
-    ModalHeaderComponent,
-    NgIf
-  ],
+    imports: [
+        ButtonDirective,
+        DatePipe,
+        NgForOf,
+        CardBodyComponent,
+        CardHeaderComponent,
+        CardComponent,
+        ColComponent,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        FormsModule,
+        FormDirective,
+        RowComponent,
+        ModalFooterComponent,
+        ModalBodyComponent,
+        ModalComponent,
+        ModalHeaderComponent,
+        NgIf,
+        HasRolesDirective
+    ],
   standalone: true,
   templateUrl: './contaminant.component.html',
   styleUrl: './contaminant.component.scss'

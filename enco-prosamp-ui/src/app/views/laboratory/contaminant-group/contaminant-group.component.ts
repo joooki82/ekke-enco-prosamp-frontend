@@ -16,25 +16,27 @@ import {
   RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
+import {HasRolesDirective} from "keycloak-angular";
 
 @Component({
   selector: 'app-contaminant-group',
-  imports: [
-    DatePipe,
-    CardBodyComponent,
-    CardHeaderComponent,
-    CardComponent,
-    ColComponent,
-    RowComponent,
-    FormsModule,
-    ButtonDirective,
-    NgIf,
-    NgForOf,
-    ModalFooterComponent,
-    ModalBodyComponent,
-    ModalHeaderComponent,
-    ModalComponent
-  ],
+    imports: [
+        DatePipe,
+        CardBodyComponent,
+        CardHeaderComponent,
+        CardComponent,
+        ColComponent,
+        RowComponent,
+        FormsModule,
+        ButtonDirective,
+        NgIf,
+        NgForOf,
+        ModalFooterComponent,
+        ModalBodyComponent,
+        ModalHeaderComponent,
+        ModalComponent,
+        HasRolesDirective
+    ],
   standalone: true,
   templateUrl: './contaminant-group.component.html',
   styleUrl: './contaminant-group.component.scss'

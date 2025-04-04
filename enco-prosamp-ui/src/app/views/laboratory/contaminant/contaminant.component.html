@@ -9,7 +9,7 @@
   </c-col>
   <!-- Add New Button -->
   <c-col class="text-end">
-    <button cButton color="primary" (click)="openModal()">+Új Szennyezőanyag</button>
+    <button cButton color="primary" (click)="openModal()" *kaHasRoles="['head_of_laboratory']">+Új Szennyezőanyag</button>
   </c-col>
 </c-row>
 
@@ -28,7 +28,7 @@
           <th>Csoport</th>
           <th>Létrehozva</th>
           <th>Frissítve</th>
-          <th style="width: 150px;">Műveletek</th>
+          <th style="width: 150px;" *kaHasRoles="['head_of_laboratory']">Műveletek</th>
         </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@
           <td>{{ c.contaminantGroup.name }}</td>
           <td>{{ c.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>{{ c.updatedAt | date:'yyyy-MM-dd HH:mm' }}</td>
-          <td>
+          <td *kaHasRoles="['head_of_laboratory']">
             <button cButton color="warning" size="sm" (click)="openModal(c)">
               <i class="fa fa-edit me-1"></i> Szerkesztés
             </button>

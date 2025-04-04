@@ -25,35 +25,37 @@ import {
   EquipmentResponseDTO,
   EquipmentService
 } from "../../../services/laboratory/equipment.service";
+import {HasRolesDirective} from "keycloak-angular";
 
 @Component({
   selector: 'app-equipment',
   standalone: true,
   templateUrl: './equipment.component.html',
   styleUrl: './equipment.component.scss',
-  imports: [
-    ColComponent,
-    RowComponent,
-    CardComponent,
-    CardHeaderComponent,
-    CardBodyComponent,
-    ButtonDirective,
-    ModalComponent,
-    ModalHeaderComponent,
-    ModalBodyComponent,
-    ModalFooterComponent,
-    OffcanvasComponent,
-    OffcanvasHeaderComponent,
-    OffcanvasBodyComponent,
-    FormsModule,
-    FormDirective,
-    FormFeedbackComponent,
-    FormLabelDirective,
-    NgForOf,
-    NgIf,
-    DatePipe,
-    NgClass
-  ]
+    imports: [
+        ColComponent,
+        RowComponent,
+        CardComponent,
+        CardHeaderComponent,
+        CardBodyComponent,
+        ButtonDirective,
+        ModalComponent,
+        ModalHeaderComponent,
+        ModalBodyComponent,
+        ModalFooterComponent,
+        OffcanvasComponent,
+        OffcanvasHeaderComponent,
+        OffcanvasBodyComponent,
+        FormsModule,
+        FormDirective,
+        FormFeedbackComponent,
+        FormLabelDirective,
+        NgForOf,
+        NgIf,
+        DatePipe,
+        NgClass,
+        HasRolesDirective
+    ]
 })
 export class EquipmentComponent implements OnInit {
   equipmentList: EquipmentResponseDTO[] = [];

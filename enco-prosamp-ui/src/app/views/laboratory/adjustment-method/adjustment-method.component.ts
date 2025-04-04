@@ -19,13 +19,14 @@ import {
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
 import {NotificationService} from "../../../services/notification/notification.service";
+import {HasRolesDirective} from "keycloak-angular";
 
 @Component({
   selector: 'app-adjustment-method',
   templateUrl: './adjustment-method.component.html',
   styleUrls: ['./adjustment-method.component.scss'],
   standalone: true,
-  imports: [NgForOf, NgIf, RowComponent, ColComponent, CardComponent, CardHeaderComponent, CardBodyComponent, FormsModule, ButtonDirective, DatePipe, ModalFooterComponent, ModalComponent, ModalHeaderComponent, ModalBodyComponent] // ✅ Ensure Angular directives are imported
+  imports: [NgForOf, NgIf, RowComponent, ColComponent, CardComponent, CardHeaderComponent, CardBodyComponent, FormsModule, ButtonDirective, DatePipe, ModalFooterComponent, ModalComponent, ModalHeaderComponent, ModalBodyComponent, HasRolesDirective] // ✅ Ensure Angular directives are imported
 })
 export class AdjustmentMethodComponent implements OnInit {
   adjustmentMethods: AdjustmentMethodResponseDTO[] = [];
