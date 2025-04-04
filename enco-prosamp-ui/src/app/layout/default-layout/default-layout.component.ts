@@ -20,6 +20,8 @@ import { navItems } from './_nav';
 import {NotificationService} from "../../services/notification/notification.service";
 import {ToastersComponent} from "../../shared/components/toasters/toasters.component";
 import Keycloak from "keycloak-js";
+import {UserService} from "../../services/user/user.service";
+import {tap} from "rxjs/operators";
 
 function isOverflown(element: HTMLElement) {
   return (
@@ -50,11 +52,20 @@ function isOverflown(element: HTMLElement) {
     ToastersComponent
   ]
 })
-export class DefaultLayoutComponent  {
+export class DefaultLayoutComponent implements OnInit {
   public navItems = [...navItems];
 
+  constructor(private userService: UserService) {}
 
-  constructor() {}
 
+  ngOnInit(): void {
+    this.userService.sync("syncUser").pipe(
+      tap((response: any) => console.log("HTTP Status:", response?.status))
+    ).subscribe({
+      next: (data) => console.log("Data received:", data),
+      error: (err) => console.error("Error occurred:", err),
+      complete: () => console.log("Sync completed")
+    });
+  }
 
 }

@@ -24,6 +24,8 @@ import { IconDirective } from '@coreui/icons-angular';
 
 import { WidgetsBrandComponent } from '../widgets/widgets-brand/widgets-brand.component';
 import { WidgetsDropdownComponent } from '../widgets/widgets-dropdown/widgets-dropdown.component';
+import {NotificationService} from "../../services/notification/notification.service";
+import {UserService} from "../../services/user/user.service";
 
 interface IUser {
   name: string;
@@ -44,7 +46,7 @@ interface IUser {
     styleUrls: ['dashboard.component.scss'],
     imports: [WidgetsDropdownComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ReactiveFormsModule, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, NgStyle, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent]
 })
-export class DashboardComponent  {
+export class DashboardComponent {
 
   // readonly #destroyRef: DestroyRef = inject(DestroyRef);
   // readonly #document: Document = inject(DOCUMENT);
