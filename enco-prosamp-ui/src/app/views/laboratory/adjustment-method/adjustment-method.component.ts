@@ -11,7 +11,6 @@ import {
   CardComponent,
   CardHeaderComponent,
   ColComponent,
-  FormDirective,
   ModalBodyComponent,
   ModalComponent,
   ModalFooterComponent,

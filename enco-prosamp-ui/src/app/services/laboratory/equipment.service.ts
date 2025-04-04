@@ -29,7 +29,7 @@ export interface EquipmentResponseDTO extends EquipmentRequestDTO {
 
 @Injectable({ providedIn: 'root' })
 export class EquipmentService {
-  private baseUrl = `${environment.apiUrl}/api/equipments`;
+  private baseUrl = `${environment.apiUrl}/api/accredited_laboratory/equipments`;
 
   constructor(private http: HttpClient) {}
 

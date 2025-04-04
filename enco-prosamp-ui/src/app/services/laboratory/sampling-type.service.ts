@@ -22,7 +22,7 @@ export interface SamplingTypeCreatedDTO extends SamplingTypeRequestDTO {
 
 @Injectable({ providedIn: 'root' })
 export class SamplingTypeService {
-  private baseUrl = `${environment.apiUrl}/api/sampling-types`;
+  private baseUrl = `${environment.apiUrl}/api/accredited_laboratory/sampling-types`;
 
   constructor(private http: HttpClient) {}
 

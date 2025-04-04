@@ -34,7 +34,7 @@ export interface MeasurementUnitCreatedDTO extends MeasurementUnitRequestDTO {
 
 @Injectable({ providedIn: 'root' })
 export class MeasurementUnitService {
-  private baseUrl = `${environment.apiUrl}/api/measurement-units`;
+  private baseUrl = `${environment.apiUrl}/api/accredited_laboratory/measurement-units`;
 
   constructor(private http: HttpClient) {}
 

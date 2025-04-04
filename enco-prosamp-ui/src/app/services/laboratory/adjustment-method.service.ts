@@ -27,7 +27,7 @@ export interface AdjustmentMethodCreatedDTO {
   providedIn: 'root'
 })
 export class AdjustmentMethodService {
-  private baseUrl = `${environment.apiUrl}/api/adjustment-methods`;
+  private baseUrl = `${environment.apiUrl}/api/accredited_laboratory/adjustment-methods`;
 
   constructor(private http: HttpClient) {}
 

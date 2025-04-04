@@ -38,7 +38,7 @@ export interface ContaminantListItemDTO {
   providedIn: 'root'
 })
 export class ContaminantService {
-  private baseUrl = `${environment.apiUrl}/api/contaminants`;
+  private baseUrl = `${environment.apiUrl}/api/accredited_laboratory/contaminants`;
 
   constructor(private http: HttpClient) {}
 

@@ -28,7 +28,7 @@ export interface ContaminantGroupCreatedDTO {
   providedIn: 'root'
 })
 export class ContaminantGroupService {
-  private baseUrl = `${environment.apiUrl}/api/contaminant-groups`;
+  private baseUrl = `${environment.apiUrl}/api/accredited_laboratory/contaminant-groups`;
 
   constructor(private http: HttpClient) {
   }

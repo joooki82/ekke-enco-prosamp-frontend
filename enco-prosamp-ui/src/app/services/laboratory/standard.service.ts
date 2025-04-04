@@ -27,7 +27,7 @@ export interface StandardCreatedDTO extends StandardRequestDTO {
 
 @Injectable({ providedIn: 'root' })
 export class StandardService {
-  private baseUrl = `${environment.apiUrl}/api/standards`;
+  private baseUrl = `${environment.apiUrl}/api/accredited_laboratory/standards`;
 
   constructor(private http: HttpClient) {}
 
