@@ -156,10 +156,5 @@ export const navItems: INavData[] = [
       },
 
     ]
-  },
-  {
-    name: 'login',
-    url: '/pages/login',
-    icon: 'nav-icon-bullet'
   }
 ];

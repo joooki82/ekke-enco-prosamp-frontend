@@ -36,8 +36,8 @@ export const routes: Routes = [
       {
         path: 'laboratorium',
         loadChildren: () => import('./views/laboratory/routes').then((m) => m.routes),
-        canActivate: [canActivateAuthRole],
-        data: { role: 'managing_director' }
+        // canActivate: [canActivateAuthRole],
+        // data: { role: 'managing_director' }
       },
       {
         path: 'partners',
@@ -60,17 +60,6 @@ export const routes: Routes = [
         // canActivate: [canActivateAuthRole],
       },
     ]
-  },
-  {
-    path: 'pages',
-    loadChildren: () => import('./views/pages/routes').then((m) => m.routes)
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('./views/pages/login/login.component').then(m => m.LoginComponent),
-    data: {
-      title: 'Login Page'
-    }
   },
   {path: '**', redirectTo: 'dashboard'}
 ];
