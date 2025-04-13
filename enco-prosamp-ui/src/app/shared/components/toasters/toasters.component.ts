@@ -1,29 +1,7 @@
-import {Component, OnDestroy, OnInit, QueryList, viewChild, ViewChild, ViewChildren} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NotificationService, ToastMessage} from "../../../services/notification/notification.service";
 import {Subscription} from "rxjs";
-import {
-  ButtonDirective,
-  CardBodyComponent,
-  CardComponent,
-  CardHeaderComponent,
-  ColComponent,
-  ContainerComponent,
-  FormCheckComponent,
-  FormCheckInputDirective,
-  FormCheckLabelDirective,
-  FormControlDirective,
-  FormDirective,
-  FormSelectDirective,
-  InputGroupComponent,
-  InputGroupTextDirective,
-  RowComponent,
-  TextColorDirective,
-  ToastBodyComponent,
-  ToastComponent,
-  ToasterComponent,
-  ToasterPlacement,
-  ToastHeaderComponent
-} from "@coreui/angular";
+import {ToasterComponent, ToasterPlacement,} from "@coreui/angular";
 import {ReactiveFormsModule} from "@angular/forms";
 import {AppToastSampleComponent} from "./app-toast-sample/app-toast-sample.component";
 

@@ -6,24 +6,31 @@ import {
 } from "../../../services/reports/testreport.service";
 import {NotificationService} from "../../../services/notification/notification.service";
 import {
-  ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent,
-  ColComponent, FormDirective, FormFeedbackComponent, FormLabelDirective,
-  ModalBodyComponent, ModalComponent, ModalFooterComponent,
-  ModalHeaderComponent, RowComponent,
+  ButtonDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  ColComponent,
+  FormDirective,
+  FormFeedbackComponent,
+  FormLabelDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  RowComponent,
 } from "@coreui/angular";
 import {FormsModule, NgForm} from "@angular/forms";
-import {
-  ProjectLookupModalComponent
-} from "../../../shared/lookup-modals/project-lookup-modal/project-lookup-modal.component";
-import {
-  LocationLookupModalComponent
-} from "../../../shared/lookup-modals/location-lookup-modal/location-lookup-modal.component";
 import {
   SamplingRecordLookupModalComponent
 } from "../../../shared/lookup-modals/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {StandardLookupModalComponent} from "../../../shared/lookup-modals/standard-lookup-modal/standard-lookup-modal.component";
-import {SamplerLookupModalComponent} from "../../../shared/lookup-modals/sampler-lookup-modal/sampler-lookup-modal.component";
+import {
+  StandardLookupModalComponent
+} from "../../../shared/lookup-modals/standard-lookup-modal/standard-lookup-modal.component";
+import {
+  SamplerLookupModalComponent
+} from "../../../shared/lookup-modals/sampler-lookup-modal/sampler-lookup-modal.component";
 
 @Component({
   selector: 'app-test-report',
