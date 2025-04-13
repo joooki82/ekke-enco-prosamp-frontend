@@ -256,20 +256,15 @@ export class TestReportComponent implements OnInit {
     this.isSamplerLookupOpen = true;
   }
   onSamplersSelected(selectedSamplers: { id: string, username: string }[]): void {
-    const samplerMap = new Map<string, string>();
+    if (!selectedSamplers || selectedSamplers.length === 0) return;
 
-    if (this.newReport.testReportSamplerIds && this.selectedSamplerNames) {
-      this.newReport.testReportSamplerIds.forEach((id, index) => {
-        samplerMap.set(id, this.selectedSamplerNames[index]);
-      });
-    }
+    const ids = selectedSamplers.map(s => s.id);
+    const names = selectedSamplers.map(s => s.username);
 
-    selectedSamplers.forEach(sampler => {
-      samplerMap.set(sampler.id, sampler.username);
-    });
+    this.newReport.testReportSamplerIds = ids;
+    this.selectedSamplerNames = names;
 
-    this.newReport.testReportSamplerIds = Array.from(samplerMap.keys());
-    this.selectedSamplerNames = Array.from(samplerMap.values());
+    this.notificationService.showInfo("Samplers updated. Please save the report to persist changes.");
 
     this.isSamplerLookupOpen = false;
   }

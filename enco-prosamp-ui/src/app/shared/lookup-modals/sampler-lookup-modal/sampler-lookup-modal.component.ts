@@ -56,23 +56,20 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
       this.selectedSamplerIds = new Set(this.preselectedSamplerIds);
 
       if (this.samplers.length > 0) {
-        this.preselectedSamplerIds.forEach(id => {
-          const foundSampler = this.samplers.find(s => s.id === id);
-          if (foundSampler) {
-            this.selectedSamplerMap.set(foundSampler.id, foundSampler.username);
-          }
-        });
+        this.populateSamplerMap();
       } else {
-        this.loadSamplers();
+        this.loadSamplers(true);
       }
     }
   }
 
-  loadSamplers(): void {
+  loadSamplers(preserveSelection = false): void {
     this.samplerService.getAll().subscribe({
       next: (data) => {
         this.samplers = data;
-        console.log('Samplers loaded:', this.samplers);
+        if (preserveSelection) {
+          this.populateSamplerMap();
+        }
       },
       error: (err) => {
         console.error('Error fetching samplers:', err);
@@ -80,6 +77,14 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
     });
   }
 
+  populateSamplerMap(): void {
+    this.preselectedSamplerIds.forEach(id => {
+      const found = this.samplers.find(s => s.id === id);
+      if (found) {
+        this.selectedSamplerMap.set(found.id, found.username);
+      }
+    });
+  }
   toggleSelection(sampler: UserDTO): void {
     if (this.selectedSamplerIds.has(sampler.id)) {
       this.selectedSamplerIds.delete(sampler.id);

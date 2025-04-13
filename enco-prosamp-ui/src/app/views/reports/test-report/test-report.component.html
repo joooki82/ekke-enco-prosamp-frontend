@@ -211,9 +211,11 @@
           <button cButton color="primary" (click)="openSamplerLookup()">Select Samplers</button>
           <div class="mt-2">
             <span *ngFor="let name of selectedSamplerNames" class="badge bg-success me-1">{{ name }}</span>
+            <div *ngIf="selectedSamplerNames.length === 0" class="text-muted">No samplers selected.</div>
           </div>
         </c-col>
       </fieldset>
+
 
 
       <!-- Report Metadata -->
