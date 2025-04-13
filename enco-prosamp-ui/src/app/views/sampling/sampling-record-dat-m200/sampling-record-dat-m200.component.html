@@ -200,116 +200,209 @@
     <h5>{{ selectedRecordId ? 'Mintavételi jegyzőkönyv szerkesztése' : 'Új mintavételi jegyzőkönyv létrehozása' }}</h5>
   </c-modal-header>
   <c-modal-body>
-    <form class="row g-3">
+    <form class="row g-3" #recordForm="ngForm" novalidate>
 
+      <!-- Dátum -->
       <div class="col-md-6">
-        <label class="form-label">Dátum</label>
-        <input type="datetime-local" class="form-control" [(ngModel)]="newRecord.samplingDate" name="samplingDate"
-               required/>
+        <label class="form-label">Dátum *</label>
+        <input type="datetime-local" class="form-control"
+               [(ngModel)]="newRecord.samplingDate"
+               name="samplingDate"
+               #samplingDate="ngModel"
+               required
+               [ngClass]="{'is-invalid': formValidated && samplingDate.invalid}" />
+        <div class="invalid-feedback" *ngIf="formValidated && samplingDate.invalid">
+          A dátum megadása kötelező.
+        </div>
       </div>
 
+      <!-- Státusz -->
       <div class="col-md-6">
-        <label class="form-label">Státusz</label>
-        <input class="form-control" [(ngModel)]="newRecord.status" name="status"/>
+        <label class="form-label">Státusz *</label>
+        <input class="form-control"
+               [(ngModel)]="newRecord.status"
+               name="status"
+               #status="ngModel"
+               required
+               [ngClass]="{'is-invalid': formValidated && status.invalid}" />
+        <div class="invalid-feedback" *ngIf="formValidated && status.invalid">
+          A státusz megadása kötelező.
+        </div>
       </div>
 
+      <!-- Projekt -->
       <div class="col-md-6">
-        <label class="form-label">Projekt</label>
+        <label class="form-label">Projekt *</label>
         <div class="input-group">
-          <input class="form-control" [value]="selectedProjectName" readonly/>
+          <input class="form-control"
+                 [value]="selectedProjectName"
+                 readonly
+                 [ngClass]="{'is-invalid': formValidated && !newRecord.projectId}" />
           <button cButton color="info" type="button" (click)="isProjectModalOpen = true">Kiválasztás</button>
         </div>
+        <div class="invalid-feedback d-block" *ngIf="formValidated && !newRecord.projectId">
+          A projekt kiválasztása kötelező.
+        </div>
       </div>
 
+      <!-- Cég -->
       <div class="col-md-6">
-        <label class="form-label">Cég</label>
+        <label class="form-label">Cég *</label>
         <div class="input-group">
-          <input class="form-control" [value]="selectedCompanyName" readonly/>
+          <input class="form-control"
+                 [value]="selectedCompanyName"
+                 readonly
+                 [ngClass]="{'is-invalid': formValidated && !newRecord.companyId}" />
           <button cButton color="info" type="button" (click)="isCompanyModalOpen = true">Kiválasztás</button>
         </div>
-      </div>
-
-      <div class="col-md-6">
-        <label class="form-label">Telephely</label>
-        <div class="input-group">
-          <input class="form-control" [value]="selectedLocationName" readonly/>
-          <button cButton color="info" type="button" (click)="isLocationModalOpen = true">Kiválasztás</button>
+        <div class="invalid-feedback d-block" *ngIf="formValidated && !newRecord.companyId">
+          A cég kiválasztása kötelező.
         </div>
       </div>
 
+      <!-- Telephely -->
+      <div class="col-md-6">
+        <label class="form-label">Telephely *</label>
+        <div class="input-group">
+          <input class="form-control"
+                 [value]="selectedLocationName"
+                 readonly
+                 [ngClass]="{'is-invalid': formValidated && !newRecord.siteLocationId}" />
+          <button cButton color="info" type="button" (click)="isLocationModalOpen = true">Kiválasztás</button>
+        </div>
+        <div class="invalid-feedback d-block" *ngIf="formValidated && !newRecord.siteLocationId">
+          A telephely kiválasztása kötelező.
+        </div>
+      </div>
+
+      <!-- Mintavételi eszközök -->
       <div class="col-md-6">
         <label class="form-label">Mintavételi eszközök</label>
         <div class="input-group">
-          <input class="form-control" [value]="selectedEquipmentsDisplay.join(', ')" readonly/>
+          <input class="form-control" [value]="selectedEquipmentsDisplay.join(', ')" readonly />
           <button cButton color="info" type="button" (click)="isEquipmentModalOpen = true">Kiválasztás</button>
         </div>
       </div>
 
-      <div class="col-md-6"><label class="form-label">Szennyező technológia</label><input class="form-control"
-                                                                                          [(ngModel)]="newRecord.technology"
-                                                                                          name="technology"/></div>
-      <div class="col-md-6"><label class="form-label">Vizsgált üzem</label><input class="form-control"
-                                                                                  [(ngModel)]="newRecord.testedPlant"
-                                                                                  name="testedPlant"/></div>
-
-      <div class="col-md-6"><label class="form-label">Műszak száma / ideje</label><input type="number"
-                                                                                         class="form-control"
-                                                                                         [(ngModel)]="newRecord.shiftCountAndDuration"
-                                                                                         name="shiftCountAndDuration"/>
-      </div>
-      <div class="col-md-6"><label class="form-label">Dolgozókszáma / műszak</label><input type="number"
-                                                                                           class="form-control"
-                                                                                           [(ngModel)]="newRecord.workersPerShift"
-                                                                                           name="workersPerShift"/>
+      <!-- Additional Inputs -->
+      <div class="col-md-6">
+        <label class="form-label">Szennyező technológia</label>
+        <input class="form-control" [(ngModel)]="newRecord.technology" name="technology" />
       </div>
 
-      <div class="col-md-6"><label class="form-label">Expozíciót idő idő (perc)</label><input type="number"
-                                                                                              class="form-control"
-                                                                                              [(ngModel)]="newRecord.exposureTime"
-                                                                                              name="exposureTime"/>
+      <div class="col-md-6">
+        <label class="form-label">Vizsgált üzem</label>
+        <input class="form-control" [(ngModel)]="newRecord.testedPlant" name="testedPlant" />
       </div>
-      <div class="col-md-6"><label class="form-label">Hőmérséklet (°C)</label><input type="number" class="form-control"
-                                                                                     [(ngModel)]="newRecord.temperature"
-                                                                                     name="temperature"/></div>
-      <div class="col-md-6"><label class="form-label">Páratartalom (%)</label><input type="number" class="form-control"
-                                                                                     [(ngModel)]="newRecord.humidity"
-                                                                                     name="humidity"/></div>
-      <div class="col-md-6"><label class="form-label">Szélsebesség (m/s)</label><input type="number"
-                                                                                       class="form-control"
-                                                                                       [(ngModel)]="newRecord.windSpeed"
-                                                                                       name="windSpeed"/></div>
-      <div class="col-md-6"><label class="form-label">Nyomás 1 (hPa)</label><input type="number" class="form-control"
-                                                                                   [(ngModel)]="newRecord.pressure1"
-                                                                                   name="pressure1"/></div>
-      <div class="col-md-6"><label class="form-label">Nyomás 2 (hPa)</label><input type="number" class="form-control"
-                                                                                   [(ngModel)]="newRecord.pressure2"
-                                                                                   name="pressure2"/></div>
 
-      <div class="col-md-6"><label class="form-label">Légáramlási viszonyok</label><input class="form-control"
-                                                                                          [(ngModel)]="newRecord.airFlowConditions"
-                                                                                          name="airFlowConditions"/>
+      <div class="col-md-6">
+        <label class="form-label">Műszak száma / ideje</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="newRecord.shiftCountAndDuration" name="shiftCountAndDuration" />
       </div>
-      <div class="col-md-6"><label class="form-label">Üzemvitel</label><input class="form-control"
-                                                                              [(ngModel)]="newRecord.operationMode"
-                                                                              name="operationMode"/></div>
-      <div class="col-md-6"><label class="form-label">Üzemszünet</label><input class="form-control"
-                                                                               [(ngModel)]="newRecord.operationBreak"
-                                                                               name="operationBreak"/></div>
-      <div class="col-md-6"><label class="form-label">Helyi elszívás</label><input class="form-control"
-                                                                                   [(ngModel)]="newRecord.localAirExtraction"
-                                                                                   name="localAirExtraction"/></div>
 
-      <div class="col-md-12"><label class="form-label">Egyéb körülmények</label><textarea class="form-control"
-                                                                                          [(ngModel)]="newRecord.otherEnvironmentalConditions"
-                                                                                          name="otherEnvironmentalConditions"></textarea>
+      <div class="col-md-6">
+        <label class="form-label">Dolgozók száma / műszak</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="newRecord.workersPerShift" name="workersPerShift" />
       </div>
-      <div class="col-md-12"><label class="form-label">Minták sorszáma</label><input class="form-control"
-                                                                                     [(ngModel)]="newRecord.serialNumbersOfSamples"
-                                                                                     name="serialNumbersOfSamples"/>
+
+      <div class="col-md-6">
+        <label class="form-label">Expozíciós idő (perc)</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="newRecord.exposureTime" name="exposureTime" />
       </div>
-      <div class="col-md-12"><label class="form-label">Megjegyzés</label><textarea class="form-control"
-                                                                                   [(ngModel)]="newRecord.remarks"
-                                                                                   name="remarks"></textarea></div>
+
+      <div class="col-md-6">
+        <label class="form-label">Hőmérséklet (°C)</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="newRecord.temperature" name="temperature"
+               #temperature="ngModel"
+               [ngClass]="{'is-invalid': formValidated && (temperature.value < -100 || temperature.value > 100)}" />
+        <div class="invalid-feedback" *ngIf="formValidated && (temperature.value < -100 || temperature.value > 100)">
+          Hőmérséklet -100 és 100 °C között kell legyen.
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Páratartalom (%)</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="newRecord.humidity" name="humidity"
+               #humidity="ngModel"
+               [ngClass]="{'is-invalid': formValidated && (humidity.value < 0 || humidity.value > 100)}" />
+        <div class="invalid-feedback" *ngIf="formValidated && (humidity.value < 0 || humidity.value > 100)">
+          Páratartalom 0 és 100% között kell legyen.
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Szélsebesség (m/s)</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="newRecord.windSpeed" name="windSpeed" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nyomás 1 (hPa)</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="newRecord.pressure1" name="pressure1"
+               #pressure1="ngModel"
+               [ngClass]="{'is-invalid': formValidated && (pressure1.value < 800 || pressure1.value > 1100)}" />
+        <div class="invalid-feedback" *ngIf="formValidated && (pressure1.value < 800 || pressure1.value > 1100)">
+          Nyomás 1 értéke 800 és 1100 hPa között kell legyen.
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nyomás 2 (hPa)</label>
+        <input type="number" class="form-control"
+               [(ngModel)]="newRecord.pressure2" name="pressure2"
+               #pressure2="ngModel"
+               [ngClass]="{'is-invalid': formValidated && (pressure2.value < 800 || pressure2.value > 1100)}" />
+        <div class="invalid-feedback" *ngIf="formValidated && (pressure2.value < 800 || pressure2.value > 1100)">
+          Nyomás 2 értéke 800 és 1100 hPa között kell legyen.
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Légáramlási viszonyok</label>
+        <input class="form-control" [(ngModel)]="newRecord.airFlowConditions" name="airFlowConditions" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Üzemvitel</label>
+        <input class="form-control" [(ngModel)]="newRecord.operationMode" name="operationMode" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Üzemszünet</label>
+        <input class="form-control" [(ngModel)]="newRecord.operationBreak" name="operationBreak" />
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Helyi elszívás</label>
+        <input class="form-control" [(ngModel)]="newRecord.localAirExtraction" name="localAirExtraction" />
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Egyéb körülmények</label>
+        <textarea class="form-control"
+                  [(ngModel)]="newRecord.otherEnvironmentalConditions"
+                  name="otherEnvironmentalConditions"></textarea>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Minták sorszáma</label>
+        <input class="form-control"
+               [(ngModel)]="newRecord.serialNumbersOfSamples"
+               name="serialNumbersOfSamples" />
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label">Megjegyzés</label>
+        <textarea class="form-control"
+                  [(ngModel)]="newRecord.remarks"
+                  name="remarks"></textarea>
+      </div>
 
     </form>
   </c-modal-body>

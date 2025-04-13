@@ -246,7 +246,12 @@ export class SamplingRecordDatM200Component implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('onSubmit() called', this.newRecord);
+    this.formValidated = true;
+
+    if (!this.isFormValid()) {
+      this.notificationService.showError('Kérjük, javítsa a hibákat az űrlapon.');
+      return;
+    }
 
     const action = this.selectedRecordId == null
       ? this.recordService.create(this.newRecord)
@@ -297,4 +302,20 @@ export class SamplingRecordDatM200Component implements OnInit {
     this.selectedEquipmentsDisplay = equipments.map(e => e.name);
     this.isEquipmentModalOpen = false;
   }
+
+  isFormValid(): boolean {
+    const r = this.newRecord;
+    return (
+      !!r.samplingDate &&
+      !!r.status &&
+      !!r.companyId &&
+      !!r.siteLocationId &&
+      !!r.projectId &&
+      (!r.humidity || (r.humidity >= 0 && r.humidity <= 100)) &&
+      (!r.temperature || (r.temperature >= -100 && r.temperature <= 100)) &&
+      (!r.pressure1 || (r.pressure1 >= 800 && r.pressure1 <= 1100)) &&
+      (!r.pressure2 || (r.pressure2 >= 800 && r.pressure2 <= 1100))
+    );
+  }
+
 }
