@@ -91,7 +91,7 @@ export class ToastersComponent implements OnInit {
     toasterPosition.forEach((item) => {
       const title = `Toast ${formValues.color} ${formValues.position}`;
       const { position, ...props } = { ...formValues, title, position: formValues.position };
-      console.log('Props:', props); // Logging props here
+      console.log('Props:', props);
       const componentRef = item.addToast(AppToastComponent, props, {});
       componentRef.instance['closeButton'] = props.closeButton;
       console.log('ToasterComponent', this.viewChildren);

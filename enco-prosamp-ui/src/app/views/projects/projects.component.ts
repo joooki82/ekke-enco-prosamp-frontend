@@ -169,7 +169,7 @@ export class ProjectsComponent implements OnInit {
       filtered = filtered.filter(p =>
         p.projectName.toLowerCase().includes(lower) ||
         p.projectNumber.toLowerCase().includes(lower) ||
-        p.clientName.toLowerCase().includes(lower)     // 👈 új feltétel
+        p.clientName.toLowerCase().includes(lower)
     );
     }
 
@@ -194,4 +194,3 @@ export class ProjectsComponent implements OnInit {
     }
   }
 }
-

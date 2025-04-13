@@ -147,7 +147,6 @@ export class TestReportComponent implements OnInit {
       this.newReport = this.mapToRequestDTO(report);
       this.selectedSamplingRecord = report.samplingRecord;
 
-      // Map saved sampler IDs to usernames
       this.selectedSamplerNames = report.testReportSamplers?.map(sampler => sampler.username) || [];
     } else {
       this.selectedReportId = null;
@@ -257,7 +256,6 @@ export class TestReportComponent implements OnInit {
     this.isSamplerLookupOpen = true;
   }
   onSamplersSelected(selectedSamplers: { id: string, username: string }[]): void {
-    // Use a Map to maintain unique sampler IDs with corresponding names
     const samplerMap = new Map<string, string>();
 
     if (this.newReport.testReportSamplerIds && this.selectedSamplerNames) {
