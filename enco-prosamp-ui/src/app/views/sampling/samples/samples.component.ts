@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {
   AdjustmentMethodListItemDTO,
   MeasurementUnitListItemDTO,
@@ -78,7 +78,7 @@ export class SamplesComponent {
               private measurementUnitService: MeasurementUnitService,
               private adjustmentMethodService: AdjustmentMethodService,
               private notificationService: NotificationService,
-              private samplingTypeService: SamplingTypeService ) {
+              private samplingTypeService: SamplingTypeService) {
     this.loadSamples();
     this.loadLookups();
   }
@@ -99,7 +99,7 @@ export class SamplesComponent {
       },
       error: err => {
         console.error('API error:', err);
-        this.notificationService.showError('❌ Nem sikerült a mintákat betölteni.');
+        this.notificationService.showError('Nem sikerült a mintákat betölteni.');
       }
     });
   }
@@ -172,13 +172,13 @@ export class SamplesComponent {
     request.subscribe({
       next: () => {
         this.notificationService.showSuccess(
-          isNew ? '✅ Minta sikeresen létrehozva' : '✅ Minta frissítve'
+          isNew ? 'Minta sikeresen létrehozva' : 'Minta frissítve'
         );
         this.closeModal();
         this.loadSamples();
       },
       error: () => {
-        this.notificationService.showError('❌ Hiba történt a mentés során');
+        this.notificationService.showError('Hiba történt a mentés során');
       }
     });
   }

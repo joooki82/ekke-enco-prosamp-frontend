@@ -1,4 +1,3 @@
-
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
@@ -35,7 +34,6 @@ export class AnalyticalResultModalComponent {
   onCancel() {
     this.close.emit();
   }
-
 
 
   onNDChange(result: SampleAnalyticalResultRequestDTO & { id?: number }) {

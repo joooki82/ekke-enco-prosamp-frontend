@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   ButtonDirective,
   CardBodyComponent,
@@ -14,9 +14,9 @@ import {
   ModalHeaderComponent,
   RowComponent
 } from '@coreui/angular';
-import { FormsModule } from '@angular/forms';
+import {FormsModule} from '@angular/forms';
 import {NgIf, NgForOf, DatePipe, NgClass} from '@angular/common';
-import { NotificationService } from '../../../services/notification/notification.service';
+import {NotificationService} from '../../../services/notification/notification.service';
 import {
   MeasurementUnitRequestDTO,
   MeasurementUnitResponseDTO, MeasurementUnitService
@@ -29,27 +29,27 @@ import {HasRolesDirective} from "keycloak-angular";
   standalone: true,
   templateUrl: './measurement-unit.component.html',
   styleUrl: './measurement-unit.component.scss',
-    imports: [
-        ColComponent,
-        RowComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardBodyComponent,
-        ButtonDirective,
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalBodyComponent,
-        ModalFooterComponent,
-        FormDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        NgForOf,
-        NgIf,
-        DatePipe,
-        NgClass,
-        HasRolesDirective
-    ]
+  imports: [
+    ColComponent,
+    RowComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    ButtonDirective,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    ModalFooterComponent,
+    FormDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    NgForOf,
+    NgIf,
+    DatePipe,
+    NgClass,
+    HasRolesDirective
+  ]
 })
 export class MeasurementUnitComponent implements OnInit {
   units: MeasurementUnitResponseDTO[] = [];
@@ -66,7 +66,8 @@ export class MeasurementUnitComponent implements OnInit {
   constructor(
     private unitService: MeasurementUnitService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadUnits();
@@ -90,7 +91,7 @@ export class MeasurementUnitComponent implements OnInit {
         this.units = data;
         this.allUnits = data;
       },
-      error: err => console.error('Failed to load units', err)
+      error: err => console.error('Hiba a mértékegységek betöltésekor', err)
     });
   }
 

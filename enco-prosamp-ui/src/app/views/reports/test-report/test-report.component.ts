@@ -79,8 +79,6 @@ export class TestReportComponent implements OnInit {
   isGeneratingReport: boolean = false;
 
 
-
-
   constructor(
     private testReportService: TestReportService,
     private notificationService: NotificationService
@@ -95,7 +93,7 @@ export class TestReportComponent implements OnInit {
   loadReports(): void {
     this.testReportService.getAll().subscribe({
       next: data => this.reports = data,
-      error: err => console.error('Failed to load test reports', err)
+      error: err => console.error('Nem sikerült betölteni a jelentéseket', err)
     });
   }
 
@@ -165,7 +163,7 @@ export class TestReportComponent implements OnInit {
   onSubmit(form: NgForm): void {
     if (!form.valid) {
       this.formValidated = true;
-      this.notificationService.showError('Please fill out all required fields!');
+      this.notificationService.showError('Kérjük, töltse ki az összes kötelező mezőt!');
       return;
     }
 
@@ -176,14 +174,14 @@ export class TestReportComponent implements OnInit {
     action.subscribe({
       next: () => {
         this.notificationService.showSuccess(
-          this.selectedReportId ? 'Report updated successfully' : 'Report created successfully'
+          this.selectedReportId ? 'A jegyzőkönyv sikeresen frissítve' : 'A jelentés sikeresen létrjött'
         );
         this.closeModal();
         this.loadReports();
       },
       error: (err) => {
         console.error('Error during save:', err);
-        this.notificationService.showError('An error occurred while saving');
+        this.notificationService.showError('Hiba történt a mentés során');
       }
     });
   }
@@ -255,6 +253,7 @@ export class TestReportComponent implements OnInit {
   openSamplerLookupWithSelection(): void {
     this.isSamplerLookupOpen = true;
   }
+
   onSamplersSelected(selectedSamplers: { id: string, username: string }[]): void {
     if (!selectedSamplers || selectedSamplers.length === 0) return;
 
@@ -264,7 +263,7 @@ export class TestReportComponent implements OnInit {
     this.newReport.testReportSamplerIds = ids;
     this.selectedSamplerNames = names;
 
-    this.notificationService.showInfo("Samplers updated. Please save the report to persist changes.");
+    this.notificationService.showInfo("A mintavevők frissítve. Kérjük, mentse el a jelentést a változtatások fennmaradásához.");
 
     this.isSamplerLookupOpen = false;
   }
@@ -280,12 +279,12 @@ export class TestReportComponent implements OnInit {
         link.click();
         URL.revokeObjectURL(link.href);
         this.isGeneratingReport = false;
-        this.notificationService.showSuccess('Report successfully downloaded.');
+        this.notificationService.showSuccess('A jelentés sikeresen letöltve.');
       },
       error: (err) => {
-        console.error('Error generating the report:', err);
+        console.error('Hiba a jelentés generálásakor:', err);
         this.isGeneratingReport = false;
-        this.notificationService.showError('Error generating the report.');
+        this.notificationService.showError('Hiba a jelentés generálásakor.');
       }
     });
   }

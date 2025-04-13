@@ -32,7 +32,8 @@ export class ProjectLookupModalComponent implements OnInit {
   projects: ProjectResponseDTO[] = [];
   filter = '';
 
-  constructor(private projectService: ProjectsService) {}
+  constructor(private projectService: ProjectsService) {
+  }
 
   ngOnInit(): void {
     this.loadProjects();
@@ -43,7 +44,7 @@ export class ProjectLookupModalComponent implements OnInit {
       next: data => {
         this.projects = data.filter(p => !this.filter || p.projectName.toLowerCase().includes(this.filter.toLowerCase()));
       },
-      error: err => console.error('Project fetch failed', err)
+      error: err => console.error('Hiba a projektek lekérésekor', err)
     });
   }
 

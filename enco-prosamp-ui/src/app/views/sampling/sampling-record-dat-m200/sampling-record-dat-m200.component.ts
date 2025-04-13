@@ -18,10 +18,18 @@ import {CompanyResponseDTO} from 'src/app/services/partners/company.service';
 import {LocationResponseDTO} from "../../../services/partners/location.service";
 import {ProjectResponseDTO} from "../../../services/projects/projects.service";
 import {EquipmentResponseDTO} from "../../../services/laboratory/equipment.service";
-import {CompanyLookupModalComponent} from "../../../shared/lookup-modals/company-lookup-modal/company-lookup-modal.component";
-import {LocationLookupModalComponent} from "../../../shared/lookup-modals/location-lookup-modal/location-lookup-modal.component";
-import {ProjectLookupModalComponent} from "../../../shared/lookup-modals/project-lookup-modal/project-lookup-modal.component";
-import {EquipmentLookupModalComponent} from "../../../shared/lookup-modals/equipment-lookup-modal/equipment-lookup-modal.component";
+import {
+  CompanyLookupModalComponent
+} from "../../../shared/lookup-modals/company-lookup-modal/company-lookup-modal.component";
+import {
+  LocationLookupModalComponent
+} from "../../../shared/lookup-modals/location-lookup-modal/location-lookup-modal.component";
+import {
+  ProjectLookupModalComponent
+} from "../../../shared/lookup-modals/project-lookup-modal/project-lookup-modal.component";
+import {
+  EquipmentLookupModalComponent
+} from "../../../shared/lookup-modals/equipment-lookup-modal/equipment-lookup-modal.component";
 import {FormsModule} from "@angular/forms";
 
 @Component({
@@ -84,7 +92,6 @@ export class SamplingRecordDatM200Component implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
 
 
-
   constructor(
     private recordService: SamplingRecordDatM200Service,
     private notificationService: NotificationService
@@ -111,7 +118,7 @@ export class SamplingRecordDatM200Component implements OnInit {
   loadRecords(): void {
     this.recordService.getAll().subscribe({
       next: data => this.recordList = data,
-      error: err => console.error('Failed to load sampling records', err)
+      error: err => console.error('Nem sikerült betölteni a mintavételi jegyzőkönyveket', err)
     });
   }
 
@@ -148,13 +155,20 @@ export class SamplingRecordDatM200Component implements OnInit {
 
   getSortableValue(record: SamplingRecordResponseDTO, column: string): string {
     switch (column) {
-      case 'project': return record.project?.projectName || '';
-      case 'company': return record.company?.name || '';
-      case 'location': return record.siteLocation?.name || '';
-      case 'status': return record.status || '';
-      case 'technology': return record.technology || '';
-      case 'samplingDate': return record.samplingDate || '';
-      default: return '';
+      case 'project':
+        return record.project?.projectName || '';
+      case 'company':
+        return record.company?.name || '';
+      case 'location':
+        return record.siteLocation?.name || '';
+      case 'status':
+        return record.status || '';
+      case 'technology':
+        return record.technology || '';
+      case 'samplingDate':
+        return record.samplingDate || '';
+      default:
+        return '';
     }
   }
 

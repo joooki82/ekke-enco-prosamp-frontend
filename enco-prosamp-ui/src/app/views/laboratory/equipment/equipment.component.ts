@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {
   ButtonDirective,
   CardBodyComponent,
@@ -17,9 +17,9 @@ import {
   OffcanvasBodyComponent,
   RowComponent
 } from "@coreui/angular";
-import { FormsModule } from "@angular/forms";
+import {FormsModule} from "@angular/forms";
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import { NotificationService } from "../../../services/notification/notification.service";
+import {NotificationService} from "../../../services/notification/notification.service";
 import {
   EquipmentRequestDTO,
   EquipmentResponseDTO,
@@ -32,30 +32,30 @@ import {HasRolesDirective} from "keycloak-angular";
   standalone: true,
   templateUrl: './equipment.component.html',
   styleUrl: './equipment.component.scss',
-    imports: [
-        ColComponent,
-        RowComponent,
-        CardComponent,
-        CardHeaderComponent,
-        CardBodyComponent,
-        ButtonDirective,
-        ModalComponent,
-        ModalHeaderComponent,
-        ModalBodyComponent,
-        ModalFooterComponent,
-        OffcanvasComponent,
-        OffcanvasHeaderComponent,
-        OffcanvasBodyComponent,
-        FormsModule,
-        FormDirective,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        NgForOf,
-        NgIf,
-        DatePipe,
-        NgClass,
-        HasRolesDirective
-    ]
+  imports: [
+    ColComponent,
+    RowComponent,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    ButtonDirective,
+    ModalComponent,
+    ModalHeaderComponent,
+    ModalBodyComponent,
+    ModalFooterComponent,
+    OffcanvasComponent,
+    OffcanvasHeaderComponent,
+    OffcanvasBodyComponent,
+    FormsModule,
+    FormDirective,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    NgForOf,
+    NgIf,
+    DatePipe,
+    NgClass,
+    HasRolesDirective
+  ]
 })
 export class EquipmentComponent implements OnInit {
   equipmentList: EquipmentResponseDTO[] = [];
@@ -72,7 +72,8 @@ export class EquipmentComponent implements OnInit {
   constructor(
     private equipmentService: EquipmentService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadEquipment();
@@ -97,14 +98,14 @@ export class EquipmentComponent implements OnInit {
   loadEquipment(): void {
     this.equipmentService.getAll().subscribe({
       next: data => this.equipmentList = data,
-      error: err => console.error('Failed to load equipment', err)
+      error: err => console.error('Hiba az eszközök betöültésekor', err)
     });
   }
 
   openModal(equipment?: EquipmentResponseDTO): void {
     if (equipment) {
       this.selectedEquipmentId = equipment.id;
-      this.newEquipment = { ...equipment };
+      this.newEquipment = {...equipment};
     } else {
       this.selectedEquipmentId = null;
       this.newEquipment = this.createEmptyEquipment();

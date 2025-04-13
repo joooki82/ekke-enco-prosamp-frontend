@@ -30,26 +30,26 @@ import {HasRolesDirective} from "keycloak-angular";
 
 @Component({
   selector: 'app-contaminant',
-    imports: [
-        ButtonDirective,
-        DatePipe,
-        NgForOf,
-        CardBodyComponent,
-        CardHeaderComponent,
-        CardComponent,
-        ColComponent,
-        FormFeedbackComponent,
-        FormLabelDirective,
-        FormsModule,
-        FormDirective,
-        RowComponent,
-        ModalFooterComponent,
-        ModalBodyComponent,
-        ModalComponent,
-        ModalHeaderComponent,
-        NgIf,
-        HasRolesDirective
-    ],
+  imports: [
+    ButtonDirective,
+    DatePipe,
+    NgForOf,
+    CardBodyComponent,
+    CardHeaderComponent,
+    CardComponent,
+    ColComponent,
+    FormFeedbackComponent,
+    FormLabelDirective,
+    FormsModule,
+    FormDirective,
+    RowComponent,
+    ModalFooterComponent,
+    ModalBodyComponent,
+    ModalComponent,
+    ModalHeaderComponent,
+    NgIf,
+    HasRolesDirective
+  ],
   standalone: true,
   templateUrl: './contaminant.component.html',
   styleUrl: './contaminant.component.scss'
@@ -58,7 +58,7 @@ export class ContaminantComponent implements OnInit {
   contaminants: ContaminantResponseDTO[] = [];
   contaminantGroups: ContaminantGroupResponseDTO[] = [];
 
-  newContaminant: ContaminantRequestDTO = { name: '', description: '', contaminantGroupId: 0 };
+  newContaminant: ContaminantRequestDTO = {name: '', description: '', contaminantGroupId: 0};
   selectedContaminantId: number | null = null;
   formValidated = false;
 
@@ -72,7 +72,8 @@ export class ContaminantComponent implements OnInit {
     private contaminantService: ContaminantService,
     private contaminantGroupService: ContaminantGroupService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadContaminants();
@@ -82,14 +83,14 @@ export class ContaminantComponent implements OnInit {
   loadContaminants(): void {
     this.contaminantService.getAll().subscribe({
       next: data => this.contaminants = data,
-      error: err => console.error('Failed to load contaminants', err)
+      error: err => console.error('Nem sikerült betölteni a szennyezőanyagokat', err)
     });
   }
 
   loadContaminantGroups(): void {
     this.contaminantGroupService.getAll().subscribe({
       next: data => this.contaminantGroups = data,
-      error: err => console.error('Failed to load contaminant groups', err)
+      error: err => console.error('Nem sikerült betölteni a szennyező csoportokat', err)
     });
   }
 
@@ -102,27 +103,27 @@ export class ContaminantComponent implements OnInit {
     if (this.selectedContaminantId === null) {
       this.contaminantService.create(this.newContaminant).subscribe({
         next: () => {
-          this.notificationService.showSuccess('Contaminant created');
+          this.notificationService.showSuccess('Szennyezőanyag létrehozása sikeres');
           this.resetForm();
           this.loadContaminants();
         },
-        error: () => this.notificationService.showError('Creation failed')
+        error: () => this.notificationService.showError('Szennyezőanyag létrehozása nem sikerült')
       });
     } else {
       this.contaminantService.update(this.selectedContaminantId, this.newContaminant).subscribe({
         next: () => {
-          this.notificationService.showSuccess('Contaminant updated');
+          this.notificationService.showSuccess('Szenyezőanyag frissítve');
           this.resetForm();
           this.loadContaminants();
         },
-        error: () => this.notificationService.showError('Update failed')
+        error: () => this.notificationService.showError('Frissítés nem sikerült')
       });
     }
   }
 
 
   resetForm(): void {
-    this.newContaminant = { name: '', description: '', contaminantGroupId: 0 };
+    this.newContaminant = {name: '', description: '', contaminantGroupId: 0};
     this.selectedContaminantId = null;
     this.formValidated = false;
   }

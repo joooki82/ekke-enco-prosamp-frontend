@@ -53,7 +53,8 @@ export class LaboratoryComponent implements OnInit {
   constructor(
     private laboratoryService: LaboratoryService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadLabs();
@@ -73,14 +74,14 @@ export class LaboratoryComponent implements OnInit {
   loadLabs(): void {
     this.laboratoryService.getAll().subscribe({
       next: data => this.laboratories = data,
-      error: err => console.error('Failed to load laboratories', err)
+      error: err => console.error('Nem sikerült betölteni a laboratóriumokat', err)
     });
   }
 
   openModal(lab?: LaboratoryResponseDTO): void {
     if (lab) {
       this.selectedLabId = lab.id;
-      this.newLab = { ...lab };
+      this.newLab = {...lab};
     } else {
       this.selectedLabId = null;
       this.newLab = this.createEmptyLab();
@@ -147,4 +148,3 @@ export class LaboratoryComponent implements OnInit {
     }
   }
 }
-

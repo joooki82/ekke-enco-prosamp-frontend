@@ -49,7 +49,8 @@ export class CompanyComponent implements OnInit {
   constructor(
     private companyService: CompanyService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadCompanies();
@@ -70,14 +71,14 @@ export class CompanyComponent implements OnInit {
   loadCompanies(): void {
     this.companyService.getAll().subscribe({
       next: data => this.companies = data,
-      error: err => console.error('Failed to load companies', err)
+      error: err => console.error('Nem sikerült betölteni a cégeket', err)
     });
   }
 
   openModal(company?: CompanyResponseDTO): void {
     if (company) {
       this.selectedCompanyId = company.id;
-      this.newCompany = { ...company };
+      this.newCompany = {...company};
     } else {
       this.selectedCompanyId = null;
       this.newCompany = this.createEmptyCompany();
@@ -145,4 +146,3 @@ export class CompanyComponent implements OnInit {
     }
   }
 }
-

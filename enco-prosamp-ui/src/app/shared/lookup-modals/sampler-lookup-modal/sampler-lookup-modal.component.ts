@@ -72,7 +72,7 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
         }
       },
       error: (err) => {
-        console.error('Error fetching samplers:', err);
+        console.error('Hiba a mintavevők lekérésekor:', err);
       }
     });
   }
@@ -85,6 +85,7 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
       }
     });
   }
+
   toggleSelection(sampler: UserDTO): void {
     if (this.selectedSamplerIds.has(sampler.id)) {
       this.selectedSamplerIds.delete(sampler.id);
@@ -109,10 +110,6 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
   cancel(): void {
     this.close.emit();
   }
-
-
-
-
 
 
 }

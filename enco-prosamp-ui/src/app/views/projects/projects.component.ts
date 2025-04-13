@@ -15,7 +15,7 @@ import {
 import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ProjectRequestDTO, ProjectResponseDTO, ProjectsService} from 'src/app/services/projects/projects.service';
-import {ClientResponseDTO } from "../../services/partners/client.service";
+import {ClientResponseDTO} from "../../services/partners/client.service";
 import {NotificationService} from "../../services/notification/notification.service";
 import {ClientLookupModalComponent} from "../../shared/lookup-modals/client-lookup-modal/client-lookup-modal.component";
 
@@ -68,7 +68,8 @@ export class ProjectsComponent implements OnInit {
   constructor(
     private projectService: ProjectsService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadProjects();
@@ -89,7 +90,7 @@ export class ProjectsComponent implements OnInit {
   loadProjects(): void {
     this.projectService.getAll().subscribe({
       next: data => this.projectList = data,
-      error: err => console.error('Failed to load projects', err)
+      error: err => console.error('Nem sikerült betölteni a projekteket', err)
     });
   }
 
@@ -170,7 +171,7 @@ export class ProjectsComponent implements OnInit {
         p.projectName.toLowerCase().includes(lower) ||
         p.projectNumber.toLowerCase().includes(lower) ||
         p.clientName.toLowerCase().includes(lower)
-    );
+      );
     }
 
     if (this.sortColumn !== null) {

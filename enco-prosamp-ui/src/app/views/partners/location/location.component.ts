@@ -1,15 +1,24 @@
 import {Component, OnInit} from '@angular/core';
-import {LocationService, LocationRequestDTO, LocationResponseDTO} from "../../../services/partners/location.service";
+import {LocationRequestDTO, LocationResponseDTO, LocationService} from "../../../services/partners/location.service";
 import {CompanyResponseDTO, CompanyService} from "../../../services/partners/company.service";
 import {NotificationService} from "../../../services/notification/notification.service";
 import {
-  ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent,
-  ColComponent, FormDirective, FormFeedbackComponent, FormLabelDirective,
-  ModalBodyComponent, ModalComponent, ModalFooterComponent, ModalHeaderComponent,
+  ButtonDirective,
+  CardBodyComponent,
+  CardComponent,
+  CardHeaderComponent,
+  ColComponent,
+  FormDirective,
+  FormFeedbackComponent,
+  FormLabelDirective,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
   RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-location',
@@ -51,7 +60,8 @@ export class LocationComponent implements OnInit {
     private locationService: LocationService,
     private companyService: CompanyService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadLocations();
@@ -61,14 +71,14 @@ export class LocationComponent implements OnInit {
   loadLocations(): void {
     this.locationService.getAll().subscribe({
       next: data => this.locations = data,
-      error: err => console.error('Failed to load locations', err)
+      error: err => console.error('Nem sikerült betölteni a helyszíneket', err)
     });
   }
 
   loadCompanies(): void {
     this.companyService.getAll().subscribe({
       next: data => this.companies = data,
-      error: err => console.error('Failed to load companies', err)
+      error: err => console.error('Nem sikerült betölteni a cégeket', err)
     });
   }
 

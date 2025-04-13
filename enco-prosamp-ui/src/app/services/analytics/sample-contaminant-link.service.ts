@@ -4,17 +4,11 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 
-/**
- * Request DTO for linking contaminant to sample
- */
 export interface SampleContaminantRequestDTO {
   sampleId: number;
   contaminantId: number;
 }
 
-/**
- * Response DTO after linking
- */
 export interface SampleContaminantCreatedDTO {
   id: number;
   sampleId: number;
@@ -27,9 +21,7 @@ export interface SampleContaminantCreatedDTO {
   contaminantDescription: string;
 }
 
-/**
- * Used when fetching sample with contaminant list (includes SampleContaminant ID)
- */
+
 export interface SampleContaminantListItem2DTO {
   id: number;
   contaminant: ContaminantListNameDTO;
@@ -40,9 +32,7 @@ export interface ContaminantListNameDTO {
   name: string;
 }
 
-/**
- * DTO returned by /{sampleId}/samplecontaminants
- */
+
 export interface SampleWithSampleContaminantsDTO {
   sample: {
     id: number;
@@ -51,9 +41,7 @@ export interface SampleWithSampleContaminantsDTO {
   sampleContaminants: SampleContaminantListItem2DTO[];
 }
 
-/**
- * DTO returned by /{sampleId}/samplecontaminants
- */
+
 export interface SampleWithContaminantsDTO {
   sample: {
     id: number;
@@ -94,16 +82,11 @@ export class SampleContaminantLinkService {
     return this.http.request<void>('delete', `${this.baseUrl}/unlink`, { body: request });
   }
 
-  /**
-   * Gets all sample contaminants (with SampleContaminant ID) by sample ID
-   */
   getContaminantsBySample(sampleId: number): Observable<SampleWithContaminantsDTO> {
     return this.http.get<SampleWithContaminantsDTO>(`${this.baseUrl}/${sampleId}/contaminants`);
   }
 
-  /**
-   * Gets all sample contaminants (with SampleContaminant ID) by sample ID
-   */
+
   getSampleContaminantsBySample(sampleId: number): Observable<SampleWithSampleContaminantsDTO> {
     return this.http.get<SampleWithSampleContaminantsDTO>(`${this.baseUrl}/${sampleId}/samplecontaminants`);
   }

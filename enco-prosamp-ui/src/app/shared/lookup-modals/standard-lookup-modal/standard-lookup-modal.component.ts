@@ -59,7 +59,7 @@ export class StandardLookupModalComponent implements OnInit {
         this.standards = data;
       },
       error: (err) => {
-        console.error('Error fetching standards:', err);
+        console.error('Hiba a szabványok lekérésekor:', err);
       }
     });
   }

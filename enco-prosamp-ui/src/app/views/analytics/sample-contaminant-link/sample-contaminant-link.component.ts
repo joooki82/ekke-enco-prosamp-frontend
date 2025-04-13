@@ -195,11 +195,11 @@ export class SampleContaminantLinkComponent implements OnInit {
     ])
       .then(() => {
         this.isLoading = false;
-        alert('Contaminant links updated successfully.');
+        alert('Kiválasztott szennyezőanyagok sikeresen frissítve.');
       })
       .catch(err => {
         this.isLoading = false;
-        this.error = 'Error saving assignments.';
+        this.error = 'Hiba a mentéskor.';
         console.error(err);
       });
   }

@@ -55,7 +55,8 @@ export class SamplingTypeComponent implements OnInit {
   constructor(
     private samplingTypeService: SamplingTypeService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.load();

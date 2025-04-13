@@ -45,7 +45,7 @@ export class CompanyLookupModalComponent implements OnInit {
           this.filter ? c.name.toLowerCase().includes(this.filter.toLowerCase()) : true
         );
       },
-      error: err => console.error('Company fetch error', err)
+      error: err => console.error('Hiba a cégek lekérdezésekor', err)
     });
   }
 

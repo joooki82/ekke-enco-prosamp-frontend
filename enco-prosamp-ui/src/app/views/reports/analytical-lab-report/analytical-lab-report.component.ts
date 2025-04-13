@@ -56,7 +56,8 @@ export class AnalyticalLabReportComponent implements OnInit {
     private reportService: AnalyticalLabReportService,
     private laboratoryService: LaboratoryService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadReports();
@@ -66,14 +67,14 @@ export class AnalyticalLabReportComponent implements OnInit {
   loadReports(): void {
     this.reportService.getAll().subscribe({
       next: data => this.reports = data,
-      error: err => console.error('Failed to load reports', err)
+      error: err => console.error('Nem sikerült betölteni a jegyzőkönyveket', err)
     });
   }
 
   loadLaboratories(): void {
     this.laboratoryService.getAll().subscribe({
       next: data => this.laboratories = data,
-      error: err => console.error('Failed to load labs', err)
+      error: err => console.error('Nem sikerült betölteni a laboratóriumokat', err)
     });
   }
 
@@ -118,7 +119,7 @@ export class AnalyticalLabReportComponent implements OnInit {
     action.subscribe({
       next: () => {
         this.notificationService.showSuccess(
-          this.selectedReportId ? 'Jelentés frissítve' : 'Jelentés létrehozva'
+          this.selectedReportId ? 'Jegyzőkönyv frissítve' : 'Jegyzőkönyv létrehozva'
         );
         this.closeModal();
         this.loadReports();

@@ -44,7 +44,7 @@ export class EquipmentLookupModalComponent implements OnInit {
       next: data => {
         this.equipmentList = data.filter(e => !this.filter || e.name.toLowerCase().includes(this.filter.toLowerCase()));
       },
-      error: err => console.error('Equipment fetch failed', err)
+      error: err => console.error('Hiba az eszközök lekérésekor', err)
     });
   }
 

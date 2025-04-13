@@ -32,7 +32,8 @@ export class LocationLookupModalComponent implements OnInit {
   locations: LocationResponseDTO[] = [];
   filter = '';
 
-  constructor(private locationService: LocationService) {}
+  constructor(private locationService: LocationService) {
+  }
 
   ngOnInit(): void {
     this.loadLocations();
@@ -43,7 +44,7 @@ export class LocationLookupModalComponent implements OnInit {
       next: data => {
         this.locations = data.filter(l => !this.filter || l.name.toLowerCase().includes(this.filter.toLowerCase()));
       },
-      error: err => console.error('Location fetch failed', err)
+      error: err => console.error('Hiba a helyszínek lekérésekor', err)
     });
   }
 

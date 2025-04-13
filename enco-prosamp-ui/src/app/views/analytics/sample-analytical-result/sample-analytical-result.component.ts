@@ -1,4 +1,3 @@
-
 import {
   Component,
   OnInit,
@@ -36,7 +35,9 @@ import {
 } from "../../../services/analytics/sample-contaminant-link.service";
 
 import {FormsModule} from "@angular/forms";
-import {SamplingRecordLookupModalComponent} from "../../../shared/lookup-modals/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
+import {
+  SamplingRecordLookupModalComponent
+} from "../../../shared/lookup-modals/sampling-record-lookup-modal/sampling-record-lookup-modal.component";
 import {AnalyticalResultModalComponent} from "./modal/analytical-result-modal.component";
 import {SpinnerComponent} from "@coreui/angular";
 import {NotificationService} from "../../../services/notification/notification.service";
@@ -81,7 +82,8 @@ export class SampleAnalyticalResultComponent implements OnInit {
     private labReportService: AnalyticalLabReportService,
     private notification: NotificationService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadMeasurementUnits();
@@ -108,13 +110,11 @@ export class SampleAnalyticalResultComponent implements OnInit {
       next: () => {
         this.isLoading = false;
         this.notification.showSuccess('Szennyezőanyag adatok betöltve.');
-        console.log("✅ Final sampleDataMap:", this.sampleDataMap);
         this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: () => {
         this.isLoading = false;
         this.notification.showError('Hiba történt az adatok betöltése közben.');
-        console.error("❌ Failed to load results:", err);
         this.cdr.detectChanges();
       }
     });
@@ -124,7 +124,7 @@ export class SampleAnalyticalResultComponent implements OnInit {
     const contaminantRequests = sampleIds.map(id =>
       this.contaminantService.getSampleContaminantsBySample(id).pipe(
         catchError(err => {
-          console.error(`Failed to load contaminants for sampleId=${id}`, err);
+          console.error(`Nem sikerült betölteni a szennyeződéseket a mintaazonosítóhoz=${id}`, err);
           return of(null);
         })
       )
@@ -136,7 +136,6 @@ export class SampleAnalyticalResultComponent implements OnInit {
 
         for (const dto of results) {
           if (!dto) {
-            console.warn("⚠️ Skipping null DTO from forkJoin result.");
             continue;
           }
 
@@ -144,7 +143,7 @@ export class SampleAnalyticalResultComponent implements OnInit {
           const contaminants = dto.sampleContaminants;
           const resultMap = new Map<number, SampleAnalyticalResultRequestDTO & { id?: number }>();
 
-          console.log(`🔍 Loading for sampleId=${sampleId}, contaminants=`, contaminants);
+          console.log(`Betöltés a mintaazonosítóhoz=${sampleId}, szennyező anyagokat=`, contaminants);
 
           const resultFetches: Observable<any>[] = [];
 
@@ -154,7 +153,7 @@ export class SampleAnalyticalResultComponent implements OnInit {
             const fetch$ = this.resultService.getBySampleContaminantId(sampleContaminantId).pipe(
               catchError(err => {
                 if (err.status !== 404) {
-                  console.error(`❌ Error fetching analytical result for SCID=${sampleContaminantId}`, err);
+                  console.error(`Hiba az minta-szennyezőanyag eredményének lekérésekor=${sampleContaminantId}`, err);
                 }
                 return of(null);
               }),
@@ -199,7 +198,7 @@ export class SampleAnalyticalResultComponent implements OnInit {
                 contaminants,
                 results: new Map(resultMap)
               });
-              console.log(`✅ Results loaded for sampleId=${sampleId}`, {
+              console.log(`A mintaazonosító eredményei betöltve=${sampleId}`, {
                 contaminants,
                 resultMap
               });
@@ -217,8 +216,6 @@ export class SampleAnalyticalResultComponent implements OnInit {
 
   openSampleModal(sample: SampleListItemDTO): void {
     const data = this.sampleDataMap.get(sample.id);
-    console.log("🧪 Trying to open modal for:", sample.id);
-    console.log("🧪 Data from sampleDataMap:", data);
 
     if (this.isLoading) {
       this.notification.showWarning("Kérem, várjon az adatok betöltéséig.");
@@ -248,7 +245,7 @@ export class SampleAnalyticalResultComponent implements OnInit {
     const saveOps = [];
 
     for (const result of updated.values()) {
-      const dto = { ...result };
+      const dto = {...result};
 
       if (dto.id) {
         saveOps.push(this.resultService.update(dto.id, dto));

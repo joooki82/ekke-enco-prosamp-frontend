@@ -39,7 +39,6 @@ export class AdjustmentMethodComponent implements OnInit {
   filterText: string = '';
 
 
-
   constructor(private adjustmentMethodService: AdjustmentMethodService,
               private notificationService: NotificationService) {
   }
@@ -52,7 +51,7 @@ export class AdjustmentMethodComponent implements OnInit {
   loadAdjustmentMethods(): void {
     this.adjustmentMethodService.getAll().subscribe({
       next: (data: AdjustmentMethodResponseDTO[]) => (this.adjustmentMethods = data),
-      error: (err: any) => console.error('Failed to load adjustment methods', err)
+      error: (err: any) => console.error('Nem sikerült betölteni a beállítási módszereket', err)
     });
   }
 
@@ -67,37 +66,37 @@ export class AdjustmentMethodComponent implements OnInit {
       this.adjustmentMethodService.create(this.newAdjustmentMethod).subscribe({
         next: (response: any) => {
           console.log('Created:', response);
-          this.notificationService.showSuccess('Adjustment method created');
+          this.notificationService.showSuccess('Beállítási módszer létrehozva');
           this.resetForm();
           this.loadAdjustmentMethods();
         },
         error: (err: any) => {
-          console.error('Failed to create adjustment method', err)
-          this.notificationService.showError('Failed to create adjustment method');
+          console.error('Nem sikerült létrehozni a beállítási módszert', err)
+          this.notificationService.showError('Nem sikerült létrehozni a beállítási módszert');
         }
       });
     } else {
       this.adjustmentMethodService.update(this.selectedMethodId, this.newAdjustmentMethod).subscribe({
         next: (response: AdjustmentMethodResponseDTO) => {
-          console.log('Updated:', response);
+          console.log('Frissítve:', response);
           this.resetForm();
           this.loadAdjustmentMethods();
         },
-        error: (err: any) => console.error('Failed to update adjustment method', err)
+        error: (err: any) => console.error('Nem sikerült frissíteni a beállítási módszert', err)
       });
     }
   }
 
   editMethod(method: AdjustmentMethodResponseDTO): void {
     this.selectedMethodId = method.id;
-    this.newAdjustmentMethod = { code: method.code, description: method.description };
+    this.newAdjustmentMethod = {code: method.code, description: method.description};
     this.isModalOpen = true;
   }
 
 
   /** Reset form and switch back to create mode */
   resetForm(): void {
-    this.newAdjustmentMethod = { code: '', description: '' };
+    this.newAdjustmentMethod = {code: '', description: ''};
     this.selectedMethodId = null;
     this.formValidated = false;
     this.isModalOpen = false;

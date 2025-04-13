@@ -54,11 +54,11 @@ export class ClientComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
 
 
-
   constructor(
     private clientService: ClientService,
     private notificationService: NotificationService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadClients();
@@ -81,14 +81,14 @@ export class ClientComponent implements OnInit {
   loadClients(): void {
     this.clientService.getAll().subscribe({
       next: data => this.clients = data,
-      error: err => console.error('Failed to load clients', err)
+      error: err => console.error('Nem sikerült betölteni az ügyfeleket', err)
     });
   }
 
   openModal(client?: ClientResponseDTO): void {
     if (client) {
       this.selectedClientId = client.id;
-      this.newClient = { ...client };
+      this.newClient = {...client};
     } else {
       this.selectedClientId = null;
       this.newClient = this.createEmptyClient();
