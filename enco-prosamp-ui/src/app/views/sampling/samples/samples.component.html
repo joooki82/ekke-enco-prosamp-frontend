@@ -1,6 +1,7 @@
 <c-row class="mb-3">
   <c-col md="6">
-    <input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Keresés mintanév, státusz..." (ngModelChange)="filterSamples()" />
+    <input type="text" class="form-control" [(ngModel)]="searchText" placeholder="Keresés mintanév, státusz..."
+           (ngModelChange)="filterSamples()"/>
   </c-col>
   <c-col md="6" class="text-end">
     <button cButton color="primary" (click)="openModal()">+ Új minta</button>
@@ -15,80 +16,136 @@
   </c-modal-header>
 
   <c-modal-body>
-    <form class="row g-3">
+    <form class="row g-3" #sampleForm="ngForm" novalidate>
 
       <div class="col-md-6">
         <label class="form-label">Minta azonosító</label>
-        <input class="form-control" [(ngModel)]="newSample.sampleIdentifier" name="sampleIdentifier" required />
+        <input class="form-control"
+               name="sampleIdentifier"
+               [(ngModel)]="newSample.sampleIdentifier"
+               #sampleIdentifier="ngModel"
+               required
+               maxlength="255"
+               [ngClass]="{'is-invalid': formValidated && sampleIdentifier.invalid}"/>
+        <div class="invalid-feedback" *ngIf="formValidated && sampleIdentifier.errors?.['required']">
+          Kötelező mező.
+        </div>
       </div>
 
       <div class="col-md-6">
         <div class="col-md-12">
           <label class="form-label">Mintavételi jegyzőkönyv</label>
           <div class="input-group">
-            <input class="form-control" [value]="selectedSamplingRecord?.id || newSample.samplingRecordId" readonly />
-            <button class="btn btn-outline-secondary" type="button" (click)="isRecordLookupOpen = true">Kiválasztás</button>
+            <input class="form-control" [value]="selectedSamplingRecord?.id || newSample.samplingRecordId" readonly/>
+            <button class="btn btn-outline-secondary" type="button" (click)="isRecordLookupOpen = true">Kiválasztás
+            </button>
           </div>
         </div>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Helyszín</label>
-        <input class="form-control" [(ngModel)]="newSample.location" name="location" />
+        <input class="form-control" [(ngModel)]="newSample.location" name="location"/>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Alkalmazott neve</label>
-        <input class="form-control" [(ngModel)]="newSample.employeeName" name="employeeName" />
+        <input class="form-control" [(ngModel)]="newSample.employeeName" name="employeeName"/>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Minta típusa</label>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="sampleType" id="typeAK" [(ngModel)]="newSample.sampleType" value="AK" required>
+          <input class="form-check-input" type="radio" name="sampleType" id="typeAK" [(ngModel)]="newSample.sampleType"
+                 value="AK" required>
           <label class="form-check-label" for="typeAK">Átlagkoncentráció (AK)</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="sampleType" id="typeCK" [(ngModel)]="newSample.sampleType" value="CK">
+          <input class="form-check-input" type="radio" name="sampleType" id="typeCK" [(ngModel)]="newSample.sampleType"
+                 value="CK">
           <label class="form-check-label" for="typeCK">Csúcskoncentráció (CK)</label>
         </div>
       </div>
 
       <div class="col-md-4">
         <label class="form-label">Hőmérséklet (°C)</label>
-        <input class="form-control" type="number" [(ngModel)]="newSample.temperature" name="temperature" />
+        <input class="form-control"
+               type="number"
+               name="temperature"
+               [(ngModel)]="newSample.temperature"
+               min="-100"
+               max="100"
+               [ngClass]="{'is-invalid': formValidated && (temperature?.invalid)}"
+               #temperature="ngModel"/>
+        <div class="invalid-feedback" *ngIf="formValidated && temperature.errors">
+          Érvénytelen hőmérséklet (-100 és 100 között).
+        </div>
       </div>
 
       <div class="col-md-4">
         <label class="form-label">Páratartalom (%)</label>
-        <input class="form-control" type="number" [(ngModel)]="newSample.humidity" name="humidity" />
+        <input class="form-control"
+               type="number"
+               name="humidity"
+               [(ngModel)]="newSample.humidity"
+               min="0"
+               max="100"
+               [ngClass]="{'is-invalid': formValidated && humidity?.invalid}"
+               #humidity="ngModel"/>
+        <div class="invalid-feedback" *ngIf="formValidated && humidity.errors">
+          Páratartalomnak 0 és 100 között kell lennie.
+        </div>
       </div>
 
       <div class="col-md-4">
         <label class="form-label">Légnyomás (hPa)</label>
-        <input class="form-control" type="number" [(ngModel)]="newSample.pressure" name="pressure" />
+        <input class="form-control"
+               type="number"
+               name="pressure"
+               [(ngModel)]="newSample.pressure"
+               min="800"
+               max="1100"
+               [ngClass]="{'is-invalid': formValidated && pressure?.invalid}"
+               #pressure="ngModel"/>
+        <div class="invalid-feedback" *ngIf="formValidated && pressure.errors">
+          A nyomás 800 és 1100 hPa között kell legyen.
+        </div>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Térfogatáram (m³/h)</label>
-        <input class="form-control" type="number" [(ngModel)]="newSample.sampleVolumeFlowRate" name="sampleVolumeFlowRate" />
+        <input class="form-control"
+               type="number"
+               name="sampleVolumeFlowRate"
+               [(ngModel)]="newSample.sampleVolumeFlowRate"
+               min="0"
+               [ngClass]="{'is-invalid': formValidated && sampleVolumeFlowRate?.invalid}"
+               #sampleVolumeFlowRate="ngModel"/>
+        <div class="invalid-feedback" *ngIf="formValidated && sampleVolumeFlowRate.errors">
+          Csak pozitív szám lehet.
+        </div>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Térfogatáram mértékegység ID</label>
-        <select class="form-select" [(ngModel)]="newSample.sampleVolumeFlowRateUnitId" name="sampleVolumeFlowRateUnitId" required>
+        <select class="form-select"
+                [(ngModel)]="newSample.sampleVolumeFlowRateUnitId"
+                name="sampleVolumeFlowRateUnitId"
+                #sampleVolumeFlowRateUnitId="ngModel"
+                required
+                [ngClass]="{'is-invalid': formValidated && sampleVolumeFlowRateUnitId.invalid}">
           <option *ngFor="let unit of measurementUnits" [value]="unit.id">{{ unit.unitCode }}</option>
         </select>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Kezdési idő</label>
-        <input class="form-control" type="datetime-local" [(ngModel)]="newSample.startTime" name="startTime" />
+        <input class="form-control" type="datetime-local" [(ngModel)]="newSample.startTime" name="startTime"/>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Befejezési idő</label>
-        <input class="form-control" type="datetime-local" [(ngModel)]="newSample.endTime" name="endTime" />
+        <input class="form-control" type="datetime-local" [(ngModel)]="newSample.endTime" name="endTime"/>
       </div>
 
       <div class="col-md-6">
@@ -112,6 +169,10 @@
         <textarea class="form-control" rows="2" [(ngModel)]="newSample.remarks" name="remarks"></textarea>
       </div>
 
+
+      <div class="col-12 text-danger" *ngIf="formValidated && isDateRangeInvalid()">
+        A befejezési időnek későbbinek kell lennie, mint a kezdési idő.
+      </div>
     </form>
   </c-modal-body>
 

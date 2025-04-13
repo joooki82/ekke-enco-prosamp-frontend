@@ -6,7 +6,7 @@ import {
   SampleResponseDTO,
   SamplesService, SamplingRecordDatM200ListItemDTO, SamplingTypeListItemDTO
 } from "../../../services/sampling/samples.service";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {
   ButtonDirective,
   CardBodyComponent,
@@ -46,7 +46,8 @@ import {NotificationService} from "../../../services/notification/notification.s
     SamplingRecordLookupModalComponent,
     OffcanvasBodyComponent,
     OffcanvasHeaderComponent,
-    OffcanvasComponent
+    OffcanvasComponent,
+    NgClass
   ],
   standalone: true,
   templateUrl: './samples.component.html',
@@ -87,6 +88,22 @@ export class SamplesComponent {
     this.measurementUnitService.getAll().subscribe(data => this.measurementUnits = data);
     this.adjustmentMethodService.getAll().subscribe(data => this.adjustmentMethods = data);
     this.samplingTypeService.getAll().subscribe(data => this.samplingTypes = data);
+  }
+
+  isFormValid(): boolean {
+    const s = this.newSample;
+    return !!(
+      s.sampleIdentifier?.trim() &&
+      s.samplingRecordId &&
+      s.sampleVolumeFlowRateUnitId &&
+      s.sampleType &&
+      s.status &&
+      (!s.humidity || (s.humidity >= 0 && s.humidity <= 100)) &&
+      (!s.temperature || (s.temperature >= -100 && s.temperature <= 100)) &&
+      (!s.pressure || (s.pressure >= 800 && s.pressure <= 1100)) &&
+      (!s.sampleVolumeFlowRate || s.sampleVolumeFlowRate >= 0) &&
+      (!s.startTime || !s.endTime || new Date(s.startTime) < new Date(s.endTime))
+    );
   }
 
 
@@ -160,9 +177,12 @@ export class SamplesComponent {
   onSubmit(): void {
     this.formValidated = true;
 
-    if (!this.newSample.sampleIdentifier || !this.newSample.samplingRecordId || !this.newSample.status) {
+    if (!this.isFormValid()) {
+      this.notificationService.showError('Kérjük, javítsa a hibákat az űrlapon.');
       return;
     }
+
+
 
     const isNew = this.selectedSampleId == null;
     const request = isNew
@@ -197,6 +217,13 @@ export class SamplesComponent {
     this.selectedSampleForDetails = null;
     this.isDrawerOpen = false;
   }
+
+  isDateRangeInvalid(): boolean {
+    const { startTime, endTime } = this.newSample;
+    if (!startTime || !endTime) return false;
+    return new Date(startTime) >= new Date(endTime);
+  }
+
 
 
 }

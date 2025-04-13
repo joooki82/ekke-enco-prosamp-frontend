@@ -47,7 +47,6 @@ export class AdjustmentMethodComponent implements OnInit {
     this.loadAdjustmentMethods();
   }
 
-  /** Fetch all adjustment methods */
   loadAdjustmentMethods(): void {
     this.adjustmentMethodService.getAll().subscribe({
       next: (data: AdjustmentMethodResponseDTO[]) => (this.adjustmentMethods = data),
@@ -55,7 +54,6 @@ export class AdjustmentMethodComponent implements OnInit {
     });
   }
 
-  /** Create or update an adjustment method */
   onSubmit(): void {
     if (!this.newAdjustmentMethod.code) {
       this.formValidated = true;
@@ -94,7 +92,6 @@ export class AdjustmentMethodComponent implements OnInit {
   }
 
 
-  /** Reset form and switch back to create mode */
   resetForm(): void {
     this.newAdjustmentMethod = {code: '', description: ''};
     this.selectedMethodId = null;

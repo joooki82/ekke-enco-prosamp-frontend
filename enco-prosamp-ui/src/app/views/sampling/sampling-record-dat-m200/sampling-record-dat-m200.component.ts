@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
   SamplingRecordDatM200Service,
   SamplingRecordRequestDTO,
@@ -31,6 +31,7 @@ import {
   EquipmentLookupModalComponent
 } from "../../../shared/lookup-modals/equipment-lookup-modal/equipment-lookup-modal.component";
 import {FormsModule} from "@angular/forms";
+import Keycloak, {KeycloakProfile} from "keycloak-js";
 
 @Component({
   selector: 'app-sampling-record-dat-m200',
@@ -67,6 +68,11 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './sampling-record-dat-m200.component.scss'
 })
 export class SamplingRecordDatM200Component implements OnInit {
+  private readonly keycloak = inject(Keycloak);
+  public userProfile: KeycloakProfile | null = null;
+  public userId: string | undefined = undefined;
+
+
   recordList: SamplingRecordResponseDTO[] = [];
   newRecord: SamplingRecordRequestDTO = this.createEmptyRecord();
   selectedRecordId: number | null = null;
@@ -100,12 +106,19 @@ export class SamplingRecordDatM200Component implements OnInit {
 
   ngOnInit(): void {
     this.loadRecords();
+    this.keycloak.loadUserProfile().then(profile => {
+      this.userProfile = profile;
+      this.userId = this.userProfile?.id;
+      console.log(this.userId);
+    }).catch(error => {
+      this.notificationService.showError(error);
+    });
   }
 
   createEmptyRecord(): SamplingRecordRequestDTO {
     return {
       samplingDate: '',
-      conductedById: '11111111-1111-1111-1111-111111111111',
+      conductedById: this.userId || '',
       companyId: 0,
       siteLocationId: 0,
       exposureTime: 0,
