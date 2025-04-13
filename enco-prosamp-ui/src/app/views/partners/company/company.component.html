@@ -1,4 +1,3 @@
-<!-- Search & Add -->
 <c-row class="mb-3">
   <c-col md="6">
     <input class="form-control" placeholder="Keresés név, kapcsolattartó vagy email alapján..."
@@ -9,7 +8,6 @@
   </c-col>
 </c-row>
 
-<!-- Table -->
 <c-card>
   <c-card-header><strong>Üzemek Listája</strong></c-card-header>
   <c-card-body>
@@ -140,7 +138,6 @@
   </c-card-body>
 </c-card>
 
-<!-- Modal -->
 <c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
   <c-modal-header>
     <h5 class="modal-title">{{ selectedCompanyId ? 'Üzem Módosítása' : 'Új Üzem Hozzáadása' }}</h5>
@@ -191,4 +188,3 @@
     <button cButton color="secondary" (click)="closeModal()">Mégse</button>
   </c-modal-footer>
 </c-modal>
-

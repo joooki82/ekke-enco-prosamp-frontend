@@ -1,4 +1,3 @@
-<!-- Filter + Add -->
 <c-row class="mb-3">
   <c-col md="6">
     <input class="form-control" placeholder="Keresés kód vagy leírás alapján..." [(ngModel)]="filterText" />
@@ -8,7 +7,6 @@
   </c-col>
 </c-row>
 
-<!-- Table -->
 <c-card>
   <c-card-header><strong>Mintavételi Típusok</strong></c-card-header>
   <c-card-body>
@@ -56,7 +54,6 @@
   </c-card-body>
 </c-card>
 
-<!-- Modal -->
 <c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
   <c-modal-header>
     <h5 class="modal-title">{{ selectedId ? 'Típus módosítása' : 'Új Típus' }}</h5>

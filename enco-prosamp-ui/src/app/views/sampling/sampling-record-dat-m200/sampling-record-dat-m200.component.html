@@ -1,4 +1,3 @@
-<!-- Toolbar -->
 <c-row class="mb-3">
   <c-col md="6">
     <input
@@ -14,7 +13,6 @@
 </c-row>
 
 
-<!-- Record List Table -->
 <c-card>
   <c-card-header><strong>Mintavételi jegyzőkönyvek (DAT-M200)</strong></c-card-header>
   <c-card-body>
@@ -91,7 +89,6 @@
   </c-card-body>
 </c-card>
 
-<!-- Details Offcanvas -->
 <c-offcanvas
   placement="end"
   [visible]="isDrawerOpen"
@@ -108,7 +105,6 @@
   <c-offcanvas-body *ngIf="selectedRecordForDetails" style="overflow-y: auto; max-height: calc(100vh - 4rem);">
     <c-accordion class="shadow-sm rounded-2">
 
-      <!-- Alapadatok -->
       <c-accordion-item [visible]="true">
         <ng-template cTemplateId="accordionHeader">
           Alapadatok
@@ -127,7 +123,6 @@
         </ng-template>
       </c-accordion-item>
 
-      <!-- Környezeti körülmények -->
       <c-accordion-item>
         <ng-template cTemplateId="accordionHeader">
           Környezeti körülmények
@@ -142,7 +137,6 @@
         </ng-template>
       </c-accordion-item>
 
-      <!-- Működési jellemzők -->
       <c-accordion-item>
         <ng-template cTemplateId="accordionHeader">
           Működési jellemzők
@@ -158,7 +152,6 @@
         </ng-template>
       </c-accordion-item>
 
-      <!-- Minták -->
       <c-accordion-item>
         <ng-template cTemplateId="accordionHeader">
           Minták
@@ -173,7 +166,6 @@
         </ng-template>
       </c-accordion-item>
 
-      <!-- Eszközök -->
       <c-accordion-item>
         <ng-template cTemplateId="accordionHeader">
           Mintavételi eszközök
@@ -187,7 +179,6 @@
         </ng-template>
       </c-accordion-item>
 
-      <!-- Egyéb -->
       <c-accordion-item>
         <ng-template cTemplateId="accordionHeader">
           Egyéb információk
@@ -204,7 +195,6 @@
   </c-offcanvas-body>
 </c-offcanvas>
 
-<!-- Modal for Creating/Editing Sampling Record -->
 <c-modal [visible]="isModalOpen" (close)="closeModal()" size="xl" backdrop="static">
   <c-modal-header>
     <h5>{{ selectedRecordId ? 'Mintavételi jegyzőkönyv szerkesztése' : 'Új mintavételi jegyzőkönyv létrehozása' }}</h5>
@@ -212,7 +202,6 @@
   <c-modal-body>
     <form class="row g-3">
 
-      <!-- Required fields -->
       <div class="col-md-6">
         <label class="form-label">Dátum</label>
         <input type="datetime-local" class="form-control" [(ngModel)]="newRecord.samplingDate" name="samplingDate"
@@ -224,7 +213,6 @@
         <input class="form-control" [(ngModel)]="newRecord.status" name="status"/>
       </div>
 
-      <!-- Lookups -->
       <div class="col-md-6">
         <label class="form-label">Projekt</label>
         <div class="input-group">
@@ -257,7 +245,6 @@
         </div>
       </div>
 
-      <!-- Basic Info -->
       <div class="col-md-6"><label class="form-label">Szennyező technológia</label><input class="form-control"
                                                                                           [(ngModel)]="newRecord.technology"
                                                                                           name="technology"/></div>
@@ -265,7 +252,6 @@
                                                                                   [(ngModel)]="newRecord.testedPlant"
                                                                                   name="testedPlant"/></div>
 
-      <!-- Shift and Workforce -->
       <div class="col-md-6"><label class="form-label">Műszak száma / ideje</label><input type="number"
                                                                                          class="form-control"
                                                                                          [(ngModel)]="newRecord.shiftCountAndDuration"
@@ -277,7 +263,6 @@
                                                                                            name="workersPerShift"/>
       </div>
 
-      <!-- Environment -->
       <div class="col-md-6"><label class="form-label">Expozíciót idő idő (perc)</label><input type="number"
                                                                                               class="form-control"
                                                                                               [(ngModel)]="newRecord.exposureTime"
@@ -300,7 +285,6 @@
                                                                                    [(ngModel)]="newRecord.pressure2"
                                                                                    name="pressure2"/></div>
 
-      <!-- Operational -->
       <div class="col-md-6"><label class="form-label">Légáramlási viszonyok</label><input class="form-control"
                                                                                           [(ngModel)]="newRecord.airFlowConditions"
                                                                                           name="airFlowConditions"/>
@@ -315,7 +299,6 @@
                                                                                    [(ngModel)]="newRecord.localAirExtraction"
                                                                                    name="localAirExtraction"/></div>
 
-      <!-- Extras -->
       <div class="col-md-12"><label class="form-label">Egyéb körülmények</label><textarea class="form-control"
                                                                                           [(ngModel)]="newRecord.otherEnvironmentalConditions"
                                                                                           name="otherEnvironmentalConditions"></textarea>
@@ -337,7 +320,6 @@
 </c-modal>
 
 
-<!-- Lookup Modals -->
 <app-company-lookup-modal [visible]="isCompanyModalOpen" (close)="isCompanyModalOpen = false"
                           (companySelected)="onCompanySelected($event)"></app-company-lookup-modal>
 <app-location-lookup-modal [visible]="isLocationModalOpen" (close)="isLocationModalOpen = false"

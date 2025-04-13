@@ -1,5 +1,4 @@
 <c-row class="mb-3">
-  <!-- Filter Dropdown -->
   <c-col md="6">
     <input id="searchInput"
            type="text"
@@ -7,17 +6,15 @@
            placeholder="Keresés név vagy leírás alapján..."
            [(ngModel)]="searchText" />
   </c-col>
-  <!-- Add New Button -->
   <c-col class="text-end">
     <button cButton color="primary" (click)="openModal()" *kaHasRoles="['head_of_laboratory']">+Új Szennyezőanyag</button>
   </c-col>
 </c-row>
 
-<!-- Contaminant Table -->
 <c-card>
   <c-card-header><strong>Szennyezőanyagok listája</strong></c-card-header>
   <c-card-body>
-    <div class="table-responsive"> <!-- ✅ Add this wrapper -->
+    <div class="table-responsive">
 
       <table class="table table-bordered table-hover align-middle mb-0">
         <thead class="table-light">
@@ -54,7 +51,6 @@
   </c-card-body>
 </c-card>
 
-<!-- Modal Form for Create/Edit -->
 <c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
   <c-modal-header>
     <h5 class="modal-title">

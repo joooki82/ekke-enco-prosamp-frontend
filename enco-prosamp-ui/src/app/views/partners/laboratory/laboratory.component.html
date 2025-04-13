@@ -1,4 +1,3 @@
-<!-- location.component.html -->
 <c-row class="mb-3">
   <c-col md="6">
     <input class="form-control" placeholder="Keresés labor név vagy email alapján..." [(ngModel)]="filterText" />
@@ -98,7 +97,6 @@
   </c-card-body>
 </c-card>
 
-<!-- Modal -->
 <c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
   <c-modal-header>
     <h5 class="modal-title">{{ selectedLabId ? 'Labor Módosítása' : 'Új Labor Hozzáadása' }}</h5>

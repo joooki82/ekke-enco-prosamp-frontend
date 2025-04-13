@@ -1,4 +1,3 @@
-<!-- Sampling record modal -->
 <app-sampling-record-lookup-modal
   [visible]="showLookupModal"
   (close)="handleModalClose()"
@@ -9,12 +8,6 @@
   <h4>Analitikai vizsgálati eredmények rögzítése</h4>
 
 
-  <!-- Sampling Record Selector (with Modal) -->
-  <!--  <div class="text-end my-3">-->
-  <!--    <button cButton color="primary" (click)="openRecordSelector()">Mintavételi jegyzőkönyv kiválasztása</button>-->
-  <!--  </div>-->
-
-  <!-- Sampling Record Selector (with Modal) -->
   <div class="form-group">
     <label class="form-label">Mintavételi jegyzőkönyv kiválasztása</label>
     <div class="d-flex align-items-center">
@@ -27,16 +20,10 @@
     </div>
   </div>
 
-  <!-- Spinner while loading -->
   <div *ngIf="isLoading" class="d-flex justify-content-center my-4">
     <c-spinner color="primary" class="my-4 d-flex justify-content-center"></c-spinner>
   </div>
 
-  <!-- Display selected record -->
-  <!--  <div *ngIf="selectedRecord && !isLoading">-->
-  <!--    <h5 class="text-primary mb-4">Projekt: {{ selectedRecord.project.projectName }}</h5>-->
-
-  <!-- Sample list -->
   <div class="row mt-3">
     <div class="col-md-6 col-lg-4 mb-3" *ngFor="let sample of samples">
       <div class="card shadow-sm h-100" (click)="openSampleModal(sample)" style="cursor: pointer;">
@@ -48,10 +35,8 @@
       </div>
     </div>
   </div>
-  <!--  </div>-->
 </div>
 
-<!-- Modal for sample -->
 <app-analytical-result-modal
   *ngIf="selectedSample"
   [sample]="selectedSample"

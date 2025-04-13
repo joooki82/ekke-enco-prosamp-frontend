@@ -1,7 +1,6 @@
 <div class="container mt-4">
   <h4>Vizsgálandó szennyezők kiválasztása a mintákból</h4>
 
-  <!-- Sampling Record Selector (with Modal) -->
   <div class="form-group">
     <label class="form-label">Mintavételi jegyzőkönyv kiválasztása</label>
     <div class="d-flex align-items-center">
@@ -14,21 +13,18 @@
     </div>
   </div>
 
-  <!-- Lookup Modal -->
   <app-sampling-record-lookup-modal
     [visible]="showModal"
     (selected)="onSamplingRecordSelected($event)"
     (close)="showModal = false">
   </app-sampling-record-lookup-modal>
 
-  <!-- Sample Cards -->
   <div *ngIf="samples.length > 0">
     <div *ngFor="let sample of samples" class="card my-4 border border-primary">
       <div class="card-header fw-bold bg-light">
         Minta jele: {{ sample.sampleIdentifier }} (Location: {{ sample.location }})
       </div>
       <div class="card-body">
-        <!-- Group Buttons -->
         <label class="fw-semibold">Szennyezőanyag csoportok:</label>
         <div class="mb-2">
           <button *ngFor="let group of contaminantGroups"
@@ -45,12 +41,10 @@
           </button>
         </div>
 
-        <!-- Loading placeholder -->
         <div class="text-muted" *ngIf="!readySampleIds.has(sample.id)">
           <em>Loading contaminants...</em>
         </div>
 
-        <!-- Contaminant Checkboxes -->
         <div class="row mt-3" *ngIf="readySampleIds.has(sample.id)">
           <div class="col-md-4" *ngFor="let contaminant of contaminants">
             <div class="form-check">
@@ -70,12 +64,10 @@
       </div>
     </div>
 
-    <!-- Save Button -->
     <button class="btn btn-success mt-3" (click)="saveAssignments()" [disabled]="isLoading">
       Szennyezők mentése
     </button>
 
-    <!-- Error Message -->
     <div *ngIf="error" class="alert alert-danger mt-3">
       {{ error }}
     </div>

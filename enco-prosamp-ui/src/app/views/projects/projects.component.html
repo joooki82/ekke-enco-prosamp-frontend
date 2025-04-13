@@ -1,4 +1,3 @@
-<!-- Search & Add -->
 <c-row class="mb-3">
   <c-col md="6">
     <input class="form-control" placeholder="Keresés projekt név, szám vagy ügyfél  alapján..." [(ngModel)]="filterText" />
@@ -8,7 +7,6 @@
   </c-col>
 </c-row>
 
-<!-- Project List Table -->
 <c-card>
   <c-card-header><strong>Labor Projektek</strong></c-card-header>
   <c-card-body>
@@ -70,7 +68,6 @@
   </c-card-body>
 </c-card>
 
-<!-- Project Create/Edit Modal -->
 <c-modal [visible]="isModalOpen" (close)="closeModal()" backdrop="static" keyboard="false">
   <c-modal-header>
     <h5 class="modal-title">{{ selectedProjectId ? 'Projekt Módosítása' : 'Új Projekt' }}</h5>
@@ -118,7 +115,6 @@
   </c-modal-footer>
 </c-modal>
 
-<!-- Project Details Drawer -->
 <c-offcanvas placement="end" [visible]="isDrawerOpen" (visibleChange)="isDrawerOpen = $event" [scroll]="true" [backdrop]="true">
   <c-offcanvas-header>
     <h5 class="offcanvas-title">Projekt Részletei</h5>
@@ -140,10 +136,8 @@
   </c-offcanvas-body>
 </c-offcanvas>
 
-<!-- Client Lookup Modal -->
 <app-client-lookup-modal
   [visible]="isClientSelectorModalOpen"
   (close)="isClientSelectorModalOpen = false"
   (clientSelected)="onClientSelected($event)"
 ></app-client-lookup-modal>
-
