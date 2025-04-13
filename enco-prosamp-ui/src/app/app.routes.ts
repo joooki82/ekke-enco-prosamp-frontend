@@ -1,6 +1,5 @@
 import {Routes} from "@angular/router";
 import {DefaultLayoutComponent} from "./layout";
-import {canActivateAuthRole} from "./guards/auth-role.guard";
 
 
 export const routes: Routes = [

@@ -9,7 +9,7 @@ import {
   ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent,
   ColComponent,
   FormDirective,
-  FormFeedbackComponent, ModalBodyComponent, ModalComponent,
+  FormFeedbackComponent, FormLabelDirective, ModalBodyComponent, ModalComponent,
   ModalFooterComponent, ModalHeaderComponent, RowComponent
 } from "@coreui/angular";
 import {FormsModule} from "@angular/forms";
@@ -18,25 +18,26 @@ import {HasRolesDirective} from "keycloak-angular";
 
 @Component({
   selector: 'app-sampling-type',
-    imports: [
-        ModalFooterComponent,
-        ButtonDirective,
-        FormFeedbackComponent,
-        ColComponent,
-        FormsModule,
-        FormDirective,
-        ModalBodyComponent,
-        ModalHeaderComponent,
-        ModalComponent,
-        NgIf,
-        NgForOf,
-        NgClass,
-        CardBodyComponent,
-        CardHeaderComponent,
-        CardComponent,
-        RowComponent,
-        HasRolesDirective
-    ],
+  imports: [
+    ModalFooterComponent,
+    ButtonDirective,
+    FormFeedbackComponent,
+    ColComponent,
+    FormsModule,
+    FormDirective,
+    ModalBodyComponent,
+    ModalHeaderComponent,
+    ModalComponent,
+    NgIf,
+    NgForOf,
+    NgClass,
+    CardBodyComponent,
+    CardHeaderComponent,
+    CardComponent,
+    RowComponent,
+    HasRolesDirective,
+    FormLabelDirective
+  ],
   standalone: true,
   templateUrl: './sampling-type.component.html',
   styleUrl: './sampling-type.component.scss'
