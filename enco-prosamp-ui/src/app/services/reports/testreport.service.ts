@@ -28,7 +28,6 @@ export interface TestReportRequestDTO {
   reportStatus: string;
 }
 
-// Response DTO
 export interface TestReportResponseDTO {
   id: number;
   reportNumber: string;

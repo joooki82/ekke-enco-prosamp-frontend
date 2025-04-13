@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DatePipe, NgForOf, NgIf} from '@angular/common'; // ✅ Import necessary Angular directives
+import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {
   AdjustmentMethodService,
   AdjustmentMethodResponseDTO,
@@ -26,12 +26,12 @@ import {HasRolesDirective} from "keycloak-angular";
   templateUrl: './adjustment-method.component.html',
   styleUrls: ['./adjustment-method.component.scss'],
   standalone: true,
-  imports: [NgForOf, NgIf, RowComponent, ColComponent, CardComponent, CardHeaderComponent, CardBodyComponent, FormsModule, ButtonDirective, DatePipe, ModalFooterComponent, ModalComponent, ModalHeaderComponent, ModalBodyComponent, HasRolesDirective] // ✅ Ensure Angular directives are imported
+  imports: [NgForOf, NgIf, RowComponent, ColComponent, CardComponent, CardHeaderComponent, CardBodyComponent, FormsModule, ButtonDirective, DatePipe, ModalFooterComponent, ModalComponent, ModalHeaderComponent, ModalBodyComponent, HasRolesDirective]
 })
 export class AdjustmentMethodComponent implements OnInit {
   adjustmentMethods: AdjustmentMethodResponseDTO[] = [];
   newAdjustmentMethod: AdjustmentMethodRequestDTO = {code: '', description: ''};
-  selectedMethodId: number | null = null; // ✅ Tracks if we are editing an existing method
+  selectedMethodId: number | null = null;
   formValidated = false;
 
   isModalOpen: boolean = false;
@@ -64,7 +64,6 @@ export class AdjustmentMethodComponent implements OnInit {
     }
 
     if (this.selectedMethodId === null) {
-      // ✅ Create new method
       this.adjustmentMethodService.create(this.newAdjustmentMethod).subscribe({
         next: (response: any) => {
           console.log('Created:', response);
@@ -78,7 +77,6 @@ export class AdjustmentMethodComponent implements OnInit {
         }
       });
     } else {
-      // ✅ Update existing method
       this.adjustmentMethodService.update(this.selectedMethodId, this.newAdjustmentMethod).subscribe({
         next: (response: AdjustmentMethodResponseDTO) => {
           console.log('Updated:', response);

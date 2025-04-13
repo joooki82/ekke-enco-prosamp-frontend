@@ -1,4 +1,3 @@
-// sample-analytical-result.component.ts
 
 import {
   Component,
@@ -125,8 +124,8 @@ export class SampleAnalyticalResultComponent implements OnInit {
     const contaminantRequests = sampleIds.map(id =>
       this.contaminantService.getSampleContaminantsBySample(id).pipe(
         catchError(err => {
-          console.error(`❌ Failed to load contaminants for sampleId=${id}`, err);
-          return of(null); // continue gracefully
+          console.error(`Failed to load contaminants for sampleId=${id}`, err);
+          return of(null);
         })
       )
     );

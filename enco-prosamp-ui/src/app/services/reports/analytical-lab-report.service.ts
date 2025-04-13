@@ -12,7 +12,7 @@ export interface LaboratoryListItemDTO {
 
 export interface AnalyticalLabReportRequestDTO {
   reportNumber: string;
-  issueDate: string; // ISO format
+  issueDate: string;
   laboratoryId: number;
 }
 

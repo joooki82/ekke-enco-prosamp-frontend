@@ -15,7 +15,7 @@ export interface SampleAnalyticalResultRequestDTO {
   measurementUncertainty?: number;
   analysisMethod?: string;
   labReportId: number;
-  analysisDate?: string; // ISO format
+  analysisDate?: string;
 }
 
 export interface SampleAnalyticalResultResponseDTO {
@@ -60,27 +60,22 @@ export class SampleAnalyticalResultService {
 
   constructor(private http: HttpClient) {}
 
-  // 🔹 Fetch all results
   getAll(): Observable<SampleAnalyticalResultResponseDTO[]> {
     return this.http.get<SampleAnalyticalResultResponseDTO[]>(this.baseUrl);
   }
 
-  // 🔹 Get single result by ID
   get(id: number): Observable<SampleAnalyticalResultResponseDTO> {
     return this.http.get<SampleAnalyticalResultResponseDTO>(`${this.baseUrl}/${id}`);
   }
 
-  // 🔹 Create new analytical result
   create(dto: SampleAnalyticalResultRequestDTO): Observable<SampleAnalyticalResultCreatedDTO> {
     return this.http.post<SampleAnalyticalResultCreatedDTO>(this.baseUrl, dto);
   }
 
-  // 🔹 Update an existing result
   update(id: number, dto: SampleAnalyticalResultRequestDTO): Observable<SampleAnalyticalResultResponseDTO> {
     return this.http.put<SampleAnalyticalResultResponseDTO>(`${this.baseUrl}/${id}`, dto);
   }
 
-  // 🔹 Delete a result
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }

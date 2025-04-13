@@ -1,4 +1,3 @@
-// analytical-result-modal.component.ts
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
@@ -14,7 +13,7 @@ import {AnalyticalLabReportResponseDTO} from "../../../../services/reports/analy
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './analytical-result-modal.component.html',
-  styleUrls: ['./analytical-result-modal.component.scss'] // ✅ MUST INCLUDE THIS
+  styleUrls: ['./analytical-result-modal.component.scss']
 })
 export class AnalyticalResultModalComponent {
   @Input() sample!: SampleListItemDTO;

@@ -118,7 +118,6 @@ export class SamplingRecordDatM200Component implements OnInit {
   get filteredRecords(): SamplingRecordResponseDTO[] {
     let records = this.recordList;
 
-    // Apply filter
     if (this.filterText) {
       const text = this.filterText.toLowerCase();
       records = records.filter(r =>
@@ -130,7 +129,6 @@ export class SamplingRecordDatM200Component implements OnInit {
       );
     }
 
-    // Apply sorting
     if (this.sortColumn) {
       records = [...records].sort((a, b) => {
         const aValue = this.getSortableValue(a, this.sortColumn);
@@ -221,12 +219,7 @@ export class SamplingRecordDatM200Component implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('onSubmit() called', this.newRecord);  // ✅ Add this line
-
-    // if (!this.newRecord.samplingDate || !this.newRecord.conductedById || !this.newRecord.companyId) {
-    //   this.formValidated = true;
-    //   return;
-    // }
+    console.log('onSubmit() called', this.newRecord);
 
     const action = this.selectedRecordId == null
       ? this.recordService.create(this.newRecord)

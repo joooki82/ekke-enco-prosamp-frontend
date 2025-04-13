@@ -46,7 +46,7 @@ export class ClientLookupModalComponent implements OnInit {
   }
 
   onSearchInput(): void {
-    this.loadClients(); // Simple frontend-side filtering for now
+    this.loadClients();
   }
 
   selectClient(client: ClientResponseDTO): void {

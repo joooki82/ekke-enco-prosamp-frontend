@@ -31,7 +31,7 @@ export interface SampleContaminantCreatedDTO {
  * Used when fetching sample with contaminant list (includes SampleContaminant ID)
  */
 export interface SampleContaminantListItem2DTO {
-  id: number; // ← SampleContaminant ID
+  id: number;
   contaminant: ContaminantListNameDTO;
 }
 

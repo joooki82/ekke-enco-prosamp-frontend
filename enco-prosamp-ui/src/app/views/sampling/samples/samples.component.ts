@@ -188,7 +188,6 @@ export class SamplesComponent {
     this.newSample.samplingRecordId = record.id;
   }
 
-  // Add these methods to the class
   openDetails(sample: SampleResponseDTO): void {
     this.selectedSampleForDetails = sample;
     this.isDrawerOpen = true;

@@ -142,7 +142,7 @@ export class SampleContaminantLinkComponent implements OnInit {
       selectedSet.delete(contaminantId);
     }
 
-    this.selectedContaminants[sampleId] = new Set(selectedSet); // trigger change detection
+    this.selectedContaminants[sampleId] = new Set(selectedSet);
   }
 
   assignGroup(sampleId: number, groupId: number): void {

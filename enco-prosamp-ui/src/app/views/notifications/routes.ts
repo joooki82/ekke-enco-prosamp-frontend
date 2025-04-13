@@ -33,13 +33,6 @@ export const routes: Routes = [
           title: 'Modal'
         }
       },
-      // {
-      //   path: 'toasts',
-      //   loadComponent: () => import('./toasters/toasters.component').then(m => m.ToastersComponent),
-      //   data: {
-      //     title: 'Toasts'
-      //   }
-      // }
     ]
   }
 ];

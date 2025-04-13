@@ -253,19 +253,16 @@ export class TestReportComponent implements OnInit {
     // Use a Map to maintain unique sampler IDs with corresponding names
     const samplerMap = new Map<string, string>();
 
-    // Add previously saved samplers
     if (this.newReport.testReportSamplerIds && this.selectedSamplerNames) {
       this.newReport.testReportSamplerIds.forEach((id, index) => {
         samplerMap.set(id, this.selectedSamplerNames[index]);
       });
     }
 
-    // Add newly selected samplers or update existing ones
     selectedSamplers.forEach(sampler => {
       samplerMap.set(sampler.id, sampler.username);
     });
 
-    // Update the component properties from the map
     this.newReport.testReportSamplerIds = Array.from(samplerMap.keys());
     this.selectedSamplerNames = Array.from(samplerMap.values());
 
@@ -273,7 +270,7 @@ export class TestReportComponent implements OnInit {
   }
 
   generateReport(id: number): void {
-    this.isGeneratingReport = true;  // Start the spinner
+    this.isGeneratingReport = true;
 
     this.testReportService.generateReport(id).subscribe({
       next: (blob: Blob) => {
@@ -282,15 +279,14 @@ export class TestReportComponent implements OnInit {
         link.download = `report_${id}.pdf`;
         link.click();
         URL.revokeObjectURL(link.href);
-        this.isGeneratingReport = false;  // Stop the spinner
+        this.isGeneratingReport = false;
         this.notificationService.showSuccess('Report successfully downloaded.');
       },
       error: (err) => {
         console.error('Error generating the report:', err);
-        this.isGeneratingReport = false;  // Stop the spinner
+        this.isGeneratingReport = false;
         this.notificationService.showError('Error generating the report.');
       }
     });
   }
 }
-

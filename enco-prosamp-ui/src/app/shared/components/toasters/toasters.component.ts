@@ -56,7 +56,7 @@ export class ToastersComponent implements OnInit, OnDestroy {
       autohide: true,
       visible: true,
     };
-    console.log('toastConfig:', toastConfig); // Logging props here
+    console.log('toastConfig:', toastConfig);
     const componentRef = this.toaster?.addToast(AppToastSampleComponent, toastConfig, {});
     if (componentRef) {
       componentRef.instance['closeButton'] = true;

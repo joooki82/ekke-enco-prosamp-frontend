@@ -55,7 +55,6 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
     if (changes['preselectedSamplerIds'] && this.preselectedSamplerIds) {
       this.selectedSamplerIds = new Set(this.preselectedSamplerIds);
 
-      // Prepopulate the map with existing sampler IDs and their names
       if (this.samplers.length > 0) {
         this.preselectedSamplerIds.forEach(id => {
           const foundSampler = this.samplers.find(s => s.id === id);
@@ -93,7 +92,6 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
 
 
   submitSelection(): void {
-    // Construct an array of objects containing both ID and username
     const selectedSamplers = Array.from(this.selectedSamplerIds).map(id => ({
       id,
       username: this.selectedSamplerMap.get(id) || ''

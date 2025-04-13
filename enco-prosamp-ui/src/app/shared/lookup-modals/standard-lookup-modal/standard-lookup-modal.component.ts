@@ -33,7 +33,7 @@ import {StandardResponseDTO, StandardService} from "../../../services/laboratory
 })
 export class StandardLookupModalComponent implements OnInit {
   @Input() visible: boolean = false;
-  @Input() preselectedStandardIds: number[] = [];  // New input for preselection
+  @Input() preselectedStandardIds: number[] = [];
   @Output() close = new EventEmitter<void>();
   @Output() selectedStandards = new EventEmitter<number[]>();
 
@@ -48,7 +48,6 @@ export class StandardLookupModalComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Update selected standards when input changes
     if (changes['preselectedStandardIds'] && this.preselectedStandardIds) {
       this.selectedStandardIds = new Set(this.preselectedStandardIds);
     }
