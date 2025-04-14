@@ -37,7 +37,7 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
   @Input() visible: boolean = false;
   @Input() preselectedSamplerIds: string[] = [];
   @Output() close = new EventEmitter<void>();
-  @Output() selectedSamplers = new EventEmitter<{ id: string, username: string }[]>();
+  @Output() selectedSamplers = new EventEmitter<{ id: string, lastName: string }[]>();
 
   filterText: string = '';
   samplers: UserDTO[] = [];
@@ -67,6 +67,7 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
     this.samplerService.getAll().subscribe({
       next: (data) => {
         this.samplers = data;
+        console.log('Mintavevők:', this.samplers);
         if (preserveSelection) {
           this.populateSamplerMap();
         }
@@ -81,7 +82,7 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
     this.preselectedSamplerIds.forEach(id => {
       const found = this.samplers.find(s => s.id === id);
       if (found) {
-        this.selectedSamplerMap.set(found.id, found.username);
+        this.selectedSamplerMap.set(found.id, found.lastName);
       }
     });
   }
@@ -92,7 +93,7 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
       this.selectedSamplerMap.delete(sampler.id);
     } else {
       this.selectedSamplerIds.add(sampler.id);
-      this.selectedSamplerMap.set(sampler.id, sampler.username);
+      this.selectedSamplerMap.set(sampler.id, sampler.lastName);
     }
   }
 
@@ -100,7 +101,7 @@ export class SamplerLookupModalComponent implements OnInit, OnChanges {
   submitSelection(): void {
     const selectedSamplers = Array.from(this.selectedSamplerIds).map(id => ({
       id,
-      username: this.selectedSamplerMap.get(id) || ''
+      lastName: this.selectedSamplerMap.get(id) || ''
     }));
     this.selectedSamplers.emit(selectedSamplers);
     this.close.emit();

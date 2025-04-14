@@ -145,7 +145,7 @@ export class TestReportComponent implements OnInit {
       this.newReport = this.mapToRequestDTO(report);
       this.selectedSamplingRecord = report.samplingRecord;
 
-      this.selectedSamplerNames = report.testReportSamplers?.map(sampler => sampler.username) || [];
+      this.selectedSamplerNames = report.testReportSamplers?.map(sampler => sampler.lastName) || [];
     } else {
       this.selectedReportId = null;
       this.newReport = this.createEmptyReport();
@@ -254,11 +254,11 @@ export class TestReportComponent implements OnInit {
     this.isSamplerLookupOpen = true;
   }
 
-  onSamplersSelected(selectedSamplers: { id: string, username: string }[]): void {
+  onSamplersSelected(selectedSamplers: { id: string, lastName: string }[]): void {
     if (!selectedSamplers || selectedSamplers.length === 0) return;
 
     const ids = selectedSamplers.map(s => s.id);
-    const names = selectedSamplers.map(s => s.username);
+    const names = selectedSamplers.map(s => s.lastName);
 
     this.newReport.testReportSamplerIds = ids;
     this.selectedSamplerNames = names;

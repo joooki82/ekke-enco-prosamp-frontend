@@ -1,12 +1,12 @@
 <c-modal class="bg-dark rounded shadow-sm" [visible]="visible" (close)="cancel()" size="xl" backdrop="static">
   <c-modal-header>
-    <h5 class="modal-title">Select Samplers</h5>
+    <h5 class="modal-title">Mintavevő kiválasztása</h5>
   </c-modal-header>
 
   <c-modal-body>
     <c-row class="mb-3">
       <c-col md="6">
-        <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Search for samplers..." />
+        <input type="text" class="form-control" [(ngModel)]="filterText" placeholder="Mintavevő keresése..." />
       </c-col>
     </c-row>
 
@@ -15,9 +15,9 @@
         <table class="table table-bordered table-hover align-middle">
           <thead class="table-light">
           <tr>
-            <th>Select</th>
-            <th>Sampler ID</th>
-            <th>Sampler Name</th>
+            <th>Kiválaszt</th>
+            <th>Mintavevő azonosítója</th>
+            <th>Mintavevő neve</th>
           </tr>
           </thead>
           <tbody>
@@ -30,10 +30,10 @@
               />
             </td>
             <td>{{ sampler.id }}</td>
-            <td>{{ sampler.username }}</td>
+            <td>{{ sampler.lastName }} </td>
           </tr>
           <tr *ngIf="samplers.length === 0">
-            <td colspan="3" class="text-center text-muted">No samplers found.</td>
+            <td colspan="3" class="text-center text-muted">Nincs mintavavő a listában.</td>
           </tr>
           </tbody>
         </table>
@@ -42,8 +42,7 @@
   </c-modal-body>
 
   <c-modal-footer>
-    <button cButton color="primary" (click)="submitSelection()">Save Selection</button>
-    <button cButton color="secondary" (click)="cancel()">Cancel</button>
+    <button cButton color="primary" (click)="submitSelection()">Mentés</button>
+    <button cButton color="secondary" (click)="cancel()">Törlés</button>
   </c-modal-footer>
 </c-modal>
-

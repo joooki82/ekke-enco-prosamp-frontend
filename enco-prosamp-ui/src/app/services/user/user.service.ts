@@ -8,6 +8,8 @@ import {Observable} from "rxjs";
 export interface UserDTO {
   id: string;
   username: string;
+  firstName: string;
+  lastName: string;
 }
 
 @Injectable({
