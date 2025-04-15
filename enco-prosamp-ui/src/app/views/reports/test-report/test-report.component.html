@@ -214,8 +214,8 @@
           <label cLabel for="reportStatus">Jegyzőkönyv státusza</label>
           <select class="form-control" id="reportStatus" name="reportStatus" required
                   [(ngModel)]="newReport.reportStatus">
-            <option value="DRAFT">Draft</option>
-            <option value="FINAL">Final</option>
+            <option value="DRAFT">DRAFT</option>
+            <option value="FINALIZED">FINALIZED</option>
           </select>
           <c-form-feedback [valid]="false">Kötelező megadni.</c-form-feedback>
         </c-col>

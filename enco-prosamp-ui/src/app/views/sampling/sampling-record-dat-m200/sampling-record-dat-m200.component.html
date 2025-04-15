@@ -131,8 +131,8 @@
           <div><strong>Hőmérséklet:</strong> {{ selectedRecordForDetails.temperature }} °C</div>
           <div><strong>Páratartalom:</strong> {{ selectedRecordForDetails.humidity }} %</div>
           <div><strong>Szélsebesség:</strong> {{ selectedRecordForDetails.windSpeed }} m/s</div>
-          <div><strong>Nyomás 1:</strong> {{ selectedRecordForDetails.pressure1 }} hPa</div>
-          <div><strong>Nyomás 2:</strong> {{ selectedRecordForDetails.pressure2 }} hPa</div>
+          <div><strong>Nyomás 1:</strong> {{ selectedRecordForDetails.pressure1 }} mBar</div>
+          <div><strong>Nyomás 2:</strong> {{ selectedRecordForDetails.pressure2 }} mBar</div>
           <div><strong>Egyéb körülmények:</strong> {{ selectedRecordForDetails.otherEnvironmentalConditions }}</div>
         </ng-template>
       </c-accordion-item>
@@ -342,24 +342,24 @@
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Nyomás 1 (hPa)</label>
+        <label class="form-label">Nyomás 1 (mBar)</label>
         <input type="number" class="form-control"
                [(ngModel)]="newRecord.pressure1" name="pressure1"
                #pressure1="ngModel"
                [ngClass]="{'is-invalid': formValidated && (pressure1.value < 800 || pressure1.value > 1100)}" />
         <div class="invalid-feedback" *ngIf="formValidated && (pressure1.value < 800 || pressure1.value > 1100)">
-          Nyomás 1 értéke 800 és 1100 hPa között kell legyen.
+          Nyomás 1 értéke 800 és 1100 mBar között kell legyen.
         </div>
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Nyomás 2 (hPa)</label>
+        <label class="form-label">Nyomás 2 (mBar)</label>
         <input type="number" class="form-control"
                [(ngModel)]="newRecord.pressure2" name="pressure2"
                #pressure2="ngModel"
                [ngClass]="{'is-invalid': formValidated && (pressure2.value < 800 || pressure2.value > 1100)}" />
         <div class="invalid-feedback" *ngIf="formValidated && (pressure2.value < 800 || pressure2.value > 1100)">
-          Nyomás 2 értéke 800 és 1100 hPa között kell legyen.
+          Nyomás 2 értéke 800 és 1100 mBar között kell legyen.
         </div>
       </div>
 

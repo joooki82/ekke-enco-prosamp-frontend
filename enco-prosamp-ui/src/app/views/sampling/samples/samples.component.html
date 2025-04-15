@@ -98,7 +98,7 @@
       </div>
 
       <div class="col-md-4">
-        <label class="form-label">Légnyomás (hPa)</label>
+        <label class="form-label">Légnyomás (mBar)</label>
         <input class="form-control"
                type="number"
                name="pressure"
@@ -108,7 +108,7 @@
                [ngClass]="{'is-invalid': formValidated && pressure?.invalid}"
                #pressure="ngModel"/>
         <div class="invalid-feedback" *ngIf="formValidated && pressure.errors">
-          A nyomás 800 és 1100 hPa között kell legyen.
+          A nyomás 800 és 1100 mBar között kell legyen.
         </div>
       </div>
 
